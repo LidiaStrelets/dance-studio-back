@@ -66,6 +66,8 @@ export class UsersController {
   })
   @ApiOperation({ summary: 'Add classes to the coach' })
   @ApiResponse({ status: 200, type: Class })
+  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin', 'coach')
   @UseGuards(RolesGuard)
   @Post('/classes')

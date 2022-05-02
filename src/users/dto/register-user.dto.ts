@@ -1,5 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDate, IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
+import {
+  IsDateString,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 import { DateDataType } from 'sequelize/types';
 
 export class RegisterUserDto {
@@ -37,12 +44,16 @@ export class RegisterUserDto {
   })
   readonly lastname: string;
 
+  @IsOptional()
+  @IsDateString()
   @ApiPropertyOptional({
     example: '29.07.1996',
     description: `User's date of birth`,
   })
   readonly birth_date: DateDataType | null;
 
+  @IsOptional()
+  @IsString()
   @ApiPropertyOptional({
     example: 'Want to visit classes every day!',
     description: `Here you can attach some additional information about uuser`,

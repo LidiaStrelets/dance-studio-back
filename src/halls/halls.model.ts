@@ -4,12 +4,13 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript';
 interface HallCreationAttrs {
   name: string;
   description: string;
+  poles_amount: number;
 }
 
 @Table({ tableName: 'halls' })
 export class Hall extends Model<Hall, HallCreationAttrs> {
   @ApiProperty({
-    example: '1',
+    example: 1,
     description: 'Unique hall identyfier',
   })
   @Column({
@@ -40,4 +41,14 @@ export class Hall extends Model<Hall, HallCreationAttrs> {
     allowNull: false,
   })
   description: string;
+
+  @ApiProperty({
+    example: 9,
+    description: 'Poles available for the hall',
+  })
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  poles_amount: number;
 }
