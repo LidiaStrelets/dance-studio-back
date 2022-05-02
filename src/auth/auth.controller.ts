@@ -1,5 +1,4 @@
 import { Body, Controller, Headers, Param, Post } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
 import { RegisterUserDto } from 'src/users/dto/register-user.dto';

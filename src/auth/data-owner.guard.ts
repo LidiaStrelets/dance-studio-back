@@ -8,7 +8,6 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/users.model';
-import { ROLES_KEY } from './roles.decorator';
 
 @Injectable()
 export class DataOwnerGuard implements CanActivate {
