@@ -7,6 +7,8 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { DateDataType } from 'sequelize/types';
+import { Class } from 'src/classes/classes.model';
+import { UserClasses } from 'src/classes/user-classes.model';
 import { Role } from 'src/roles/roles.model';
 import { UserRoles } from 'src/roles/user-roles.model';
 
@@ -96,4 +98,7 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @BelongsToMany(() => Role, () => UserRoles)
   roles: Role[];
+
+  @BelongsToMany(() => Class, () => UserClasses)
+  classes: Class[];
 }

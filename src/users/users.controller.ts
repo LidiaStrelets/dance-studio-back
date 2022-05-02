@@ -3,6 +3,8 @@ import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DataOwnerGuard } from 'src/auth/data-owner.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { Class } from 'src/classes/classes.model';
+import { AddClassToUserDto } from 'src/classes/dto/add-class-to-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { User } from './users.model';
 import { UsersService } from './users.service';
@@ -56,5 +58,18 @@ export class UsersController {
   @Get('/:userId')
   getUser(@Param('userId') userId: string) {
     return this.userService.getUser(userId);
+  }
+
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+  })
+  @ApiOperation({ summary: 'Add classes to the coach' })
+  @ApiResponse({ status: 200, type: Class })
+  @Roles('admin', 'coach')
+  @UseGuards(RolesGuard)
+  @Post('/classes')
+  addClass(@Body() dto: AddClassToUserDto) {
+    return this.userService.addClass(dto);
   }
 }

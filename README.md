@@ -4,3 +4,5 @@
 - to registrate admin user add an adminKey to the query body
 - user can get only his own information
 - only admin is allowed to create or update halls
+- only admin is allowed to create classes
+- coaches and admins are allowed to add class to user ( only to a coach)

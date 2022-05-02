@@ -1,5 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Class } from 'src/classes/classes.model';
+import { ClassesService } from 'src/classes/classes.service';
+import { AddClassToUserDto } from 'src/classes/dto/add-class-to-user.dto';
 import { Role } from 'src/roles/roles.model';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { User } from './users.model';
@@ -9,6 +12,7 @@ export class UsersService {
   constructor(
     @InjectModel(User) private userRepo: typeof User,
     @InjectModel(Role) private roleRepo: typeof Role,
+    @InjectModel(Class) private classRepo: typeof Class,
   ) {}
 
   async registrateUser(userDto: RegisterUserDto, roleParam: string) {
@@ -49,5 +53,25 @@ export class UsersService {
     } catch (e) {
       throw new HttpException({ message: e.message }, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async addClass(dto: AddClassToUserDto) {
+    const user = await this.userRepo.findOne({
+      where: { id: dto.user_id },
+      include: { all: true },
+    });
+    if (!user)
+      throw new HttpException('Unauthorized!', HttpStatus.UNAUTHORIZED);
+
+    if (!user.roles.some((r) => r.id === 2))
+      throw new HttpException(
+        'Impossible to add classes to user who is not a coach!',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    const classObj = await this.classRepo.findOne({ where: { id: dto.class } });
+    await user.$add('class', dto.class);
+
+    return classObj;
   }
 }
