@@ -7,6 +7,7 @@ import { User } from './users/users.model';
 import { Role } from './roles/roles.model';
 import { UserRoles } from './roles/user-roles.model';
 import { AuthModule } from './auth/auth.module';
+import { HallsModule } from './halls/halls.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     RolesModule,
     AuthModule,
+    HallsModule,
   ],
   controllers: [],
   providers: [],

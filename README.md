@@ -3,3 +3,4 @@
 - set user role when registrating as a query param
 - to registrate admin user add an adminKey to the query body
 - user can get only his own information
+- only admin is allowed to create or update halls
