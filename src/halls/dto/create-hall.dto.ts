@@ -22,7 +22,7 @@ export class CreateHallDto {
   @IsNotEmpty()
   @ApiProperty({
     example: 9,
-    description: 'DPoles available for the hall',
+    description: 'Poles available for the hall',
   })
   readonly poles_amount: number;
 }

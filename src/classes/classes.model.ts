@@ -17,7 +17,7 @@ interface ClassCreationAttrs {
 @Table({ tableName: 'classes' })
 export class Class extends Model<Class, ClassCreationAttrs> {
   @ApiProperty({
-    example: '1',
+    example: 1,
     description: 'Unique class identyfier',
   })
   @Column({

@@ -24,7 +24,7 @@ interface UserCreationAttrs {
 @Table({ tableName: 'users' })
 export class User extends Model<User, UserCreationAttrs> {
   @ApiProperty({
-    example: '1',
+    example: 1,
     description: 'Unique user identyfier',
   })
   @Column({
