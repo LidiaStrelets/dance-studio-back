@@ -23,4 +23,10 @@ export class HallsService {
     await hall.update(data);
     return hall;
   }
+
+  async getPolesAmount(id: number) {
+    return await (
+      await this.hallRepo.findOne({ where: { id } })
+    ).poles_amount;
+  }
 }

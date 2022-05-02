@@ -11,6 +11,7 @@ import { HallsModule } from './halls/halls.module';
 import { ClassesModule } from './classes/classes.module';
 import { Class } from './classes/classes.model';
 import { UserClasses } from './classes/user-classes.model';
+import { SchedulesModule } from './schedules/schedules.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { UserClasses } from './classes/user-classes.model';
     AuthModule,
     HallsModule,
     ClassesModule,
+    SchedulesModule,
   ],
   controllers: [],
   providers: [],

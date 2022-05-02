@@ -9,5 +9,6 @@ import { HallsService } from './halls.service';
   controllers: [HallsController],
   providers: [HallsService],
   imports: [SequelizeModule.forFeature([Hall]), AuthModule],
+  exports: [HallsService],
 })
 export class HallsModule {}
