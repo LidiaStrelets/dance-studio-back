@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Class } from 'src/classes/classes.model';
 import { ClassesService } from 'src/classes/classes.service';
 import { AddClassToUserDto } from 'src/classes/dto/add-class-to-user.dto';
 import { Role } from 'src/roles/roles.model';
@@ -56,22 +55,32 @@ export class UsersService {
   }
 
   async addClass(dto: AddClassToUserDto) {
+    const user = await this.isUserCoach(dto.user_id);
+    if (user) {
+      const classObj = this.classesService.getClassById(dto.class);
+      await user.$add('class', dto.class);
+
+      return classObj;
+    }
+  }
+
+  async isUserCoach(id: number) {
     const user = await this.userRepo.findOne({
-      where: { id: dto.user_id },
+      where: { id },
       include: { all: true },
     });
     if (!user)
-      throw new HttpException('Unauthorized!', HttpStatus.UNAUTHORIZED);
-
-    if (!user.roles.some((r) => r.id === 2))
       throw new HttpException(
-        'Impossible to add classes to user who is not a coach!',
+        `No user found for coach line`,
         HttpStatus.BAD_REQUEST,
       );
 
-    const classObj = this.classesService.getClassById(dto.class);
-    await user.$add('class', dto.class);
+    if (!user.roles || !user.roles.some((r) => r.id === 2))
+      throw new HttpException(
+        `Requested user is not a coach!`,
+        HttpStatus.BAD_REQUEST,
+      );
 
-    return classObj;
+    return user;
   }
 }
