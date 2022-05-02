@@ -1,1 +1,5 @@
-# dance-studio-back
+- user can registrate and get token
+- user can login only with his own token and correct password
+- set user role when registrating as a query param
+- to registrate admin user add an adminKey to the query body
+- user can get only his own information
