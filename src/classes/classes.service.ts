@@ -10,4 +10,8 @@ export class ClassesService {
   async createClass(dto: CreateClassDto) {
     return await this.classRepo.create(dto);
   }
+
+  async getClassById(id: number) {
+    return await this.classRepo.findOne({ where: { id } });
+  }
 }

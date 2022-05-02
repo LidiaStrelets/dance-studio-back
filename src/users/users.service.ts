@@ -12,7 +12,7 @@ export class UsersService {
   constructor(
     @InjectModel(User) private userRepo: typeof User,
     @InjectModel(Role) private roleRepo: typeof Role,
-    @InjectModel(Class) private classRepo: typeof Class,
+    private classesService: ClassesService,
   ) {}
 
   async registrateUser(userDto: RegisterUserDto, roleParam: string) {
@@ -69,7 +69,7 @@ export class UsersService {
         HttpStatus.BAD_REQUEST,
       );
 
-    const classObj = await this.classRepo.findOne({ where: { id: dto.class } });
+    const classObj = this.classesService.getClassById(dto.class);
     await user.$add('class', dto.class);
 
     return classObj;
