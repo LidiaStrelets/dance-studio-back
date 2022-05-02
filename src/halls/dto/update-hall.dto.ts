@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 
 export class UpdateHallDto {
   @IsOptional()
@@ -17,4 +17,12 @@ export class UpdateHallDto {
     description: 'Describes the hall',
   })
   readonly description: string;
+
+  @IsOptional()
+  @IsInt()
+  @ApiProperty({
+    example: 9,
+    description: 'DPoles available for the hall',
+  })
+  readonly poles_amount: number;
 }
