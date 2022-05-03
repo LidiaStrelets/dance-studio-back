@@ -8,3 +8,7 @@
 - coaches and admins are allowed to add class to user ( only to a coach)
 - only admin is allowed to add or update prices
 - only authorized user is allowed to get prices
+- admin can create payments for any user
+- client can create his own payment
+- admin can get  any client payments list
+- client can get only his own payments list
