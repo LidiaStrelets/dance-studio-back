@@ -24,15 +24,7 @@ export class RegistrationsController {
   @ApiOperation({ summary: 'Create registration' })
   @ApiResponse({ status: 200, type: Registration })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 400, description: 'Client id required!' })
-  @ApiResponse({
-    status: 400,
-    description: 'You already signed for this class!',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Registration can be created only for the clients!',
-  })
+  @ApiResponse({ status: 400, description: 'Wrong data passed' })
   @ApiResponse({
     status: 402,
     description:
