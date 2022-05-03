@@ -14,7 +14,7 @@ interface ScheduleCreationAttrs {
 export class Schedule extends Model<Schedule, ScheduleCreationAttrs> {
   @ApiProperty({
     example: 1,
-    description: 'Unique schedule position identyfier',
+    description: 'Unique schedule position identifier',
   })
   @Column({
     type: DataType.INTEGER,
@@ -26,7 +26,7 @@ export class Schedule extends Model<Schedule, ScheduleCreationAttrs> {
 
   @ApiProperty({
     example: 1,
-    description: 'Unique class identyfier',
+    description: 'Unique class identifier',
   })
   @Column({
     type: DataType.INTEGER,
@@ -36,7 +36,7 @@ export class Schedule extends Model<Schedule, ScheduleCreationAttrs> {
 
   @ApiProperty({
     example: 1,
-    description: 'Unique coach identyfier',
+    description: 'Unique coach identifier',
   })
   @Column({
     type: DataType.INTEGER,
@@ -46,7 +46,7 @@ export class Schedule extends Model<Schedule, ScheduleCreationAttrs> {
 
   @ApiProperty({
     example: 1,
-    description: 'Unique hall identyfier',
+    description: 'Unique hall identifier',
   })
   @Column({
     type: DataType.INTEGER,

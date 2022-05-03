@@ -11,7 +11,7 @@ interface HallCreationAttrs {
 export class Hall extends Model<Hall, HallCreationAttrs> {
   @ApiProperty({
     example: 1,
-    description: 'Unique hall identyfier',
+    description: 'Unique hall identifier',
   })
   @Column({
     type: DataType.INTEGER,

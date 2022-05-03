@@ -18,7 +18,7 @@ interface ClassCreationAttrs {
 export class Class extends Model<Class, ClassCreationAttrs> {
   @ApiProperty({
     example: 1,
-    description: 'Unique class identyfier',
+    description: 'Unique class identifier',
   })
   @Column({
     type: DataType.INTEGER,
