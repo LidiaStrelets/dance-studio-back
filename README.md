@@ -12,3 +12,5 @@
 - client can create his own payment
 - admin can get  any client payments list
 - client can get only his own payments list
+- clients can book and cancel a class
+- admin can book and cancel class for any client

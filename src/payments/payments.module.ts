@@ -18,5 +18,6 @@ import { UsersModule } from 'src/users/users.module';
     PricesModule,
     UsersModule,
   ],
+  exports: [PaymentsService],
 })
 export class PaymentsModule {}

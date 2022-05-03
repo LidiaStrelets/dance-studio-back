@@ -16,5 +16,6 @@ import { UsersModule } from 'src/users/users.module';
     HallsModule,
     UsersModule,
   ],
+  exports: [SchedulesService],
 })
 export class SchedulesModule {}

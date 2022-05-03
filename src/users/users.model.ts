@@ -11,6 +11,7 @@ import { DateDataType } from 'sequelize/types';
 import { Class } from 'src/classes/classes.model';
 import { UserClasses } from 'src/classes/user-classes.model';
 import { Payment } from 'src/payments/payments.model';
+import { Registration } from 'src/registrations/registrations.model';
 import { Role } from 'src/roles/roles.model';
 import { UserRoles } from 'src/roles/user-roles.model';
 
@@ -106,4 +107,7 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @HasMany(() => Payment)
   payments: Payment[];
+
+  @HasMany(() => Registration)
+  registrations: Registration[];
 }

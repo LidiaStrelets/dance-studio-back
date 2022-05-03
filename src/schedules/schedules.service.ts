@@ -15,19 +15,46 @@ export class SchedulesService {
   ) {}
 
   async createScheduleItem(dto: CreateScheduleDto) {
-    const user = await this.userService.isUserCoach(dto.coach);
-    if (user) {
-      if (!user.classes.some((cl) => cl.id === dto.class))
-        throw new HttpException(
-          `${user.firstname} ${user.lastname} doesn't conduct requested class!`,
-          HttpStatus.BAD_REQUEST,
-        );
-      const availablePoles = await this.hallsService.getPolesAmount(dto.hall);
-      return await this.scheduleRepo.create({
-        ...dto,
-        places_left: availablePoles,
-      });
+    try {
+      const user = await this.userService.isUserCoach(dto.coach);
+      if (user) {
+        if (!user.classes.some((cl) => cl.id === dto.class))
+          throw new HttpException(
+            `${user.firstname} ${user.lastname} doesn't conduct requested class!`,
+            HttpStatus.BAD_REQUEST,
+          );
+        const availablePoles = await this.hallsService.getPolesAmount(dto.hall);
+        return await this.scheduleRepo.create({
+          ...dto,
+          places_left: availablePoles,
+        });
+      }
+    } catch (e) {
+      throw new HttpException(
+        `Something went wrong`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
+  }
+
+  async getScheduleItem(id: number) {
+    return await this.scheduleRepo.findOne({ where: { id } });
+  }
+
+  async decreaseAvailableSpots(id: number) {
+    const scheduleItem = await this.scheduleRepo.findOne({ where: { id } });
+
+    scheduleItem.places_left -= 1;
+    await scheduleItem.save();
+    return scheduleItem;
+  }
+
+  async increaseAvailableSpots(id: number) {
+    const scheduleItem = await this.scheduleRepo.findOne({ where: { id } });
+
+    scheduleItem.places_left += 1;
+    await scheduleItem.save();
+    return scheduleItem;
   }
 
   async updateScheduleItem(data: UpdateScheduleDto, id: number) {

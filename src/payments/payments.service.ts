@@ -53,4 +53,28 @@ export class PaymentsService {
   async getUserPayments(id: number) {
     return await this.paymentRepo.findAll({ where: { client_id: id } });
   }
+
+  async getLastUserPayment(id: number): Promise<Payment> {
+    const payments = await this.paymentRepo.findAll({
+      where: { client_id: id },
+      order: [['createdAt', 'DESC']],
+    });
+    return payments[0];
+  }
+
+  async decreaseAvailableClasses(id: number) {
+    const payment = await this.paymentRepo.findOne({ where: { id } });
+
+    payment.classes_left -= 1;
+    await payment.save();
+    return payment;
+  }
+
+  async increaseAvailableClasses(id: number) {
+    const payment = await this.paymentRepo.findOne({ where: { id } });
+
+    payment.classes_left += 1;
+    await payment.save();
+    return payment;
+  }
 }
