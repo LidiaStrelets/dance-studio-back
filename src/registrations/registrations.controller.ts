@@ -24,6 +24,25 @@ export class RegistrationsController {
   @ApiOperation({ summary: 'Create registration' })
   @ApiResponse({ status: 200, type: Registration })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
+  @ApiResponse({ status: 400, description: 'Client id required!' })
+  @ApiResponse({
+    status: 400,
+    description: 'You already signed for this class!',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Registration can be created only for the clients!',
+  })
+  @ApiResponse({
+    status: 402,
+    description:
+      'Your pass has ended! Make a new payment to create a registration!',
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({
+    status: 404,
+    description: 'No places left for this class, try another one!',
+  })
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
@@ -41,6 +60,11 @@ export class RegistrationsController {
   @ApiOperation({ summary: 'Delete registration' })
   @ApiResponse({ status: 200, type: Registration })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({
+    status: 404,
+    description: `Registration doesn't exist`,
+  })
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
