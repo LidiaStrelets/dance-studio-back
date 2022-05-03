@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { HallsService } from 'src/halls/halls.service';
 import { UsersService } from 'src/users/users.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
+import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { Schedule } from './schedules.model';
 
 @Injectable()
@@ -27,5 +28,12 @@ export class SchedulesService {
         places_left: availablePoles,
       });
     }
+  }
+
+  async updateScheduleItem(data: UpdateScheduleDto, id: number) {
+    const scheduleItem = await this.scheduleRepo.findOne({ where: { id } });
+
+    await scheduleItem.update(data);
+    return scheduleItem;
   }
 }

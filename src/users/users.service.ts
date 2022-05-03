@@ -4,6 +4,7 @@ import { ClassesService } from 'src/classes/classes.service';
 import { AddClassToUserDto } from 'src/classes/dto/add-class-to-user.dto';
 import { Role } from 'src/roles/roles.model';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './users.model';
 
 @Injectable()
@@ -81,6 +82,13 @@ export class UsersService {
         HttpStatus.BAD_REQUEST,
       );
 
+    return user;
+  }
+
+  async updateUser(data: UpdateUserDto, id: number) {
+    const user = await this.userRepo.findOne({ where: { id } });
+
+    await user.update(data);
     return user;
   }
 }

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DataOwnerGuard } from 'src/auth/data-owner.guard';
 import { Roles } from 'src/auth/roles.decorator';
@@ -6,6 +14,7 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { Class } from 'src/classes/classes.model';
 import { AddClassToUserDto } from 'src/classes/dto/add-class-to-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './users.model';
 import { UsersService } from './users.service';
 
@@ -73,5 +82,15 @@ export class UsersController {
   @Post('/classes')
   addClass(@Body() dto: AddClassToUserDto) {
     return this.userService.addClass(dto);
+  }
+
+  @ApiOperation({ summary: 'Update schedule' })
+  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(DataOwnerGuard)
+  @Patch('/:id')
+  updateClass(@Body() userDto: UpdateUserDto, @Param('id') id: string) {
+    return this.userService.updateUser(userDto, Number(id));
   }
 }

@@ -1,9 +1,18 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IsAuthGuard } from 'src/auth/isAuth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { CreatePriceDto } from './dto/add-price.dto';
+import { UpdatePriceDto } from './dto/update-price.dto';
 import { Price } from './prices.model';
 import { PricesService } from './prices.service';
 
@@ -39,5 +48,16 @@ export class PricesController {
   @Get()
   getPrices() {
     return this.pricesService.getPrices();
+  }
+
+  @ApiOperation({ summary: 'Update price' })
+  @ApiResponse({ status: 200, type: Price })
+  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @Roles('admin')
+  @UseGuards(RolesGuard)
+  @Patch('/:id')
+  updateClass(@Body() priceDto: UpdatePriceDto, @Param('id') id: string) {
+    return this.pricesService.updatePrice(priceDto, Number(id));
   }
 }
