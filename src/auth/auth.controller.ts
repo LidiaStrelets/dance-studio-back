@@ -18,8 +18,8 @@ export class AuthController {
     description: 'Bearer token',
   })
   @Post('/login')
-  login(@Body() userDto: LoginUserDto, @Headers() headers) {
-    return this.authService.login(userDto, headers);
+  login(@Body() userDto: LoginUserDto) {
+    return this.authService.login(userDto);
   }
 
   @ApiOperation({ summary: 'Register user' })

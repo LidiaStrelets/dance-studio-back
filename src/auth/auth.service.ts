@@ -41,19 +41,11 @@ export class AuthService {
     }
   }
 
-  async login(dto: LoginUserDto, headers) {
-    const userFromToken = this.getUserFromToken(headers.authorization);
+  async login(dto: LoginUserDto) {
     try {
       const user = await this.validateUser(dto);
 
-      if (userFromToken.email !== user.email) {
-        throw new HttpException(
-          { message: 'Unauthorized user!' },
-          HttpStatus.UNAUTHORIZED,
-        );
-      }
-
-      return user;
+      return this.generateToken(user);
     } catch (e) {
       throw new HttpException(
         { message: 'Unauthorized user!' },
