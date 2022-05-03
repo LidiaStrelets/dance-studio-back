@@ -49,7 +49,10 @@ export class UsersService {
 
   async getUser(userId: string) {
     try {
-      return await this.userRepo.findOne({ where: { id: Number(userId) } });
+      return await this.userRepo.findOne({
+        where: { id: Number(userId) },
+        include: { all: true },
+      });
     } catch (e) {
       throw new HttpException({ message: e.message }, HttpStatus.BAD_REQUEST);
     }

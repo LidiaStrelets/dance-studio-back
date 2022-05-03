@@ -14,16 +14,14 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(dto: LoginUserDto, headers) {
-    const header = headers.authorization;
-
-    if (!header)
+  getUserFromToken(bearerToken: string) {
+    if (!bearerToken)
       throw new HttpException(
         { message: 'Unauthorized user!' },
         HttpStatus.UNAUTHORIZED,
       );
 
-    const [bearer, token] = header.split(' ');
+    const [bearer, token] = bearerToken.split(' ');
 
     if (bearer !== 'Bearer' || !token)
       throw new HttpException(
@@ -34,6 +32,18 @@ export class AuthService {
     try {
       const userFromToken: { email: string; id: number; roles: Role[] } =
         this.jwtService.verify(token);
+      return userFromToken;
+    } catch {
+      throw new HttpException(
+        { message: 'Unauthorized user!' },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+  }
+
+  async login(dto: LoginUserDto, headers) {
+    const userFromToken = this.getUserFromToken(headers.authorization);
+    try {
       const user = await this.validateUser(dto);
 
       if (userFromToken.email !== user.email) {

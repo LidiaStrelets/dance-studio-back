@@ -12,6 +12,10 @@ export class PricesService {
     return await this.priceRepo.create(priceDto);
   }
 
+  async getPriceById(id: number) {
+    return await this.priceRepo.findOne({ where: { id } });
+  }
+
   async getPrices() {
     return await this.priceRepo.findAll();
   }

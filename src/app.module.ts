@@ -13,6 +13,8 @@ import { Class } from './classes/classes.model';
 import { UserClasses } from './classes/user-classes.model';
 import { SchedulesModule } from './schedules/schedules.module';
 import { PricesModule } from './prices/prices.module';
+import { PaymentsModule } from './payments/payments.module';
+import { Payment } from './payments/payments.model';
 
 @Module({
   imports: [
@@ -26,7 +28,7 @@ import { PricesModule } from './prices/prices.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
-      models: [User, Role, UserRoles, Class, UserClasses],
+      models: [User, Role, UserRoles, Class, UserClasses, Payment],
       autoLoadModels: true,
     }),
     UsersModule,
@@ -36,6 +38,7 @@ import { PricesModule } from './prices/prices.module';
     ClassesModule,
     SchedulesModule,
     PricesModule,
+    PaymentsModule,
   ],
   controllers: [],
   providers: [],

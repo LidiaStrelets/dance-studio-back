@@ -9,5 +9,6 @@ import { PricesService } from './prices.service';
   controllers: [PricesController],
   providers: [PricesService],
   imports: [SequelizeModule.forFeature([Price]), AuthModule],
+  exports: [PricesService],
 })
 export class PricesModule {}
