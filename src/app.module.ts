@@ -12,6 +12,7 @@ import { ClassesModule } from './classes/classes.module';
 import { Class } from './classes/classes.model';
 import { UserClasses } from './classes/user-classes.model';
 import { SchedulesModule } from './schedules/schedules.module';
+import { PricesModule } from './prices/prices.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { SchedulesModule } from './schedules/schedules.module';
     HallsModule,
     ClassesModule,
     SchedulesModule,
+    PricesModule,
   ],
   controllers: [],
   providers: [],
