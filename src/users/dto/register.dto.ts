@@ -1,16 +1,17 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDateString,
   IsEmail,
+  IsNotEmpty,
   IsOptional,
   IsString,
   Length,
 } from 'class-validator';
 import { DateDataType } from 'sequelize/types';
 
-export class UpdateUserDto {
-  @IsOptional()
+export class RegisterDto {
   @IsString()
+  @IsNotEmpty()
   @IsEmail()
   @ApiProperty({
     example: 'my-email@gmail.com',
@@ -18,8 +19,8 @@ export class UpdateUserDto {
   })
   readonly email: string;
 
-  @IsOptional()
   @IsString()
+  @IsNotEmpty()
   @Length(8, 20)
   @ApiProperty({
     example: 'qwerty235!',
@@ -27,16 +28,16 @@ export class UpdateUserDto {
   })
   readonly password: string;
 
-  @IsOptional()
   @IsString()
+  @IsNotEmpty()
   @ApiProperty({
     example: 'Anna',
     description: 'User name',
   })
   readonly firstname: string;
 
-  @IsOptional()
   @IsString()
+  @IsNotEmpty()
   @ApiProperty({
     example: 'Ivanova',
     description: 'User lastname',
@@ -45,7 +46,7 @@ export class UpdateUserDto {
 
   @IsOptional()
   @IsDateString()
-  @ApiPropertyOptional({
+  @ApiProperty({
     example: '29.07.1996',
     description: `User's date of birth`,
   })
@@ -53,7 +54,7 @@ export class UpdateUserDto {
 
   @IsOptional()
   @IsString()
-  @ApiPropertyOptional({
+  @ApiProperty({
     example: 'Want to visit classes every day!',
     description: `Here you can attach some additional information about uuser`,
   })

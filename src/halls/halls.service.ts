@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateHallDto } from './dto/create-hall.dto';
-import { UpdateHallDto } from './dto/update-hall.dto';
+import { CreateDto } from './dto/create.dto';
+import { UpdateDto } from './dto/update.dto';
 import { Hall } from './halls.model';
 
 export interface HallUpdate {
@@ -13,11 +13,11 @@ export interface HallUpdate {
 export class HallsService {
   constructor(@InjectModel(Hall) private hallRepo: typeof Hall) {}
 
-  async createHall(dto: CreateHallDto) {
-    return await this.hallRepo.create(dto);
+  async create(dto: CreateDto) {
+    return this.hallRepo.create(dto);
   }
 
-  async updateHall(data: UpdateHallDto, id: number) {
+  async update(data: UpdateDto, id: number) {
     const hall = await this.hallRepo.findOne({ where: { id } });
 
     await hall.update(data);
@@ -25,8 +25,8 @@ export class HallsService {
   }
 
   async getPolesAmount(id: number) {
-    return await (
-      await this.hallRepo.findOne({ where: { id } })
-    ).poles_amount;
+    const hall = await this.hallRepo.findOne({ where: { id } });
+
+    return hall.poles_amount;
   }
 }

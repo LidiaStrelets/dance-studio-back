@@ -4,7 +4,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { PaymentsService } from 'src/payments/payments.service';
 import { SchedulesService } from 'src/schedules/schedules.service';
 import { UsersService } from 'src/users/users.service';
-import { CreateRegistrationDto } from './dto/add-registration.dto';
+import { CreateDto } from './dto/add.dto';
 import { Registration } from './registrations.model';
 
 export const convertMilisecondsToDays = (ms) => ms / 1000 / 60 / 60 / 24;
@@ -20,7 +20,7 @@ export class RegistrationsService {
     private scheduleService: SchedulesService,
   ) {}
 
-  async createRegistration(dto: CreateRegistrationDto, headers) {
+  async create(dto: CreateDto, headers) {
     const userFromToken = this.authService.getUserFromToken(
       headers.authorization,
     );
@@ -31,14 +31,14 @@ export class RegistrationsService {
       );
 
     const client_id = dto.client_id ? dto.client_id : userFromToken.id;
-    if (await this.findExistingRegistration(client_id, dto.schedule_id))
+    if (await this.find(client_id, dto.schedule_id))
       throw new HttpException(
         { message: 'You already signed for this class!' },
         HttpStatus.BAD_REQUEST,
       );
 
-    const user = await this.userService.getUser(client_id.toString());
-    const userPaym = await this.paymentService.getLastUserPayment(client_id);
+    const user = await this.userService.getById(client_id.toString());
+    const userPaym = await this.paymentService.getLastByUser(client_id);
 
     const days = convertMilisecondsToDays(
       Date.now() - new Date(userPaym.createdAt).getTime(),
@@ -52,9 +52,7 @@ export class RegistrationsService {
         HttpStatus.PAYMENT_REQUIRED,
       );
 
-    const scheduleItem = await this.scheduleService.getScheduleItem(
-      dto.schedule_id,
-    );
+    const scheduleItem = await this.scheduleService.get(dto.schedule_id);
 
     if (scheduleItem.places_left === 0)
       throw new HttpException(
@@ -75,13 +73,13 @@ export class RegistrationsService {
         HttpStatus.BAD_REQUEST,
       );
 
-    return await this.registrationRepo.create({
+    return this.registrationRepo.create({
       ...dto,
       client_id,
     });
   }
 
-  async cancelRegistration(regId: string, headers) {
+  async cancel(regId: string, headers) {
     const userFromToken = this.authService.getUserFromToken(
       headers.authorization,
     );
@@ -100,7 +98,7 @@ export class RegistrationsService {
     )
       throw new HttpException('Access forbidden!', HttpStatus.FORBIDDEN);
 
-    const userPaym = await this.paymentService.getLastUserPayment(
+    const userPaym = await this.paymentService.getLastByUser(
       existingReg.client_id,
     );
 
@@ -113,18 +111,18 @@ export class RegistrationsService {
 
     this.scheduleService.increaseAvailableSpots(existingReg.schedule_id);
 
-    return await this.registrationRepo.destroy({
+    return this.registrationRepo.destroy({
       where: { client_id: existingReg.client_id },
     });
   }
 
-  async findExistingRegistration(userId: number, schId: number) {
-    return await this.registrationRepo.findOne({
+  async find(userId: number, schId: number) {
+    return this.registrationRepo.findOne({
       where: { client_id: userId, schedule_id: schId },
     });
   }
 
-  async getUserRegistrations(id: number) {
-    return await this.registrationRepo.findAll({ where: { client_id: id } });
+  async getAllByUser(id: number) {
+    return this.registrationRepo.findAll({ where: { client_id: id } });
   }
 }

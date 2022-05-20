@@ -7,16 +7,16 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { CreateRoleDto } from 'src/roles/dto/add-role.dto';
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
-import { RegisterUserDto } from 'src/users/dto/register-user.dto';
+import { CreateDto } from 'src/roles/dto/add.dto';
+import { LoginDto } from 'src/users/dto/login.dto';
+import { RegisterDto } from 'src/users/dto/register.dto';
 
 @Injectable()
 export class ValidationPipe
-  implements PipeTransform<RegisterUserDto | LoginUserDto | CreateRoleDto>
+  implements PipeTransform<RegisterDto | LoginDto | CreateDto>
 {
   async transform(
-    value: RegisterUserDto | LoginUserDto | CreateRoleDto,
+    value: RegisterDto | LoginDto | CreateDto,
     metadata: ArgumentMetadata,
   ) {
     const obj = plainToClass(metadata.metatype, value);

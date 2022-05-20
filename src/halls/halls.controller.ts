@@ -9,8 +9,8 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { CreateHallDto } from './dto/create-hall.dto';
-import { UpdateHallDto } from './dto/update-hall.dto';
+import { CreateDto } from './dto/create.dto';
+import { UpdateDto } from './dto/update.dto';
 import { Hall } from './halls.model';
 import { HallsService } from './halls.service';
 
@@ -26,8 +26,8 @@ export class HallsController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Post()
-  ceateHall(@Body() hallDto: CreateHallDto) {
-    return this.hallService.createHall(hallDto);
+  async ceate(@Body() вto: CreateDto) {
+    return await this.hallService.create(вto);
   }
 
   @ApiOperation({ summary: 'Update hall' })
@@ -37,7 +37,7 @@ export class HallsController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Patch('/:id')
-  updateHall(@Body() hallDto: UpdateHallDto, @Param('id') id: string) {
-    return this.hallService.updateHall(hallDto, Number(id));
+  update(@Body() вto: UpdateDto, @Param('id') id: string) {
+    return this.hallService.update(вto, Number(id));
   }
 }

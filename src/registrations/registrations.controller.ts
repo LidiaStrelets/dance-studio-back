@@ -12,7 +12,7 @@ import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DataOwnerGuard } from 'src/auth/data-owner.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { CreateRegistrationDto } from './dto/add-registration.dto';
+import { CreateDto } from './dto/add.dto';
 import { Registration } from './registrations.model';
 import { RegistrationsService } from './registrations.service';
 
@@ -42,11 +42,8 @@ export class RegistrationsController {
   @Roles('admin', 'client')
   @UseGuards(RolesGuard)
   @Post()
-  createRegistration(
-    @Body() paymentDto: CreateRegistrationDto,
-    @Headers() headers,
-  ) {
-    return this.registrationsService.createRegistration(paymentDto, headers);
+  async create(@Body() dto: CreateDto, @Headers() headers) {
+    return await this.registrationsService.create(dto, headers);
   }
 
   @ApiOperation({ summary: 'Delete registration' })
@@ -64,8 +61,8 @@ export class RegistrationsController {
   @Roles('admin', 'client')
   @UseGuards(RolesGuard)
   @Delete('/:regId')
-  deleteRegistration(@Param('regId') regId: string, @Headers() headers) {
-    return this.registrationsService.cancelRegistration(regId, headers);
+  async delete(@Param('regId') regId: string, @Headers() headers) {
+    return await this.registrationsService.cancel(regId, headers);
   }
 
   @ApiOperation({
@@ -80,7 +77,7 @@ export class RegistrationsController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @UseGuards(DataOwnerGuard)
   @Get('/:userId')
-  getUser(@Param('userId') userId: string) {
-    return this.registrationsService.getUserRegistrations(Number(userId));
+  async getAllByUser(@Param('userId') userId: string) {
+    return await this.registrationsService.getAllByUser(Number(userId));
   }
 }

@@ -9,8 +9,8 @@ import {
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { CreateRoleDto } from './dto/add-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { CreateDto } from './dto/add.dto';
+import { UpdateDto } from './dto/update.dto';
 import { Role } from './roles.model';
 import { RolesService } from './roles.service';
 
@@ -30,8 +30,8 @@ export class RolesController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Post()
-  ceateRole(@Body() roleDto: CreateRoleDto) {
-    return this.rolesService.createRole(roleDto);
+  async ceate(@Body() dto: CreateDto) {
+    return await this.rolesService.create(dto);
   }
 
   @ApiOperation({ summary: 'Update role' })
@@ -41,7 +41,7 @@ export class RolesController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Patch('/:id')
-  updateClass(@Body() roleDto: UpdateRoleDto, @Param('id') id: string) {
-    return this.rolesService.updateRole(roleDto, Number(id));
+  update(@Body() dto: UpdateDto, @Param('id') id: string) {
+    return this.rolesService.update(dto, Number(id));
   }
 }

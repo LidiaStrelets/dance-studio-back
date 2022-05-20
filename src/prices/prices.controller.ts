@@ -11,8 +11,8 @@ import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IsAuthGuard } from 'src/auth/isAuth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { CreatePriceDto } from './dto/add-price.dto';
-import { UpdatePriceDto } from './dto/update-price.dto';
+import { CreateDto } from './dto/add.dto';
+import { UpdateDto } from './dto/update.dto';
 import { Price } from './prices.model';
 import { PricesService } from './prices.service';
 
@@ -32,8 +32,8 @@ export class PricesController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Post()
-  ceatePrice(@Body() priceDto: CreatePriceDto) {
-    return this.pricesService.createPrice(priceDto);
+  async ceate(@Body() dto: CreateDto) {
+    return await this.pricesService.create(dto);
   }
 
   @ApiOperation({ summary: 'Get prices' })
@@ -46,8 +46,8 @@ export class PricesController {
   })
   @UseGuards(IsAuthGuard)
   @Get()
-  getPrices() {
-    return this.pricesService.getPrices();
+  async getAll() {
+    return await this.pricesService.getAll();
   }
 
   @ApiOperation({ summary: 'Update price' })
@@ -57,7 +57,7 @@ export class PricesController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Patch('/:id')
-  updateClass(@Body() priceDto: UpdatePriceDto, @Param('id') id: string) {
-    return this.pricesService.updatePrice(priceDto, Number(id));
+  update(@Body() dto: UpdateDto, @Param('id') id: string) {
+    return this.pricesService.update(dto, Number(id));
   }
 }

@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsOptional, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdateClassDto {
-  @IsOptional()
+export class CreateDto {
+  @IsNotEmpty()
   @IsIn(['stretching', 'pole sport', 'pole exotic', 'stripplastic'])
   @ApiProperty({
     example: 'stretching',
@@ -10,7 +10,6 @@ export class UpdateClassDto {
   })
   readonly name: string;
 
-  @IsOptional()
   @IsString()
   @ApiProperty({
     example: 'Stretching class targets on...',

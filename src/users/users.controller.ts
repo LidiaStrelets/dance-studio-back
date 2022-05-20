@@ -12,9 +12,9 @@ import { DataOwnerGuard } from 'src/auth/data-owner.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Class } from 'src/classes/classes.model';
-import { AddClassToUserDto } from 'src/classes/dto/add-class-to-user.dto';
-import { RegisterUserDto } from './dto/register-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { AddToUserDto } from 'src/classes/dto/add-to-user.dto';
+import { RegisterDto } from './dto/register.dto';
+import { UpdateDto } from './dto/update.dto';
 import { User } from './users.model';
 import { UsersService } from './users.service';
 
@@ -34,8 +34,8 @@ export class UsersController {
     description: `notNull Violation: User.field cannot be null`,
   })
   @Post()
-  ceateUser(@Body() userDto: RegisterUserDto, role: string) {
-    return this.userService.registrateUser(userDto, role);
+  ceate(@Body() dto: RegisterDto, role: string) {
+    return this.userService.registrate(dto, role);
   }
 
   @ApiOperation({ summary: 'Get all users' })
@@ -49,8 +49,8 @@ export class UsersController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Get()
-  getUsers() {
-    return this.userService.getUsers();
+  async getAll() {
+    return await this.userService.getAll();
   }
 
   @ApiOperation({
@@ -65,8 +65,8 @@ export class UsersController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @UseGuards(DataOwnerGuard)
   @Get('/:userId')
-  getUser(@Param('userId') userId: string) {
-    return this.userService.getUser(userId);
+  async getById(@Param('userId') userId: string) {
+    return await this.userService.getById(userId);
   }
 
   @ApiHeader({
@@ -80,7 +80,7 @@ export class UsersController {
   @Roles('admin', 'coach')
   @UseGuards(RolesGuard)
   @Post('/classes')
-  addClass(@Body() dto: AddClassToUserDto) {
+  addClass(@Body() dto: AddToUserDto) {
     return this.userService.addClass(dto);
   }
 
@@ -90,7 +90,7 @@ export class UsersController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @UseGuards(DataOwnerGuard)
   @Patch('/:id')
-  updateClass(@Body() userDto: UpdateUserDto, @Param('id') id: string) {
-    return this.userService.updateUser(userDto, Number(id));
+  update(@Body() dto: UpdateDto, @Param('id') id: string) {
+    return this.userService.update(dto, Number(id));
   }
 }

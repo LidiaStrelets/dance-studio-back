@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsNotEmpty, IsString } from 'class-validator';
+import { IsIn, IsOptional, IsString } from 'class-validator';
 
-export class CreateRoleDto {
-  @IsNotEmpty()
+export class UpdateDto {
+  @IsOptional()
   @IsIn(['admin', 'client', 'coach'])
   @ApiProperty({
     example: 'admin',
@@ -10,6 +10,7 @@ export class CreateRoleDto {
   })
   readonly title: string;
 
+  @IsOptional()
   @IsString()
   @ApiProperty({
     example: 'User with the highest rights',

@@ -9,8 +9,8 @@ import {
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { CreateScheduleDto } from './dto/create-schedule.dto';
-import { UpdateScheduleDto } from './dto/update-schedule.dto';
+import { CreateDto } from './dto/create.dto';
+import { UpdateDto } from './dto/update.dto';
 import { Schedule } from './schedules.model';
 import { SchedulesService } from './schedules.service';
 
@@ -30,8 +30,8 @@ export class SchedulesController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Post()
-  addScheduleItem(@Body() dto: CreateScheduleDto) {
-    return this.scheduleService.createScheduleItem(dto);
+  async add(@Body() dto: CreateDto) {
+    return await this.scheduleService.create(dto);
   }
 
   @ApiOperation({ summary: 'Update schedule' })
@@ -41,7 +41,7 @@ export class SchedulesController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Patch('/:id')
-  updateClass(@Body() scheduleDto: UpdateScheduleDto, @Param('id') id: string) {
-    return this.scheduleService.updateScheduleItem(scheduleDto, Number(id));
+  update(@Body() scheduleDto: UpdateDto, @Param('id') id: string) {
+    return this.scheduleService.update(scheduleDto, Number(id));
   }
 }

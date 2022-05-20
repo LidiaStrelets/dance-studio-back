@@ -11,7 +11,7 @@ import { ApiHeader, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { DataOwnerGuard } from 'src/auth/data-owner.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { CreatePaymentDto } from './dto/add-payment.dto';
+import { CreateDto } from './dto/add.dto';
 import { Payment } from './payments.model';
 import { PaymentsService } from './payments.service';
 
@@ -29,8 +29,8 @@ export class PaymentsController {
   @Roles('admin', 'client')
   @UseGuards(RolesGuard)
   @Post()
-  createPayment(@Body() paymentDto: CreatePaymentDto, @Headers() headers) {
-    return this.paymentsService.createPayment(paymentDto, headers);
+  async create(@Body() dto: CreateDto, @Headers() headers) {
+    return await this.paymentsService.create(dto, headers);
   }
 
   @ApiOperation({
@@ -45,7 +45,7 @@ export class PaymentsController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @UseGuards(DataOwnerGuard)
   @Get('/:userId')
-  getUser(@Param('userId') userId: string) {
-    return this.paymentsService.getUserPayments(Number(userId));
+  async getAllByUser(@Param('userId') userId: string) {
+    return await this.paymentsService.getAllByUser(Number(userId));
   }
 }

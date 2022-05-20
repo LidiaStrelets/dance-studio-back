@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { HallsService } from 'src/halls/halls.service';
 import { UsersService } from 'src/users/users.service';
-import { CreateScheduleDto } from './dto/create-schedule.dto';
-import { UpdateScheduleDto } from './dto/update-schedule.dto';
+import { CreateDto } from './dto/create.dto';
+import { UpdateDto } from './dto/update.dto';
 import { Schedule } from './schedules.model';
 
 @Injectable()
@@ -14,9 +14,9 @@ export class SchedulesService {
     private userService: UsersService,
   ) {}
 
-  async createScheduleItem(dto: CreateScheduleDto) {
+  async create(dto: CreateDto) {
     try {
-      const user = await this.userService.isUserCoach(dto.coach);
+      const user = await this.userService.isCoach(dto.coach);
       if (user) {
         if (!user.classes.some((cl) => cl.id === dto.class))
           throw new HttpException(
@@ -24,7 +24,7 @@ export class SchedulesService {
             HttpStatus.BAD_REQUEST,
           );
         const availablePoles = await this.hallsService.getPolesAmount(dto.hall);
-        return await this.scheduleRepo.create({
+        return this.scheduleRepo.create({
           ...dto,
           places_left: availablePoles,
         });
@@ -37,8 +37,8 @@ export class SchedulesService {
     }
   }
 
-  async getScheduleItem(id: number) {
-    return await this.scheduleRepo.findOne({ where: { id } });
+  async get(id: number) {
+    return this.scheduleRepo.findOne({ where: { id } });
   }
 
   async decreaseAvailableSpots(id: number) {
@@ -57,7 +57,7 @@ export class SchedulesService {
     return scheduleItem;
   }
 
-  async updateScheduleItem(data: UpdateScheduleDto, id: number) {
+  async update(data: UpdateDto, id: number) {
     const scheduleItem = await this.scheduleRepo.findOne({ where: { id } });
 
     await scheduleItem.update(data);

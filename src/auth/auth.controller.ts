@@ -1,7 +1,7 @@
-import { Body, Controller, Headers, Param, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
-import { RegisterUserDto } from 'src/users/dto/register-user.dto';
+import { LoginDto } from 'src/users/dto/login.dto';
+import { RegisterDto } from 'src/users/dto/register.dto';
 import { User } from 'src/users/users.model';
 import { AuthService } from './auth.service';
 
@@ -18,8 +18,8 @@ export class AuthController {
     description: 'Bearer token',
   })
   @Post('/login')
-  login(@Body() userDto: LoginUserDto) {
-    return this.authService.login(userDto);
+  login(@Body() dto: LoginDto) {
+    return this.authService.login(dto);
   }
 
   @ApiOperation({ summary: 'Register user' })
@@ -34,7 +34,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 400, description: `User with email already exists!` })
   @Post('/registration/:role')
-  register(@Body() userDto: RegisterUserDto, @Param('role') role: string) {
-    return this.authService.register(userDto, role);
+  register(@Body() dto: RegisterDto, @Param('role') role: string) {
+    return this.authService.register(dto, role);
   }
 }

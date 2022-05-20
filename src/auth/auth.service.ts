@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
-import { RegisterUserDto } from 'src/users/dto/register-user.dto';
+import { LoginDto } from 'src/users/dto/login.dto';
+import { RegisterDto } from 'src/users/dto/register.dto';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { User } from 'src/users/users.model';
@@ -41,7 +41,7 @@ export class AuthService {
     }
   }
 
-  async login(dto: LoginUserDto) {
+  async login(dto: LoginDto) {
     try {
       const user = await this.validateUser(dto);
 
@@ -54,7 +54,7 @@ export class AuthService {
     }
   }
 
-  async register(dto: RegisterUserDto, role: string) {
+  async register(dto: RegisterDto, role: string) {
     if (role === 'admin' && dto.adminKey !== process.env.ADMIN_KEY) {
       throw new HttpException(
         `Attach an admin key to registrate admin user!!`,
@@ -62,7 +62,7 @@ export class AuthService {
       );
     }
 
-    const candidate = await this.userService.findUserByEmail(dto.email);
+    const candidate = await this.userService.findByEmail(dto.email);
 
     if (candidate)
       throw new HttpException(
@@ -71,7 +71,7 @@ export class AuthService {
       );
 
     const hashedPwd = await bcrypt.hash(dto.password, 6);
-    const user = await this.userService.registrateUser(
+    const user = await this.userService.registrate(
       {
         ...dto,
         password: hashedPwd,
@@ -91,8 +91,8 @@ export class AuthService {
     };
   }
 
-  private async validateUser(dto: LoginUserDto) {
-    const user = await this.userService.findUserByEmail(dto.email);
+  private async validateUser(dto: LoginDto) {
+    const user = await this.userService.findByEmail(dto.email);
     if (!user)
       throw new HttpException(
         {
