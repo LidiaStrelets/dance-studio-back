@@ -6,6 +6,7 @@ import { Schedule } from './schedules.model';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { HallsModule } from 'src/modules/halls/halls.module';
 import { UsersModule } from 'src/modules/users/users.module';
+import { IsCoachMiddleware } from 'src/core/middlewares/isCoach.middleware';
 
 @Module({
   providers: [SchedulesService],

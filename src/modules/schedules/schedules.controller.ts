@@ -35,13 +35,6 @@ export class SchedulesController {
   @Roles('admin')
   @Post()
   async add(@Body() dto: CreateDto) {
-    const userIsCoach = await this.usersService.isCoach(dto.coach);
-    if (!userIsCoach)
-      throw new HttpException(
-        `Requested user is not a coach`,
-        HttpStatus.BAD_REQUEST,
-      );
-
     const user = await this.usersService.getById(dto.coach.toString());
 
     if (!user.classes.some((cl) => cl.id === dto.class))

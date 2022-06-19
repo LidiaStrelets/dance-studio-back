@@ -45,7 +45,6 @@ export class UsersController {
   @ApiResponse({ status: 200, type: RegisterDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  // @UseGuards(DataOwnerGuard)
   @Get('/:userId')
   async getById(@Param('userId') userId: string) {
     return await this.userService.getById(userId);

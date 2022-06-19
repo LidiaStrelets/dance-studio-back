@@ -22,6 +22,7 @@ import { UnauthorizedMiddleware } from './core/middlewares/unauthorized.middlewa
 import { RequestService } from './core/services/request.service';
 import { DataOwnerOrAdminMiddleware } from './core/middlewares/dataOwner.middleware';
 import { AdminWithUserIdMiddleware } from './core/middlewares/adminWithUserId.middleware';
+import { IsCoachMiddleware } from './core/middlewares/isCoach.middleware';
 
 @Module({
   imports: [
@@ -87,5 +88,10 @@ export class AppModule implements NestModule {
     consumer
       .apply(AdminWithUserIdMiddleware)
       .forRoutes('registrations', 'payments');
+
+    consumer
+      .apply(IsCoachMiddleware)
+      .exclude('schedules/:id')
+      .forRoutes('schedules');
   }
 }
