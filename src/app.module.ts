@@ -1,22 +1,26 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
-import { RolesModule } from './roles/roles.module';
-import { User } from './users/users.model';
-import { Role } from './roles/roles.model';
-import { UserRoles } from './roles/user-roles.model';
-import { AuthModule } from './auth/auth.module';
-import { HallsModule } from './halls/halls.module';
-import { ClassesModule } from './classes/classes.module';
-import { Class } from './classes/classes.model';
-import { UserClasses } from './classes/user-classes.model';
-import { SchedulesModule } from './schedules/schedules.module';
-import { PricesModule } from './prices/prices.module';
-import { PaymentsModule } from './payments/payments.module';
-import { Payment } from './payments/payments.model';
-import { RegistrationsModule } from './registrations/registrations.module';
-import { Registration } from './registrations/registrations.model';
+import { UsersModule } from './modules/users/users.module';
+import { RolesModule } from './modules/roles/roles.module';
+import { User } from './modules/users/users.model';
+import { Role } from './modules/roles/roles.model';
+import { UserRoles } from './modules/roles/user-roles.model';
+import { AuthModule } from './modules/auth/auth.module';
+import { HallsModule } from './modules/halls/halls.module';
+import { ClassesModule } from './modules/classes/classes.module';
+import { Class } from './modules/classes/classes.model';
+import { UserClasses } from './modules/classes/user-classes.model';
+import { SchedulesModule } from './modules/schedules/schedules.module';
+import { PricesModule } from './modules/prices/prices.module';
+import { PaymentsModule } from './modules/payments/payments.module';
+import { Payment } from './modules/payments/payments.model';
+import { RegistrationsModule } from './modules/registrations/registrations.module';
+import { Registration } from './modules/registrations/registrations.model';
+import { CoreJwtModule } from './core/jwt.module';
+import { UnauthorizedMiddleware } from './core/middlewares/unauthorized.middleware';
+import { ClassesController } from './modules/classes/classes.controller';
+import { HallsController } from './modules/halls/halls.controller';
 
 @Module({
   imports: [
@@ -44,14 +48,30 @@ import { Registration } from './registrations/registrations.model';
     UsersModule,
     RolesModule,
     AuthModule,
-    HallsModule,
-    ClassesModule,
-    SchedulesModule,
-    PricesModule,
-    PaymentsModule,
-    RegistrationsModule,
+    CoreJwtModule,
+    // HallsModule,
+    // ClassesModule,
+    // SchedulesModule,
+    // PricesModule,
+    // PaymentsModule,
+    // RegistrationsModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(UnauthorizedMiddleware)
+      .forRoutes(
+        'classes',
+        'halls',
+        'payments',
+        'prices',
+        'registrations',
+        'roles',
+        'schedules',
+        'users',
+      );
+  }
+}
