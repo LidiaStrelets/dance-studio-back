@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { AuthModule } from 'src/modules/auth/auth.module';
+import { RequestService } from 'src/core/services/request.service';
 import { PaymentsModule } from 'src/modules/payments/payments.module';
 import { SchedulesModule } from 'src/modules/schedules/schedules.module';
 import { User } from 'src/modules/users/users.model';
@@ -11,10 +11,9 @@ import { RegistrationsService } from './registrations.service';
 
 @Module({
   controllers: [RegistrationsController],
-  providers: [RegistrationsService],
+  providers: [RegistrationsService, RequestService],
   imports: [
     SequelizeModule.forFeature([User, Registration]),
-    AuthModule,
     UsersModule,
     PaymentsModule,
     SchedulesModule,

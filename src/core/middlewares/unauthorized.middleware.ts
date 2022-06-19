@@ -2,12 +2,14 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/modules/users/users.model';
 import { Request, Response, NextFunction } from 'express';
+import { RequestService } from '../services/request.service';
 
 @Injectable()
 export class UnauthorizedMiddleware {
   constructor(
     @Inject('CoreJwtService')
     private jwtService: JwtService,
+    private requestService: RequestService,
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
@@ -59,6 +61,9 @@ export class UnauthorizedMiddleware {
         HttpStatus.UNAUTHORIZED,
       );
     }
+
+    this.requestService.setUserId(candidate.id.toString());
+    this.requestService.setUserRole(candidate.role.title);
 
     next();
   }

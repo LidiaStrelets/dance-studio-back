@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { HallsService } from 'src/modules/halls/halls.service';
 import { UsersService } from 'src/modules/users/users.service';
@@ -14,28 +14,12 @@ export class SchedulesService {
     private userService: UsersService,
   ) {}
 
-  // async create(dto: CreateDto) {
-  //   try {
-  //     // const user = await this.userService.isCoach(dto.coach);
-  //     if (user) {
-  //       if (!user.classes.some((cl) => cl.id === dto.class))
-  //         throw new HttpException(
-  //           `${user.firstname} ${user.lastname} doesn't conduct requested class!`,
-  //           HttpStatus.BAD_REQUEST,
-  //         );
-  //       const availablePoles = await this.hallsService.getPolesAmount(dto.hall);
-  //       return this.scheduleRepo.create({
-  //         ...dto,
-  //         places_left: availablePoles,
-  //       });
-  //     }
-  //   } catch (e) {
-  //     throw new HttpException(
-  //       `Something went wrong`,
-  //       HttpStatus.INTERNAL_SERVER_ERROR,
-  //     );
-  //   }
-  // }
+  async create(dto: CreateDto, availablePoles: number) {
+    return this.scheduleRepo.create({
+      ...dto,
+      places_left: availablePoles,
+    });
+  }
 
   async get(id: number) {
     return this.scheduleRepo.findOne({ where: { id } });

@@ -3,7 +3,6 @@ import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/core/decorators/roles.decorator';
 import { CreateDto } from './dto/add.dto';
 import { UpdateDto } from './dto/update.dto';
-import { Price } from './prices.model';
 import { PricesService } from './prices.service';
 
 @ApiTags('Prices')

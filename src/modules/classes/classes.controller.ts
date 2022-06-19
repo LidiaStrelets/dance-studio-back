@@ -1,7 +1,6 @@
 import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/core/decorators/roles.decorator';
-import { Class } from './classes.model';
 import { ClassesService } from './classes.service';
 import { CreateDto } from './dto/create.dto';
 import { UpdateDto } from './dto/update.dto';

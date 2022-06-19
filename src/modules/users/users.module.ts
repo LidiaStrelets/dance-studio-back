@@ -1,4 +1,4 @@
-import { Module, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CoreJwtModule } from 'src/core/jwt.module';
 import { Class } from 'src/modules/classes/classes.model';

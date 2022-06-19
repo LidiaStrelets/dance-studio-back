@@ -19,8 +19,7 @@ import { RegistrationsModule } from './modules/registrations/registrations.modul
 import { Registration } from './modules/registrations/registrations.model';
 import { CoreJwtModule } from './core/jwt.module';
 import { UnauthorizedMiddleware } from './core/middlewares/unauthorized.middleware';
-import { ClassesController } from './modules/classes/classes.controller';
-import { HallsController } from './modules/halls/halls.controller';
+import { RequestService } from './core/services/request.service';
 
 @Module({
   imports: [
@@ -49,15 +48,15 @@ import { HallsController } from './modules/halls/halls.controller';
     RolesModule,
     AuthModule,
     CoreJwtModule,
-    // HallsModule,
-    // ClassesModule,
-    // SchedulesModule,
-    // PricesModule,
-    // PaymentsModule,
-    // RegistrationsModule,
+    HallsModule,
+    ClassesModule,
+    SchedulesModule,
+    PricesModule,
+    PaymentsModule,
+    RegistrationsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [RequestService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

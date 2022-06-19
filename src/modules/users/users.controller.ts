@@ -2,38 +2,24 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
-  Inject,
   Param,
   Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { InjectModel } from '@nestjs/sequelize';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/core/decorators/roles.decorator';
 import { DataOwnerGuard } from 'src/core/guards/data-owner.guard';
 import { RolesGuard } from 'src/core/guards/roles.guard';
-import { Class } from 'src/modules/classes/classes.model';
 import { AddToUserDto } from 'src/modules/classes/dto/add-to-user.dto';
-import { Role } from '../roles/roles.model';
-import { RolesService } from '../roles/roles.service';
 import { RegisterDto } from './dto/register.dto';
 import { UpdateDto } from './dto/update.dto';
-import { User } from './users.model';
 import { UsersService } from './users.service';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(
-    private userService: UsersService,
-    private readonly rolesService: RolesService,
-    @Inject('CoreJwtService')
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private userService: UsersService) {}
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiHeader({
@@ -60,25 +46,25 @@ export class UsersController {
   @ApiResponse({ status: 200, type: RegisterDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @UseGuards(DataOwnerGuard)
+  // @UseGuards(DataOwnerGuard)
   @Get('/:userId')
   async getById(@Param('userId') userId: string) {
     return await this.userService.getById(userId);
   }
 
-  // @ApiHeader({
-  //   name: 'Authorization',
-  //   description: 'Bearer token',
-  // })
-  // @ApiOperation({ summary: 'Add classes to the coach' })
-  // @ApiResponse({ status: 200, type: Class })
-  // @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  // @ApiResponse({ status: 403, description: 'Forbidden.' })
-  // @Roles('admin', 'coach')
-  // @Post('/classes')
-  // addClass(@Body() dto: AddToUserDto) {
-  //   return this.userService.addClass(dto);
-  // }
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+  })
+  @ApiOperation({ summary: 'Add classes to the coach' })
+  @ApiResponse({ status: 200, type: RegisterDto })
+  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @Roles('admin', 'coach')
+  @Post('/classes')
+  addClass(@Body() dto: AddToUserDto) {
+    return this.userService.addClass(dto);
+  }
 
   @ApiOperation({ summary: 'Update schedule' })
   @ApiResponse({ status: 200, type: RegisterDto })
