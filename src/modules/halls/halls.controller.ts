@@ -12,20 +12,20 @@ export class HallsController {
   constructor(private hallService: HallsService) {}
 
   @ApiOperation({ summary: 'Create hall' })
-  @ApiResponse({ status: 200, type: Hall })
+  @ApiResponse({ status: 200, type: CreateDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  // @Roles('admin')
+  @Roles('admin')
   @Post()
   async ceate(@Body() вto: CreateDto) {
     return await this.hallService.create(вto);
   }
 
   @ApiOperation({ summary: 'Update hall' })
-  @ApiResponse({ status: 200, type: Hall })
+  @ApiResponse({ status: 200, type: CreateDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  // @Roles('admin')
+  @Roles('admin')
   @Patch('/:id')
   update(@Body() вto: UpdateDto, @Param('id') id: string) {
     return this.hallService.update(вto, Number(id));

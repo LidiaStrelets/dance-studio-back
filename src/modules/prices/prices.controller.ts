@@ -12,21 +12,21 @@ export class PricesController {
   constructor(private pricesService: PricesService) {}
 
   @ApiOperation({ summary: 'Create price' })
-  @ApiResponse({ status: 200, type: Price })
+  @ApiResponse({ status: 200, type: CreateDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
   })
-  // @Roles('admin')
+  @Roles('admin')
   @Post()
   async ceate(@Body() dto: CreateDto) {
     return await this.pricesService.create(dto);
   }
 
   @ApiOperation({ summary: 'Get prices' })
-  @ApiResponse({ status: 200, type: [Price] })
+  @ApiResponse({ status: 200, type: [CreateDto] })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiHeader({
@@ -39,10 +39,10 @@ export class PricesController {
   }
 
   @ApiOperation({ summary: 'Update price' })
-  @ApiResponse({ status: 200, type: Price })
+  @ApiResponse({ status: 200, type: CreateDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  // @Roles('admin')
+  @Roles('admin')
   @Patch('/:id')
   update(@Body() dto: UpdateDto, @Param('id') id: string) {
     return this.pricesService.update(dto, Number(id));

@@ -12,24 +12,24 @@ export class RolesController {
   constructor(private rolesService: RolesService) {}
 
   @ApiOperation({ summary: 'Create user role' })
-  @ApiResponse({ status: 200, type: Role })
+  @ApiResponse({ status: 200, type: CreateDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
   })
-  // @Roles('admin')
+  @Roles('admin')
   @Post()
   async ceate(@Body() dto: CreateDto) {
     return await this.rolesService.create(dto);
   }
 
   @ApiOperation({ summary: 'Update role' })
-  @ApiResponse({ status: 200, type: Role })
+  @ApiResponse({ status: 200, type: CreateDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  // @Roles('admin')
+  @Roles('admin')
   @Patch('/:id')
   update(@Body() dto: UpdateDto, @Param('id') id: string) {
     return this.rolesService.update(dto, Number(id));

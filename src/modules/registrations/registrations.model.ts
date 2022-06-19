@@ -19,7 +19,6 @@ export class Registration extends Model<
   Registration,
   RegistrationCreationAttrs
 > {
-  @ApiProperty({ example: 1, description: 'Unique registration id' })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -28,10 +27,6 @@ export class Registration extends Model<
   })
   id: number;
 
-  @ApiProperty({
-    example: 23,
-    description: 'Schedule item id',
-  })
   @Column({
     type: DataType.INTEGER,
     allowNull: false,

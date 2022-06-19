@@ -9,18 +9,19 @@ import { PaymentsService } from './payments.service';
 export class PaymentsController {
   constructor(private paymentsService: PaymentsService) {}
 
-  @ApiOperation({ summary: 'Create payment' })
-  @ApiResponse({ status: 200, type: Payment })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-  })
+  // @ApiOperation({ summary: 'Create payment' })
+  // @ApiResponse({ status: 200, type: Payment })
+  // @ApiResponse({ status: 401, description: 'Unauthorized user!' })
+  // @ApiHeader({
+  //   name: 'Authorization',
+  //   description: 'Bearer token',
+  // })
   // @Roles('admin', 'client')
-  @Post()
+  // @Post()
   // async create(@Body() dto: CreateDto, @Headers() headers) {
   //   return await this.paymentsService.create(dto, headers);
   // }
+
   @ApiOperation({
     summary: 'Get user payments information',
   })
@@ -28,7 +29,7 @@ export class PaymentsController {
     name: 'Authorization',
     description: 'Bearer token',
   })
-  @ApiResponse({ status: 200, type: [Payment] })
+  @ApiResponse({ status: 200, type: [CreateDto] })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Get('/:userId')

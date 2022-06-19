@@ -12,10 +12,6 @@ interface ScheduleCreationAttrs {
 
 @Table({ tableName: 'schedules' })
 export class Schedule extends Model<Schedule, ScheduleCreationAttrs> {
-  @ApiProperty({
-    example: 1,
-    description: 'Unique schedule position identifier',
-  })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -24,50 +20,30 @@ export class Schedule extends Model<Schedule, ScheduleCreationAttrs> {
   })
   id: number;
 
-  @ApiProperty({
-    example: 1,
-    description: 'Unique class identifier',
-  })
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
   class: number;
 
-  @ApiProperty({
-    example: 1,
-    description: 'Unique coach identifier',
-  })
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
   coach: number;
 
-  @ApiProperty({
-    example: 1,
-    description: 'Unique hall identifier',
-  })
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
   hall: number;
 
-  @ApiProperty({
-    example: '29.07.2022',
-    description: `Class date and time`,
-  })
   @Column({
     type: DataType.DATE,
     allowNull: true,
   })
   date_time: DateDataType;
 
-  @ApiProperty({
-    example: 3,
-    description: 'Available poles for current class',
-  })
   @Column({
     type: DataType.INTEGER,
     allowNull: false,

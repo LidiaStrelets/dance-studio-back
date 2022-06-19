@@ -9,10 +9,6 @@ interface HallCreationAttrs {
 
 @Table({ tableName: 'halls' })
 export class Hall extends Model<Hall, HallCreationAttrs> {
-  @ApiProperty({
-    example: 1,
-    description: 'Unique hall identifier',
-  })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -21,10 +17,6 @@ export class Hall extends Model<Hall, HallCreationAttrs> {
   })
   id: number;
 
-  @ApiProperty({
-    example: 'The big hall',
-    description: 'Unique hall name',
-  })
   @Column({
     type: DataType.STRING,
     unique: true,
@@ -32,20 +24,12 @@ export class Hall extends Model<Hall, HallCreationAttrs> {
   })
   name: string;
 
-  @ApiProperty({
-    example: 'This hall is 60 m^2 squared, includes...',
-    description: 'Describes the hall',
-  })
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   description: string;
 
-  @ApiProperty({
-    example: 9,
-    description: 'Poles available for the hall',
-  })
   @Column({
     type: DataType.INTEGER,
     allowNull: false,

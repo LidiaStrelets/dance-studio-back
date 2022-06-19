@@ -12,21 +12,21 @@ export class ClassesController {
   constructor(private classesService: ClassesService) {}
 
   @ApiOperation({ summary: 'Create class' })
-  @ApiResponse({ status: 200, type: Class })
+  @ApiResponse({ status: 200, type: CreateDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
   })
-  // @Roles('admin')
+  @Roles('admin')
   @Post()
   async create(@Body() dto: CreateDto) {
     return await this.classesService.create(dto);
   }
 
   @ApiOperation({ summary: 'Update class' })
-  @ApiResponse({ status: 200, type: Class })
+  @ApiResponse({ status: 200, type: CreateDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')

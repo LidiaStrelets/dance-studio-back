@@ -16,7 +16,6 @@ interface RoleCreationAttrs {
 
 @Table({ tableName: 'roles' })
 export class Role extends Model<Role, RoleCreationAttrs> {
-  @ApiProperty({ example: 1, description: 'Unique role id' })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -25,20 +24,12 @@ export class Role extends Model<Role, RoleCreationAttrs> {
   })
   id: number;
 
-  @ApiProperty({
-    example: 'admin',
-    description: 'The name of a user role',
-  })
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   title: string;
 
-  @ApiProperty({
-    example: 'User with the highest rights',
-    description: 'Describes what the role allows',
-  })
   @Column({
     type: DataType.STRING,
     allowNull: true,

@@ -17,10 +17,6 @@ interface PaymentCreationAttrs {
 
 @Table({ tableName: 'payments' })
 export class Payment extends Model<Payment, PaymentCreationAttrs> {
-  @ApiProperty({
-    example: 1,
-    description: 'Unique payment identifier',
-  })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -29,31 +25,18 @@ export class Payment extends Model<Payment, PaymentCreationAttrs> {
   })
   id: number;
 
-  @ApiProperty({
-    example: 3,
-    description:
-      'The classes amount left in current pass, if equals to 1000 means that pass is unlimited',
-  })
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
   classes_left: number;
 
-  @ApiProperty({
-    example: 1,
-    description: 'The unique price identifier',
-  })
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
   price_id: number;
 
-  @ApiProperty({
-    example: 5,
-    description: 'User id',
-  })
   @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,

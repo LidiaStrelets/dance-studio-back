@@ -16,10 +16,6 @@ interface ClassCreationAttrs {
 
 @Table({ tableName: 'classes' })
 export class Class extends Model<Class, ClassCreationAttrs> {
-  @ApiProperty({
-    example: 1,
-    description: 'Unique class identifier',
-  })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -28,10 +24,6 @@ export class Class extends Model<Class, ClassCreationAttrs> {
   })
   id: number;
 
-  @ApiProperty({
-    example: 'Stretching',
-    description: 'Unique class name',
-  })
   @Column({
     type: DataType.STRING,
     unique: true,
@@ -39,10 +31,6 @@ export class Class extends Model<Class, ClassCreationAttrs> {
   })
   name: string;
 
-  @ApiProperty({
-    example: 'This class is...',
-    description: 'Describes the class',
-  })
   @Column({
     type: DataType.STRING,
     allowNull: false,

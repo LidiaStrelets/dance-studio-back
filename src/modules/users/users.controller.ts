@@ -35,28 +35,12 @@ export class UsersController {
     private readonly jwtService: JwtService,
   ) {}
 
-  @ApiOperation({ summary: 'Create user' })
-  @ApiResponse({ status: 200, type: User })
-  @ApiResponse({
-    status: 400,
-    description: `Impossible to register user with a role. Role doesn't exist!`,
-  })
-  @ApiResponse({
-    status: 400,
-    description: `notNull Violation: User.field cannot be null`,
-  })
-  @Post()
-  async create(@Body() dto: RegisterDto, role: string) {
-    const roleObj = await this.rolesService.getByTitle(role);
-    return this.userService.registrate(dto, roleObj);
-  }
-
   @ApiOperation({ summary: 'Get all users' })
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
   })
-  @ApiResponse({ status: 200, type: [User] })
+  @ApiResponse({ status: 200, type: [RegisterDto] })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
@@ -73,7 +57,7 @@ export class UsersController {
     name: 'Authorization',
     description: 'Bearer token',
   })
-  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: 200, type: RegisterDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @UseGuards(DataOwnerGuard)
@@ -97,7 +81,7 @@ export class UsersController {
   // }
 
   @ApiOperation({ summary: 'Update schedule' })
-  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: 200, type: RegisterDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Patch('/:id')
