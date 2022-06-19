@@ -43,7 +43,7 @@ export class RolesGuard implements CanActivate {
 
       req.user = user;
 
-      return requiredRoles.some((rr) => rr === user.role);
+      return requiredRoles.some((rr) => user.roles.some((ur) => ur === rr));
     } catch (e) {
       throw new HttpException('Access forbidden!', HttpStatus.FORBIDDEN);
     }

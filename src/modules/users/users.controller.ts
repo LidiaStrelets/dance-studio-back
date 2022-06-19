@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/core/decorators/roles.decorator';
-import { DataOwnerGuard } from 'src/core/guards/data-owner.guard';
 import { RolesGuard } from 'src/core/guards/roles.guard';
 import { AddToUserDto } from 'src/modules/classes/dto/add-to-user.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -70,8 +69,8 @@ export class UsersController {
   @ApiResponse({ status: 200, type: RegisterDto })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @Patch('/:id')
-  update(@Body() dto: UpdateDto, @Param('id') id: string) {
+  @Patch('/:userId')
+  update(@Body() dto: UpdateDto, @Param('userId') id: string) {
     return this.userService.update(dto, Number(id));
   }
 }

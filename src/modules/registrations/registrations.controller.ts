@@ -8,11 +8,9 @@ import {
   HttpStatus,
   Param,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/core/decorators/roles.decorator';
-import { DataOwnerGuard } from 'src/core/guards/data-owner.guard';
 import { RequestService } from 'src/core/services/request.service';
 import { PaymentsService } from '../payments/payments.service';
 import { SchedulesService } from '../schedules/schedules.service';
@@ -58,18 +56,12 @@ export class RegistrationsController {
   @Post()
   async create(@Body() dto: CreateDto, @Headers() headers) {
     const userid = this.requestService.getUserId();
-    const userRole = this.requestService.getUserRole();
-    if (userRole === 'admin' && !dto.client_id)
-      throw new HttpException(
-        { message: 'Client id required!' },
-        HttpStatus.BAD_REQUEST,
-      );
 
     const user = await this.userService.getById(
       dto.client_id.toString() || userid,
     );
 
-    if (user.role.id !== 1)
+    if (user.roles.some((r) => r.id !== 1))
       throw new HttpException(
         { message: 'Registration can be created only for the clients!' },
         HttpStatus.BAD_REQUEST,
@@ -131,10 +123,7 @@ export class RegistrationsController {
   })
   @Roles('admin', 'client')
   @Delete('/:regId')
-  async delete(@Param('regId') regId: string, @Headers() headers) {
-    const userId = this.requestService.getUserId();
-    const userRole = this.requestService.getUserRole();
-
+  async delete(@Param('regId') regId: string) {
     const existingReg = await this.registrationsService.findById(regId);
 
     if (!existingReg)
@@ -142,9 +131,6 @@ export class RegistrationsController {
         { message: `Registration doesn't exist` },
         HttpStatus.NOT_FOUND,
       );
-
-    if (userRole !== 'admin' && existingReg.client_id !== +userId)
-      throw new HttpException('Access forbidden!', HttpStatus.FORBIDDEN);
 
     const userPaym = await this.paymentService.getLastByUser(
       existingReg.client_id,
@@ -172,7 +158,6 @@ export class RegistrationsController {
   @ApiResponse({ status: 200, type: [CreateDto] })
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  // @UseGuards(DataOwnerGuard)
   @Get('/:userId')
   async getAllByUser(@Param('userId') userId: string) {
     return await this.registrationsService.getAllByUser(Number(userId));

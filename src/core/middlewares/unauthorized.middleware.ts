@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/modules/users/users.model';
 import { Request, Response, NextFunction } from 'express';
 import { RequestService } from '../services/request.service';
+import { UsersService } from 'src/modules/users/users.service';
 
 @Injectable()
 export class UnauthorizedMiddleware {
@@ -10,6 +10,7 @@ export class UnauthorizedMiddleware {
     @Inject('CoreJwtService')
     private jwtService: JwtService,
     private requestService: RequestService,
+    private userService: UsersService,
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
@@ -23,7 +24,7 @@ export class UnauthorizedMiddleware {
           {
             message: ['Unauthorized!'],
             problem_field: null,
-            name: 'Unauthorized Error',
+            name: 'Unauthorized Error - no token',
           },
         ],
         HttpStatus.UNAUTHORIZED,
@@ -38,7 +39,7 @@ export class UnauthorizedMiddleware {
           {
             message: ['Unauthorized!'],
             problem_field: null,
-            name: 'Unauthorized Error',
+            name: 'Unauthorized Error - invalid token',
           },
         ],
         HttpStatus.UNAUTHORIZED,
@@ -47,7 +48,7 @@ export class UnauthorizedMiddleware {
 
     const decoded = this.jwtService.verify(authToken);
 
-    const candidate = await User.findOne({ where: { id: decoded.id } });
+    const candidate = await this.userService.getById(decoded.id);
 
     if (!candidate) {
       throw new HttpException(
@@ -55,7 +56,7 @@ export class UnauthorizedMiddleware {
           {
             message: ['Unauthorized!'],
             problem_field: null,
-            name: 'Unauthorized Error',
+            name: 'Unauthorized Error - no user',
           },
         ],
         HttpStatus.UNAUTHORIZED,
@@ -63,7 +64,7 @@ export class UnauthorizedMiddleware {
     }
 
     this.requestService.setUserId(candidate.id.toString());
-    this.requestService.setUserRole(candidate.role.title);
+    this.requestService.setUserRole(decoded.roles.join(','));
 
     next();
   }

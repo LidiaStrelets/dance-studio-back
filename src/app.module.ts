@@ -20,6 +20,8 @@ import { Registration } from './modules/registrations/registrations.model';
 import { CoreJwtModule } from './core/jwt.module';
 import { UnauthorizedMiddleware } from './core/middlewares/unauthorized.middleware';
 import { RequestService } from './core/services/request.service';
+import { DataOwnerOrAdminMiddleware } from './core/middlewares/dataOwner.middleware';
+import { AdminWithUserIdMiddleware } from './core/middlewares/adminWithUserId.middleware';
 
 @Module({
   imports: [
@@ -72,5 +74,18 @@ export class AppModule implements NestModule {
         'schedules',
         'users',
       );
+
+    consumer
+      .apply(DataOwnerOrAdminMiddleware)
+      .forRoutes(
+        'users/:userId',
+        'registrations/:regId',
+        'registrations/:userId',
+        'payments/:userId',
+      );
+
+    consumer
+      .apply(AdminWithUserIdMiddleware)
+      .forRoutes('registrations', 'payments');
   }
 }

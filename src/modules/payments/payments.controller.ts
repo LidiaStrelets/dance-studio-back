@@ -36,19 +36,12 @@ export class PaymentsController {
   @Roles('admin', 'client')
   @Post()
   async create(@Body() dto: CreateDto, @Headers() headers) {
-    const userRole = this.requestServise.getUserRole();
-    if (userRole === 'admin' && !dto.user_id)
-      throw new HttpException(
-        { message: 'User id required!' },
-        HttpStatus.BAD_REQUEST,
-      );
-
     const price = await this.priceService.getById(Number(dto.price_id));
 
     const client_id = dto.user_id || this.requestServise.getUserId();
     const user = await this.userService.getById(client_id.toString());
 
-    if (user.role.id !== 1)
+    if (user.roles.some((r) => r.id !== 1))
       throw new HttpException(
         { message: 'Payments can be created only for the clients!' },
         HttpStatus.BAD_REQUEST,

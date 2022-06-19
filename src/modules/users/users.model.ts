@@ -71,7 +71,7 @@ export class User extends Model<User, UserCreationAttrs> {
   information: string;
 
   @BelongsToMany(() => Role, () => UserRoles)
-  role: Role;
+  roles: Role[];
 
   @BelongsToMany(() => Class, () => UserClasses)
   classes: Class[];

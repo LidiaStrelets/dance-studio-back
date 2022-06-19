@@ -16,8 +16,9 @@ export class UsersService {
 
   async registrate(dto: RegisterDto, role: Role) {
     const user = await this.userRepo.create({ ...dto });
-    await user.$set('role', role.id);
-    user.role = role;
+    await user.$set('roles', [role.id]);
+
+    user.roles = [role];
     return user;
   }
 
@@ -56,7 +57,7 @@ export class UsersService {
       include: { all: true },
     });
 
-    return user ? user.role.id === 2 : false;
+    return user ? user.roles.some((r) => r.id === 2) : false;
   }
 
   async update(data: UpdateDto, id: number) {
