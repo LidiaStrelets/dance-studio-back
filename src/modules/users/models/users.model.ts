@@ -7,8 +7,8 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { DateDataType } from 'sequelize/types';
-import { Class } from '@classesModule/classes.model';
-import { UserClasses } from '@classesModule/user-classes.model';
+import { Class } from '@classesModule/models/classes.model';
+import { UserClasses } from '@classesModule/models/user-classes.model';
 import { Payment } from '@paymentsModule/payments.model';
 import { Registration } from '@registrationsModule/registrations.model';
 import { Role } from '@rolesModule/roles.model';

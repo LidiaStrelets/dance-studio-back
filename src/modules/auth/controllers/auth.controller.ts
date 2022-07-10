@@ -6,7 +6,7 @@ import { RegisterDto } from '@usersModule/dto/register.dto';
 import { User } from '@usersModule/users.model';
 import { RolesService } from '@rolesModule/roles.service';
 import { UsersService } from '@usersModule/users.service';
-import { AuthService } from '@authModule/auth.service';
+import { AuthService } from '@authModule/services/auth.service';
 
 @ApiTags('Authorization')
 @Controller('auth')

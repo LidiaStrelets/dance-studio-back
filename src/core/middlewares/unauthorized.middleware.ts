@@ -20,31 +20,13 @@ export class UnauthorizedMiddleware {
     } = req;
 
     if (!authorization) {
-      throw new HttpException(
-        [
-          {
-            message: ['Unauthorized!'],
-            problem_field: null,
-            name: 'Unauthorized Error - no token',
-          },
-        ],
-        HttpStatus.UNAUTHORIZED,
-      );
+      throwError();
     }
 
     const [type, authToken] = authorization.split(' ');
 
     if (!authToken || type !== BEARER) {
-      throw new HttpException(
-        [
-          {
-            message: ['Unauthorized!'],
-            problem_field: null,
-            name: 'Unauthorized Error - invalid token',
-          },
-        ],
-        HttpStatus.UNAUTHORIZED,
-      );
+      throwError();
     }
 
     const decoded = this.jwtService.verify(authToken);
@@ -52,16 +34,7 @@ export class UnauthorizedMiddleware {
     const candidate = await this.userService.getById(decoded.id);
 
     if (!candidate) {
-      throw new HttpException(
-        [
-          {
-            message: ['Unauthorized!'],
-            problem_field: null,
-            name: 'Unauthorized Error - no user',
-          },
-        ],
-        HttpStatus.UNAUTHORIZED,
-      );
+      throwError();
     }
 
     this.requestService.setUserId(candidate.id.toString());
@@ -69,4 +42,17 @@ export class UnauthorizedMiddleware {
 
     next();
   }
+}
+
+function throwError() {
+  throw new HttpException(
+    [
+      {
+        message: ['Unauthorized!'],
+        problem_field: null,
+        name: 'Unauthorized Error',
+      },
+    ],
+    HttpStatus.UNAUTHORIZED,
+  );
 }
