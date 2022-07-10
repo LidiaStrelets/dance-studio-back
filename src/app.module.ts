@@ -3,20 +3,13 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from '@usersModule/users.module';
 import { RolesModule } from '@rolesModule/roles.module';
-import { User } from '@usersModule/models/users.model';
-import { Role } from '@rolesModule/models/roles.model';
-import { UserRoles } from '@rolesModule/models/user-roles.model';
 import { AuthModule } from '@authModule/auth.module';
 import { HallsModule } from '@hallsModule/halls.module';
 import { ClassesModule } from '@classesModule/classes.module';
-import { Class } from '@classesModule/models/classes.model';
-import { UserClasses } from '@classesModule/models/user-classes.model';
 import { SchedulesModule } from '@schedulesModule/schedules.module';
 import { PricesModule } from '@pricesModule/prices.module';
 import { PaymentsModule } from '@paymentsModule/payments.module';
-import { Payment } from '@paymentsModule/models/payments.model';
 import { RegistrationsModule } from '@registrationsModule/registrations.module';
-import { Registration } from '@registrationsModule/models/registrations.model';
 import { CoreJwtModule } from '@core/jwt.module';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { RequestService } from '@services/request.service';
@@ -56,16 +49,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(UnauthorizedMiddleware)
-      .forRoutes(
-        'classes',
-        'halls',
-        'payments',
-        'prices',
-        'registrations',
-        'roles',
-        'schedules',
-        'users',
-      );
+      .forRoutes('registrations', 'roles', 'schedules', 'users');
 
     consumer
       .apply(DataOwnerOrAdminMiddleware)
@@ -73,12 +57,9 @@ export class AppModule implements NestModule {
         'users/:userId',
         'registrations/:regId',
         'registrations/:userId',
-        'payments/:userId',
       );
 
-    consumer
-      .apply(AdminWithUserIdMiddleware)
-      .forRoutes('registrations', 'payments');
+    consumer.apply(AdminWithUserIdMiddleware).forRoutes('registrations');
 
     consumer
       .apply(IsCoachMiddleware)

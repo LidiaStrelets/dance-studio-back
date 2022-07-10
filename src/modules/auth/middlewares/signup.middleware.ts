@@ -1,11 +1,16 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { RolesService } from '@rolesModule/services/roles.service';
+import { Roles } from '@rolesModule/types/types';
 import { User } from '@usersModule/models/users.model';
+import { NextFunction, Request, Response } from 'express';
 
-export function registrationMiddleware() {
-  return async (req, res, next) => {
+@Injectable()
+export class RegistrationMiddleware {
+  constructor(private rolesService: RolesService) {}
+
+  async use(req: Request, res: Response, next: NextFunction) {
     const {
-      body: { email, firstname, lastname, password },
-      query: role,
+      body: { email, firstname, lastname, password, adminKey, role },
     } = req;
 
     if (!email || !firstname || !lastname || !password || !role) {
@@ -36,6 +41,32 @@ export function registrationMiddleware() {
       );
     }
 
+    const roleObj = await this.rolesService.getByTitle(role);
+
+    if (!roleObj) {
+      throw new HttpException(
+        [
+          {
+            message: ['Role not found!'],
+            problem_field: null,
+          },
+        ],
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (roleObj.title === Roles.admin && !adminKey) {
+      throw new HttpException(
+        [
+          {
+            message: ['Unauthorized!'],
+            problem_field: null,
+            name: 'Unauthorized Error',
+          },
+        ],
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
     next();
-  };
+  }
 }

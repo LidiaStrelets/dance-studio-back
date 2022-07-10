@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { ClassesService } from '@classesModule/services/classes.service';
@@ -6,6 +13,7 @@ import { CreateDto } from '@classesModule/dto/create.dto';
 import { UpdateDto } from '@classesModule/dto/update.dto';
 import { Class } from '@classesModule/models/classes.model';
 import { IClassResponce } from '@classesModule/types/types';
+import { RolesGuard } from '@guards/roles.guard';
 
 @ApiTags('Classes')
 @Controller('classes')
@@ -21,6 +29,7 @@ export class ClassesController {
     description: 'Bearer token',
   })
   @Roles('admin')
+  @UseGuards(RolesGuard)
   @Post()
   public async create(@Body() dto: CreateDto): Promise<IClassResponce> {
     const newClass = await this.classesService.create(dto);
@@ -33,6 +42,7 @@ export class ClassesController {
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
+  @UseGuards(RolesGuard)
   @Patch('/:id')
   public async update(
     @Body() dto: UpdateDto,

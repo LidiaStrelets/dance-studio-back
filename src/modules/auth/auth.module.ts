@@ -1,13 +1,16 @@
-import { forwardRef, Module, RequestMethod } from '@nestjs/common';
+import {
+  forwardRef,
+  MiddlewareConsumer,
+  Module,
+  RequestMethod,
+} from '@nestjs/common';
 import { CoreJwtModule } from '@core/jwt.module';
 import { UsersModule } from '@usersModule/users.module';
 import { RolesModule } from '@rolesModule/roles.module';
 import { AuthController } from '@authModule/controllers/auth.controller';
 import { AuthService } from '@authModule/services/auth.service';
-import {
-  LoginModule,
-  RegistrationModule,
-} from './middlewares/middlewares.module';
+import { LoginMiddleware } from './middlewares/login.middleware';
+import { RegistrationMiddleware } from './middlewares/signup.middleware';
 
 @Module({
   controllers: [AuthController],
@@ -16,15 +19,17 @@ import {
     forwardRef(() => UsersModule),
     CoreJwtModule,
     forwardRef(() => RolesModule),
-    LoginModule.forRoot({
-      forRoutes: [{ path: 'auth/login', method: RequestMethod.POST }],
-    }),
-    RegistrationModule.forRoot({
-      forRoutes: [
-        { path: 'auth/registration/:role', method: RequestMethod.POST },
-      ],
-    }),
   ],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoginMiddleware)
+      .forRoutes({ path: 'auth/login', method: RequestMethod.POST });
+
+    consumer
+      .apply(RegistrationMiddleware)
+      .forRoutes({ path: 'auth/registration', method: RequestMethod.POST });
+  }
+}

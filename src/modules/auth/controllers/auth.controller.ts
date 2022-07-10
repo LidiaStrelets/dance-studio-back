@@ -64,31 +64,6 @@ export class AuthController {
 
     const roleObj = await this.rolesService.getByTitle(dto.role);
 
-    if (!roleObj) {
-      throw new HttpException(
-        [
-          {
-            message: ['Role not found!'],
-            problem_field: null,
-          },
-        ],
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    if (roleObj.title === Roles.admin && !dto.adminKey) {
-      throw new HttpException(
-        [
-          {
-            message: ['Unauthorized!'],
-            problem_field: null,
-            name: 'Unauthorized Error',
-          },
-        ],
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-
     const user = await this.usersService.registrate(
       { ...dto, password },
       roleObj,

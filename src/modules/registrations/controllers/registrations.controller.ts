@@ -62,16 +62,14 @@ export class RegistrationsController {
   ): Promise<IRegistrationResponce> {
     const userid = this.requestService.getUserId();
 
-    const user = await this.userService.getById(
-      dto.client_id.toString() || userid,
-    );
+    // const user = await this.userService.getById(dto.client_id || userid);
 
-    if (user.roles.some((role) => role.title !== RolesEnum.client)) {
-      throw new HttpException(
-        { message: 'Registration can be created only for the clients!' },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    // if (user.roles.some((role) => role.title !== RolesEnum.client)) {
+    //   throw new HttpException(
+    //     { message: 'Registration can be created only for the clients!' },
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
 
     const client_id = dto.client_id || userid;
 

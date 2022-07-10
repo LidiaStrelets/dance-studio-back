@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { CreateDto } from '@pricesModule/dto/add.dto';
@@ -6,6 +14,7 @@ import { UpdateDto } from '@pricesModule/dto/update.dto';
 import { PricesService } from '@pricesModule/services/prices.service';
 import { Price } from '@pricesModule/models/prices.model';
 import { IPriceResponce } from '@pricesModule/types/types';
+import { RolesGuard } from '@guards/roles.guard';
 
 @ApiTags('Prices')
 @Controller('prices')
@@ -21,6 +30,7 @@ export class PricesController {
     description: 'Bearer token',
   })
   @Roles('admin')
+  @UseGuards(RolesGuard)
   @Post()
   public async ceate(@Body() dto: CreateDto): Promise<IPriceResponce> {
     const newPrice = await this.pricesService.create(dto);
@@ -48,6 +58,7 @@ export class PricesController {
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
+  @UseGuards(RolesGuard)
   @Patch('/:id')
   public async update(
     @Body() dto: UpdateDto,

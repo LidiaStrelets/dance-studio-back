@@ -31,4 +31,8 @@ export class HallsService {
 
     return hall.poles_amount;
   }
+
+  public getById(id: string) {
+    return this.hallRepo.findByPk(id);
+  }
 }

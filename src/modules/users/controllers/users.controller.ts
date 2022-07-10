@@ -68,6 +68,7 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin', 'coach')
+  @UseGuards(RolesGuard)
   @Post('/classes')
   public async addClass(@Body() dto: AddToUserDto): Promise<string> {
     const updatedUser = await this.userService.addClass(dto);

@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { CreateDto } from '@hallsModule/dto/create.dto';
@@ -6,6 +13,7 @@ import { UpdateDto } from '@hallsModule/dto/update.dto';
 import { HallsService } from '@hallsModule/services/halls.service';
 import { Hall } from '@hallsModule/models/halls.model';
 import { IHallResponce } from '@hallsModule/types/types';
+import { RolesGuard } from '@guards/roles.guard';
 
 @ApiTags('Halls')
 @Controller('halls')
@@ -17,6 +25,7 @@ export class HallsController {
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
+  @UseGuards(RolesGuard)
   @Post()
   public async ceate(@Body() вto: CreateDto): Promise<IHallResponce> {
     const newHall = await this.hallService.create(вto);
@@ -29,6 +38,7 @@ export class HallsController {
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
+  @UseGuards(RolesGuard)
   @Patch('/:id')
   public async update(
     @Body() dto: UpdateDto,
