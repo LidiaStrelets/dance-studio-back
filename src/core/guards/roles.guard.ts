@@ -20,10 +20,10 @@ export class RolesGuard implements CanActivate {
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const requiredRoles: [string] = this.reflector.getAllAndOverride(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
 
     if (!requiredRoles) return true;
 
@@ -43,7 +43,9 @@ export class RolesGuard implements CanActivate {
 
       req.user = user;
 
-      return requiredRoles.some((rr) => user.roles.some((ur) => ur === rr));
+      return requiredRoles.some((requiredRole) =>
+        user.roles.some((userRole) => userRole.title === requiredRole),
+      );
     } catch (e) {
       throw new HttpException('Access forbidden!', HttpStatus.FORBIDDEN);
     }

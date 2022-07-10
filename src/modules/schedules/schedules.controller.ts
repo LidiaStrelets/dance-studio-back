@@ -37,7 +37,7 @@ export class SchedulesController {
   async add(@Body() dto: CreateDto) {
     const user = await this.usersService.getById(dto.coach.toString());
 
-    if (!user.classes.some((user_class) => user_class.id === dto.class))
+    if (!user.classes.some((userClass) => userClass.id === dto.class))
       throw new HttpException(
         `${user.firstname} ${user.lastname} doesn't conduct requested class!`,
         HttpStatus.BAD_REQUEST,

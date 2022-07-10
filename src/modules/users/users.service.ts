@@ -7,6 +7,7 @@ import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateDto } from '@usersModule/dto/update.dto';
 import { User } from '@usersModule/users.model';
 import { v4 as uuidv4 } from 'uuid';
+import { Roles as RolesEnum } from '@rolesModule/types';
 
 @Injectable()
 export class UsersService {
@@ -59,7 +60,9 @@ export class UsersService {
       include: { all: true },
     });
 
-    return user ? user.roles.some((role) => role.title === 'coach') : false;
+    return user
+      ? user.roles.some((role) => role.title === RolesEnum.coach)
+      : false;
   }
 
   async update(data: UpdateDto, id: string) {

@@ -22,6 +22,7 @@ import {
   convertMilisecondsToHours,
   RegistrationsService,
 } from './registrations.service';
+import { Roles as RolesEnum } from '@rolesModule/types';
 
 @ApiTags('Registrations')
 @Controller('registrations')
@@ -61,7 +62,7 @@ export class RegistrationsController {
       dto.client_id.toString() || userid,
     );
 
-    if (user.roles.some((role) => role.title !== 'client'))
+    if (user.roles.some((role) => role.title !== RolesEnum.client))
       throw new HttpException(
         { message: 'Registration can be created only for the clients!' },
         HttpStatus.BAD_REQUEST,

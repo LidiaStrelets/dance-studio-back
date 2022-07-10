@@ -15,6 +15,7 @@ import { UsersService } from '@usersModule/users.service';
 import { CreateDto } from '@paymentsModule/dto/add.dto';
 import { Payment } from '@paymentsModule/payments.model';
 import { PaymentsService } from '@paymentsModule/payments.service';
+import { Roles as RolesEnum } from '@rolesModule/types';
 
 @Controller('payments')
 export class PaymentsController {
@@ -40,7 +41,7 @@ export class PaymentsController {
     const client_id = dto.user_id || this.requestServise.getUserId();
     const user = await this.userService.getById(client_id.toString());
 
-    if (user.roles.some((role) => role.title !== 'client'))
+    if (user.roles.some((role) => role.title !== RolesEnum.client))
       throw new HttpException(
         { message: 'Payments can be created only for the clients!' },
         HttpStatus.BAD_REQUEST,
