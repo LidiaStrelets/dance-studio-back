@@ -4,6 +4,7 @@ import { Roles } from '@decorators/roles.decorator';
 import { ClassesService } from '@classesModule/classes.service';
 import { CreateDto } from '@classesModule/dto/create.dto';
 import { UpdateDto } from '@classesModule/dto/update.dto';
+import { Class } from '@classesModule/classes.model';
 
 @ApiTags('Classes')
 @Controller('classes')
@@ -20,7 +21,7 @@ export class ClassesController {
   })
   @Roles('admin')
   @Post()
-  async create(@Body() dto: CreateDto) {
+  public async create(@Body() dto: CreateDto): Promise<Class> {
     return await this.classesService.create(dto);
   }
 
@@ -30,7 +31,10 @@ export class ClassesController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
   @Patch('/:id')
-  async update(@Body() dto: UpdateDto, @Param('id') id: string) {
+  public async update(
+    @Body() dto: UpdateDto,
+    @Param('id') id: string,
+  ): Promise<Class> {
     return await this.classesService.update(dto, id);
   }
 }

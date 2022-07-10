@@ -4,6 +4,7 @@ import { Roles } from '@decorators/roles.decorator';
 import { CreateDto } from '@hallsModule/dto/create.dto';
 import { UpdateDto } from '@hallsModule/dto/update.dto';
 import { HallsService } from '@hallsModule/halls.service';
+import { Hall } from '@hallsModule/halls.model';
 
 @ApiTags('Halls')
 @Controller('halls')
@@ -16,7 +17,7 @@ export class HallsController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
   @Post()
-  async ceate(@Body() вto: CreateDto) {
+  public async ceate(@Body() вto: CreateDto): Promise<Hall> {
     return await this.hallService.create(вto);
   }
 
@@ -26,7 +27,10 @@ export class HallsController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
   @Patch('/:id')
-  update(@Body() dto: UpdateDto, @Param('id') id: string) {
-    return this.hallService.update(dto, id);
+  public async update(
+    @Body() dto: UpdateDto,
+    @Param('id') id: string,
+  ): Promise<Hall> {
+    return await this.hallService.update(dto, id);
   }
 }

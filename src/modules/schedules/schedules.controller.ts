@@ -14,6 +14,7 @@ import { UsersService } from '@usersModule/users.service';
 import { CreateDto } from '@schedulesModule/dto/create.dto';
 import { UpdateDto } from '@schedulesModule/dto/update.dto';
 import { SchedulesService } from '@schedulesModule/schedules.service';
+import { Schedule } from '@schedulesModule/schedules.model';
 
 @ApiTags('Schedules')
 @Controller('schedules')
@@ -34,7 +35,7 @@ export class SchedulesController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
   @Post()
-  async add(@Body() dto: CreateDto) {
+  public async add(@Body() dto: CreateDto): Promise<Schedule> {
     const user = await this.usersService.getById(dto.coach.toString());
 
     if (!user.classes.some((userClass) => userClass.id === dto.class)) {
@@ -58,7 +59,10 @@ export class SchedulesController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
   @Patch('/:id')
-  update(@Body() scheduleDto: UpdateDto, @Param('id') id: string) {
-    return this.scheduleService.update(scheduleDto, id);
+  public async update(
+    @Body() scheduleDto: UpdateDto,
+    @Param('id') id: string,
+  ): Promise<Schedule> {
+    return await this.scheduleService.update(scheduleDto, id);
   }
 }

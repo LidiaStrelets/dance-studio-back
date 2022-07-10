@@ -9,16 +9,16 @@ import { v4 as uuidv4 } from 'uuid';
 export class RolesService {
   constructor(@InjectModel(Role) private roleRepo: typeof Role) {}
 
-  create(dto: CreateDto) {
+  public create(dto: CreateDto): Promise<Role> {
     const id: string = uuidv4();
     return this.roleRepo.create({ ...dto, id });
   }
 
-  getByTitle(title: string) {
+  public getByTitle(title: string): Promise<Role> {
     return this.roleRepo.findOne({ where: { title } });
   }
 
-  async update(data: UpdateDto, id: string) {
+  public async update(data: UpdateDto, id: string): Promise<Role> {
     const role = await this.roleRepo.findByPk(id);
 
     await role.update(data);

@@ -4,6 +4,7 @@ import { Roles } from '@decorators/roles.decorator';
 import { CreateDto } from '@pricesModule/dto/add.dto';
 import { UpdateDto } from '@pricesModule/dto/update.dto';
 import { PricesService } from '@pricesModule/prices.service';
+import { Price } from '@pricesModule/prices.model';
 
 @ApiTags('Prices')
 @Controller('prices')
@@ -20,7 +21,7 @@ export class PricesController {
   })
   @Roles('admin')
   @Post()
-  async ceate(@Body() dto: CreateDto) {
+  public async ceate(@Body() dto: CreateDto): Promise<Price> {
     return await this.pricesService.create(dto);
   }
 
@@ -33,7 +34,7 @@ export class PricesController {
     description: 'Bearer token',
   })
   @Get()
-  async getAll() {
+  public async getAll(): Promise<Price[]> {
     return await this.pricesService.getAll();
   }
 
@@ -43,7 +44,10 @@ export class PricesController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
   @Patch('/:id')
-  update(@Body() dto: UpdateDto, @Param('id') id: string) {
-    return this.pricesService.update(dto, id);
+  public async update(
+    @Body() dto: UpdateDto,
+    @Param('id') id: string,
+  ): Promise<Price> {
+    return await this.pricesService.update(dto, id);
   }
 }

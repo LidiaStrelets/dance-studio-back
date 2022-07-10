@@ -42,9 +42,6 @@
     "@middlewares": [
       "dist/src/core/middlewares"
     ],
-    "@pipes": [
-      "dist/src/core/pipes"
-    ],
     "@servises": [
       "dist/src/core/servises"
     ],

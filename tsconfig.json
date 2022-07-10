@@ -23,7 +23,6 @@
       "@decorators/*": ["src/core/decorators/*"],
       "@guards/*": ["src/core/guards/*"],
       "@middlewares/*": ["src/core/middlewares/*"],
-      "@pipes/*": ["src/core/pipes/*"],
       "@services/*": ["src/core/services/*"],
       "@core/*": ["src/core/*"]
     },

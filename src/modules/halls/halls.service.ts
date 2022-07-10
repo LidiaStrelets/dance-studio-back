@@ -14,19 +14,19 @@ export interface HallUpdate {
 export class HallsService {
   constructor(@InjectModel(Hall) private hallRepo: typeof Hall) {}
 
-  create(dto: CreateDto) {
+  public create(dto: CreateDto): Promise<Hall> {
     const id: string = uuidv4();
     return this.hallRepo.create({ ...dto, id });
   }
 
-  async update(data: UpdateDto, id: string) {
+  public async update(data: UpdateDto, id: string): Promise<Hall> {
     const hall = await this.hallRepo.findByPk(id);
 
     await hall.update(data);
     return hall;
   }
 
-  async getPolesAmount(id: string) {
+  public async getPolesAmount(id: string): Promise<number> {
     const hall = await this.hallRepo.findByPk(id);
 
     return hall.poles_amount;

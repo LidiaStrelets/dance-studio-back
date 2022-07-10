@@ -8,6 +8,7 @@ import { UpdateDto } from '@usersModule/dto/update.dto';
 import { User } from '@usersModule/users.model';
 import { v4 as uuidv4 } from 'uuid';
 import { Roles as RolesEnum } from '@rolesModule/types';
+import { Class } from '@classesModule/classes.model';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +17,7 @@ export class UsersService {
     private classesService: ClassesService,
   ) {}
 
-  async registrate(dto: RegisterDto, role: Role) {
+  public async registrate(dto: RegisterDto, role: Role): Promise<User> {
     const id: string = uuidv4();
     const user = await this.userRepo.create({ ...dto, id });
     await user.$set('roles', [role.id]);
@@ -25,25 +26,25 @@ export class UsersService {
     return user;
   }
 
-  findByEmail(email: string) {
+  public findByEmail(email: string): Promise<User> {
     return this.userRepo.findOne({
       where: { email },
       include: { all: true },
     });
   }
 
-  getAll() {
+  public getAll(): Promise<User[]> {
     return this.userRepo.findAll({ include: { all: true } });
   }
 
-  getById(id: string) {
+  public getById(id: string): Promise<User> {
     return this.userRepo.findOne({
       where: { id },
       include: { all: true },
     });
   }
 
-  async addClass(dto: AddToUserDto) {
+  public async addClass(dto: AddToUserDto): Promise<Class> {
     const userIsCoach = await this.isCoach(dto.user_id);
     if (userIsCoach) {
       const classObj = await this.classesService.getById(dto.class);
@@ -54,7 +55,7 @@ export class UsersService {
     }
   }
 
-  async isCoach(id: string) {
+  public async isCoach(id: string): Promise<boolean> {
     const user = await this.userRepo.findOne({
       where: { id },
       include: { all: true },
@@ -65,7 +66,7 @@ export class UsersService {
       : false;
   }
 
-  async update(data: UpdateDto, id: string) {
+  public async update(data: UpdateDto, id: string): Promise<User> {
     const user = await this.userRepo.findByPk(id);
 
     await user.update(data);

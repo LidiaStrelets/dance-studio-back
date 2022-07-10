@@ -14,6 +14,8 @@ import { AddToUserDto } from '@classesModule/dto/add-to-user.dto';
 import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateDto } from '@usersModule/dto/update.dto';
 import { UsersService } from '@usersModule/users.service';
+import { User } from '@usersModule/users.model';
+import { Class } from '@classesModule/classes.model';
 
 @ApiTags('Users')
 @Controller('users')
@@ -31,7 +33,7 @@ export class UsersController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Get()
-  async getAll() {
+  public async getAll(): Promise<User[]> {
     return await this.userService.getAll();
   }
 
@@ -46,7 +48,7 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Get('/:userId')
-  async getById(@Param('userId') userId: string) {
+  public async getById(@Param('userId') userId: string): Promise<User> {
     return await this.userService.getById(userId);
   }
 
@@ -60,8 +62,8 @@ export class UsersController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin', 'coach')
   @Post('/classes')
-  addClass(@Body() dto: AddToUserDto) {
-    return this.userService.addClass(dto);
+  public async addClass(@Body() dto: AddToUserDto): Promise<Class> {
+    return await this.userService.addClass(dto);
   }
 
   @ApiOperation({ summary: 'Update schedule' })
@@ -69,7 +71,10 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Patch('/:userId')
-  update(@Body() dto: UpdateDto, @Param('userId') id: string) {
-    return this.userService.update(dto, id);
+  public async update(
+    @Body() dto: UpdateDto,
+    @Param('userId') id: string,
+  ): Promise<User> {
+    return await this.userService.update(dto, id);
   }
 }

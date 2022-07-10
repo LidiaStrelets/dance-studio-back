@@ -8,7 +8,11 @@ import { v4 as uuidv4 } from 'uuid';
 export class PaymentsService {
   constructor(@InjectModel(Payment) private paymentRepo: typeof Payment) {}
 
-  create(dto: CreateDto, client_id: string, classes_amount: number) {
+  public create(
+    dto: CreateDto,
+    client_id: string,
+    classes_amount: number,
+  ): Promise<Payment> {
     const id: string = uuidv4();
     return this.paymentRepo.create({
       ...dto,
@@ -18,11 +22,11 @@ export class PaymentsService {
     });
   }
 
-  getAllByUser(id: string) {
+  public getAllByUser(id: string): Promise<Payment[]> {
     return this.paymentRepo.findAll({ where: { client_id: id } });
   }
 
-  async getLastByUser(id: string): Promise<Payment> {
+  public async getLastByUser(id: string): Promise<Payment> {
     const payments = await this.paymentRepo.findAll({
       where: { client_id: id },
       order: [['createdAt', 'DESC']],
@@ -30,7 +34,7 @@ export class PaymentsService {
     return payments[0];
   }
 
-  async decreaseAvailableClasses(id: string) {
+  public async decreaseAvailableClasses(id: string): Promise<Payment> {
     const payment = await this.paymentRepo.findByPk(id);
 
     payment.classes_left -= 1;
@@ -38,7 +42,7 @@ export class PaymentsService {
     return payment;
   }
 
-  async increaseAvailableClasses(id: string) {
+  public async increaseAvailableClasses(id: string): Promise<Payment> {
     const payment = await this.paymentRepo.findByPk(id);
 
     payment.classes_left += 1;

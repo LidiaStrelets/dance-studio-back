@@ -9,20 +9,20 @@ import { v4 as uuidv4 } from 'uuid';
 export class PricesService {
   constructor(@InjectModel(Price) private priceRepo: typeof Price) {}
 
-  create(dto: CreateDto) {
+  public create(dto: CreateDto): Promise<Price> {
     const id: string = uuidv4();
     return this.priceRepo.create({ ...dto, id });
   }
 
-  getById(id: string) {
+  public getById(id: string): Promise<Price> {
     return this.priceRepo.findByPk(id);
   }
 
-  getAll() {
+  public getAll(): Promise<Price[]> {
     return this.priceRepo.findAll();
   }
 
-  async update(data: UpdateDto, id: string) {
+  public async update(data: UpdateDto, id: string): Promise<Price> {
     const price = await this.priceRepo.findByPk(id);
 
     await price.update(data);

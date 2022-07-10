@@ -9,16 +9,16 @@ import { v4 as uuidv4 } from 'uuid';
 export class ClassesService {
   constructor(@InjectModel(Class) private classRepo: typeof Class) {}
 
-  create(dto: CreateDto) {
+  public create(dto: CreateDto): Promise<Class> {
     const id: string = uuidv4();
     return this.classRepo.create({ ...dto, id });
   }
 
-  getById(id: string) {
+  public getById(id: string): Promise<Class> {
     return this.classRepo.findByPk(id);
   }
 
-  async update(data: UpdateDto, id: string) {
+  public async update(data: UpdateDto, id: string): Promise<Class> {
     const classObj = await this.classRepo.findByPk(id);
 
     await classObj.update(data);

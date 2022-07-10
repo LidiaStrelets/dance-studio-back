@@ -5,19 +5,19 @@ export class RequestService {
   private userId: string;
   private userRole: string;
 
-  setUserId(id: string) {
+  public setUserId(id: string) {
     this.userId = id;
   }
 
-  getUserId() {
+  public getUserId() {
     return this.userId;
   }
 
-  setUserRole(role: string) {
+  public setUserRole(role: string) {
     this.userRole = role;
   }
 
-  getUserRole() {
+  public getUserRole() {
     return this.userRole;
   }
 }

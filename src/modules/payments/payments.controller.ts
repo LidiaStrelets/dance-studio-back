@@ -35,7 +35,7 @@ export class PaymentsController {
   })
   @Roles('admin', 'client')
   @Post()
-  async create(@Body() dto: CreateDto) {
+  public async create(@Body() dto: CreateDto): Promise<Payment> {
     const price = await this.priceService.getById(dto.price_id);
 
     const client_id = dto.user_id || this.requestServise.getUserId();
@@ -66,7 +66,9 @@ export class PaymentsController {
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Get('/:userId')
-  async getAllByUser(@Param('userId') userId: string) {
+  public async getAllByUser(
+    @Param('userId') userId: string,
+  ): Promise<Payment[]> {
     return await this.paymentsService.getAllByUser(userId);
   }
 }

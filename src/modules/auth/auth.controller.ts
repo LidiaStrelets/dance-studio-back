@@ -27,7 +27,7 @@ export class AuthController {
     description: 'Bearer token',
   })
   @Post('/login')
-  async login(@Body() dto: LoginDto) {
+  public async login(@Body() dto: LoginDto) {
     const user = await this.usersService.findByEmail(dto.email);
 
     const token = await this.jwtService.sign({
@@ -51,7 +51,10 @@ export class AuthController {
   })
   @ApiResponse({ status: 400, description: `User with email already exists!` })
   @Post('/registration/:role')
-  async register(@Body() dto: RegisterDto, @Param('role') role: string) {
+  public async register(
+    @Body() dto: RegisterDto,
+    @Param('role') role: string,
+  ): Promise<string> {
     const password = await this.authService.hashedPassword(dto.password);
     const roleObj = await this.rolesService.getByTitle(role);
 

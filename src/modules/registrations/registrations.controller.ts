@@ -55,7 +55,10 @@ export class RegistrationsController {
   })
   @Roles('admin', 'client')
   @Post()
-  async create(@Body() dto: CreateDto, @Headers() headers) {
+  public async create(
+    @Body() dto: CreateDto,
+    @Headers() headers,
+  ): Promise<Registration> {
     const userid = this.requestService.getUserId();
 
     const user = await this.userService.getById(
@@ -127,7 +130,7 @@ export class RegistrationsController {
   })
   @Roles('admin', 'client')
   @Delete('/:regId')
-  async delete(@Param('regId') regId: string) {
+  public async delete(@Param('regId') regId: string): Promise<number> {
     const existingReg = await this.registrationsService.findById(regId);
 
     if (!existingReg) {
@@ -164,7 +167,9 @@ export class RegistrationsController {
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Get('/:userId')
-  async getAllByUser(@Param('userId') userId: string) {
+  public async getAllByUser(
+    @Param('userId') userId: string,
+  ): Promise<Registration[]> {
     return await this.registrationsService.getAllByUser(userId);
   }
 }

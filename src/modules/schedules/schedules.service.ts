@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class SchedulesService {
   constructor(@InjectModel(Schedule) private scheduleRepo: typeof Schedule) {}
 
-  create(dto: CreateDto, availablePoles: number) {
+  public create(dto: CreateDto, availablePoles: number): Promise<Schedule> {
     const id: string = uuidv4();
     return this.scheduleRepo.create({
       ...dto,
@@ -18,11 +18,11 @@ export class SchedulesService {
     });
   }
 
-  get(id: string) {
+  public get(id: string): Promise<Schedule> {
     return this.scheduleRepo.findByPk(id);
   }
 
-  async decreaseAvailableSpots(id: string) {
+  public async decreaseAvailableSpots(id: string): Promise<Schedule> {
     const scheduleItem = await this.scheduleRepo.findByPk(id);
 
     scheduleItem.places_left -= 1;
@@ -30,7 +30,7 @@ export class SchedulesService {
     return scheduleItem;
   }
 
-  async increaseAvailableSpots(id: string) {
+  public async increaseAvailableSpots(id: string): Promise<Schedule> {
     const scheduleItem = await this.scheduleRepo.findByPk(id);
 
     scheduleItem.places_left += 1;
@@ -38,7 +38,7 @@ export class SchedulesService {
     return scheduleItem;
   }
 
-  async update(data: UpdateDto, id: string) {
+  public async update(data: UpdateDto, id: string): Promise<Schedule> {
     const scheduleItem = await this.scheduleRepo.findByPk(id);
 
     await scheduleItem.update(data);

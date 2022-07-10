@@ -13,7 +13,7 @@ export class RegistrationsService {
     @InjectModel(Registration) private registrationRepo: typeof Registration,
   ) {}
 
-  create(dto: CreateDto, client_id: string) {
+  public create(dto: CreateDto, client_id: string): Promise<Registration> {
     const id: string = uuidv4();
     return this.registrationRepo.create({
       ...dto,
@@ -22,23 +22,23 @@ export class RegistrationsService {
     });
   }
 
-  cancel(id: string) {
+  public cancel(id: string): Promise<number> {
     return this.registrationRepo.destroy({
       where: { id },
     });
   }
 
-  findById(id: string) {
+  public findById(id: string): Promise<Registration> {
     return this.registrationRepo.findByPk(id);
   }
 
-  find(userId: string, schId: string) {
+  public find(userId: string, schId: string): Promise<Registration> {
     return this.registrationRepo.findOne({
       where: { client_id: userId, schedule_id: schId },
     });
   }
 
-  getAllByUser(id: string) {
+  public getAllByUser(id: string): Promise<Registration[]> {
     return this.registrationRepo.findAll({ where: { client_id: id } });
   }
 }
