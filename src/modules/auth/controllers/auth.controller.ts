@@ -1,4 +1,11 @@
-import { Body, Controller, Inject, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Post,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from '@usersModule/dto/login.dto';
@@ -7,6 +14,7 @@ import { User } from '@usersModule/models/users.model';
 import { RolesService } from '@rolesModule/services/roles.service';
 import { UsersService } from '@usersModule/services/users.service';
 import { AuthService } from '@authModule/services/auth.service';
+import { Roles } from '@rolesModule/types/types';
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -50,13 +58,36 @@ export class AuthController {
     description: 'Attach an admin key to registrate admin user!!',
   })
   @ApiResponse({ status: 400, description: `User with email already exists!` })
-  @Post('/registration/:role')
-  public async register(
-    @Body() dto: RegisterDto,
-    @Param('role') role: string,
-  ): Promise<string> {
+  @Post('/registration')
+  public async register(@Body() dto: RegisterDto): Promise<string> {
     const password = await this.authService.hashedPassword(dto.password);
-    const roleObj = await this.rolesService.getByTitle(role);
+
+    const roleObj = await this.rolesService.getByTitle(dto.role);
+
+    if (!roleObj) {
+      throw new HttpException(
+        [
+          {
+            message: ['Role not found!'],
+            problem_field: null,
+          },
+        ],
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (roleObj.title === Roles.admin && !dto.adminKey) {
+      throw new HttpException(
+        [
+          {
+            message: ['Unauthorized!'],
+            problem_field: null,
+            name: 'Unauthorized Error',
+          },
+        ],
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
 
     const user = await this.usersService.registrate(
       { ...dto, password },

@@ -6,55 +6,27 @@
   "private": true,
   "license": "UNLICENSED",
   "_moduleAliases": {
-    "@authModule": [
-      "dist/auth"
-    ],
-    "@classesModule": [
-      "dist/classes"
-    ],
-    "@hallsModule": [
-      "dist/halls"
-    ],
-    "@paymentsModule": [
-      "dist/payments"
-    ],
-    "@pricesModule": [
-      "dist/prices"
-    ],
-    "@registrationsModule": [
-      "dist/registrations"
-    ],
-    "@rolesModule": [
-      "dist/roles"
-    ],
-    "@schedulesModule": [
-      "dist/schedules"
-    ],
-    "@usersModule": [
-      "dist/users"
-    ],
-    "@decorators": [
-      "dist/src/core/decorators"
-    ],
-    "@guards": [
-      "dist/src/core/guards"
-    ],
-    "@middlewares": [
-      "dist/src/core/middlewares"
-    ],
-    "@servises": [
-      "dist/src/core/servises"
-    ],
-    "@core": [
-      "dist/src/core"
-    ]
+    "@authModule": "dist/modules/auth",
+    "@classesModule": "dist/modules/classes",
+    "@hallsModule": "dist/modules/halls",
+    "@paymentsModule": "dist/modules/payments",
+    "@pricesModule": "dist/modules/prices",
+    "@registrationsModule": "dist/modules/registrations",
+    "@rolesModule": "dist/modules/roles",
+    "@schedulesModule": "dist/modules/schedules",
+    "@usersModule": "dist/modules/users",
+    "@decorators": "dist/core/decorators",
+    "@guards": "dist/core/guards",
+    "@middlewares": "dist/core/middlewares",
+    "@services": "dist/core/services",
+    "@core": "dist/core"
   },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "cross-env NODE_ENV=development nest start --watch",
+    "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -76,7 +48,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "create-nestjs-middleware-module": "^0.2.2",
-    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
     "module-alias": "^2.2.2",
     "mysql2": "^2.3.3",
     "pg": "^8.7.3",

@@ -37,5 +37,5 @@ export class Class extends Model<Class, ClassCreationAttrs> {
   description: string;
 
   @BelongsToMany(() => User, () => UserClasses)
-  users: User[];
+  coaches: User[];
 }

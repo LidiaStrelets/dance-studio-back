@@ -15,7 +15,10 @@ import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateDto } from '@usersModule/dto/update.dto';
 import { UsersService } from '@usersModule/services/users.service';
 import { User } from '@usersModule/models/users.model';
-import { Class } from '@classesModule/models/classes.model';
+import {
+  IUserResponce,
+  IUserWithRolesResponce,
+} from '@usersModule/types/types';
 
 @ApiTags('Users')
 @Controller('users')
@@ -33,8 +36,9 @@ export class UsersController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Get()
-  public async getAll(): Promise<User[]> {
-    return await this.userService.getAll();
+  public async getAll(): Promise<IUserWithRolesResponce[]> {
+    const users = await this.userService.getAll();
+    return users.map((user) => this.mapUserWithRolesToResponce(user));
   }
 
   @ApiOperation({
@@ -48,8 +52,11 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Get('/:userId')
-  public async getById(@Param('userId') userId: string): Promise<User> {
-    return await this.userService.getById(userId);
+  public async getById(
+    @Param('userId') userId: string,
+  ): Promise<IUserWithRolesResponce> {
+    const user = await this.userService.getById(userId);
+    return this.mapUserWithRolesToResponce(user);
   }
 
   @ApiHeader({
@@ -62,8 +69,10 @@ export class UsersController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin', 'coach')
   @Post('/classes')
-  public async addClass(@Body() dto: AddToUserDto): Promise<Class> {
-    return await this.userService.addClass(dto);
+  public async addClass(@Body() dto: AddToUserDto): Promise<string> {
+    const updatedUser = await this.userService.addClass(dto);
+
+    return updatedUser ? 'success' : 'error';
   }
 
   @ApiOperation({ summary: 'Update schedule' })
@@ -74,7 +83,27 @@ export class UsersController {
   public async update(
     @Body() dto: UpdateDto,
     @Param('userId') id: string,
-  ): Promise<User> {
-    return await this.userService.update(dto, id);
+  ): Promise<string> {
+    const updatedUser = await this.userService.update(dto, id);
+
+    return updatedUser ? 'success' : 'error';
+  }
+
+  private mapUserToResponce(user: User): IUserResponce {
+    return {
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      birth_date: user.birth_date,
+      information: user.information,
+      id: user.id,
+    };
+  }
+
+  private mapUserWithRolesToResponce(user: User): IUserWithRolesResponce {
+    return {
+      ...this.mapUserToResponce(user),
+      roles: user.roles.map((role) => role.title),
+    };
   }
 }

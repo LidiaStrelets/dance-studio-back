@@ -5,6 +5,7 @@ import { ClassesService } from '@classesModule/services/classes.service';
 import { CreateDto } from '@classesModule/dto/create.dto';
 import { UpdateDto } from '@classesModule/dto/update.dto';
 import { Class } from '@classesModule/models/classes.model';
+import { IClassResponce } from '@classesModule/types/types';
 
 @ApiTags('Classes')
 @Controller('classes')
@@ -21,8 +22,10 @@ export class ClassesController {
   })
   @Roles('admin')
   @Post()
-  public async create(@Body() dto: CreateDto): Promise<Class> {
-    return await this.classesService.create(dto);
+  public async create(@Body() dto: CreateDto): Promise<IClassResponce> {
+    const newClass = await this.classesService.create(dto);
+
+    return this.mapClassToResponce(newClass);
   }
 
   @ApiOperation({ summary: 'Update class' })
@@ -34,7 +37,13 @@ export class ClassesController {
   public async update(
     @Body() dto: UpdateDto,
     @Param('id') id: string,
-  ): Promise<Class> {
-    return await this.classesService.update(dto, id);
+  ): Promise<string> {
+    const updatedClass = await this.classesService.update(dto, id);
+
+    return updatedClass ? 'success' : 'error';
+  }
+
+  private mapClassToResponce(item: Class): IClassResponce {
+    return { name: item.name, description: item.description, id: item.id };
   }
 }

@@ -8,9 +8,8 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@usersModule/models/users.model';
 import { ROLES_KEY } from '@decorators/roles.decorator';
-import { BEARER } from '@authModule/types/types';
+import { BEARER, IToken } from '@authModule/types/types';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -42,12 +41,12 @@ export class RolesGuard implements CanActivate {
       );
     }
 
-    const user: User = this.jwtService.verify(token);
+    const decodedToken: IToken = this.jwtService.verify(token);
 
-    req.user = user;
+    req.user = decodedToken.id;
 
     return requiredRoles.some((requiredRole) =>
-      user.roles.some((userRole) => userRole.title === requiredRole),
+      decodedToken.roles.some((userRole) => userRole === requiredRole),
     );
   }
 }

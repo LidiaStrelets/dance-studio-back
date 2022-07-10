@@ -23,6 +23,7 @@ import {
   RegistrationsService,
 } from '../services/registrations.service';
 import { Roles as RolesEnum } from '@rolesModule/types/types';
+import { IRegistrationResponce } from '@registrationsModule/types/types';
 
 @ApiTags('Registrations')
 @Controller('registrations')
@@ -58,7 +59,7 @@ export class RegistrationsController {
   public async create(
     @Body() dto: CreateDto,
     @Headers() headers,
-  ): Promise<Registration> {
+  ): Promise<IRegistrationResponce> {
     const userid = this.requestService.getUserId();
 
     const user = await this.userService.getById(
@@ -113,7 +114,11 @@ export class RegistrationsController {
       }
     }
 
-    return await this.registrationsService.create(dto, headers);
+    const newRegistration = await this.registrationsService.create(
+      dto,
+      headers,
+    );
+    return this.mapRegistrationToResponce(newRegistration);
   }
 
   @ApiOperation({ summary: 'Delete registration' })
@@ -169,7 +174,17 @@ export class RegistrationsController {
   @Get('/:userId')
   public async getAllByUser(
     @Param('userId') userId: string,
-  ): Promise<Registration[]> {
-    return await this.registrationsService.getAllByUser(userId);
+  ): Promise<IRegistrationResponce[]> {
+    const registrations = await this.registrationsService.getAllByUser(userId);
+
+    return registrations.map((item) => this.mapRegistrationToResponce(item));
+  }
+
+  private mapRegistrationToResponce(item: Registration): IRegistrationResponce {
+    return {
+      schedule_id: item.schedule_id,
+      client_id: item.client_id,
+      id: item.id,
+    };
   }
 }

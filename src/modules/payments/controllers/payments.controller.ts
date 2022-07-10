@@ -16,6 +16,7 @@ import { CreateDto } from '@paymentsModule/dto/add.dto';
 import { Payment } from '@paymentsModule/models/payments.model';
 import { PaymentsService } from '@paymentsModule/services/payments.service';
 import { Roles as RolesEnum } from '@rolesModule/types/types';
+import { IPaymentResponce } from '@paymentsModule/types/types';
 
 @Controller('payments')
 export class PaymentsController {
@@ -35,7 +36,7 @@ export class PaymentsController {
   })
   @Roles('admin', 'client')
   @Post()
-  public async create(@Body() dto: CreateDto): Promise<Payment> {
+  public async create(@Body() dto: CreateDto): Promise<IPaymentResponce> {
     const price = await this.priceService.getById(dto.price_id);
 
     const client_id = dto.user_id || this.requestServise.getUserId();
@@ -48,11 +49,13 @@ export class PaymentsController {
       );
     }
 
-    return await this.paymentsService.create(
+    const newPayment = await this.paymentsService.create(
       dto,
       client_id,
       price.classes_amount,
     );
+
+    return this.mapPaymentToResponce(newPayment);
   }
 
   @ApiOperation({
@@ -68,7 +71,18 @@ export class PaymentsController {
   @Get('/:userId')
   public async getAllByUser(
     @Param('userId') userId: string,
-  ): Promise<Payment[]> {
-    return await this.paymentsService.getAllByUser(userId);
+  ): Promise<IPaymentResponce[]> {
+    const payments = await this.paymentsService.getAllByUser(userId);
+
+    return payments.map((payment) => this.mapPaymentToResponce(payment));
+  }
+
+  private mapPaymentToResponce(payment: Payment): IPaymentResponce {
+    return {
+      classes_left: payment.classes_left,
+      price_id: payment.price_id,
+      client_id: payment.client_id,
+      id: payment.id,
+    };
   }
 }

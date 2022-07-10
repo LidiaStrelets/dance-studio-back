@@ -15,6 +15,7 @@ import { CreateDto } from '@schedulesModule/dto/create.dto';
 import { UpdateDto } from '@schedulesModule/dto/update.dto';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
 import { Schedule } from '@schedulesModule/models/schedules.model';
+import { IScheduleResponce } from '@schedulesModule/types/types';
 
 @ApiTags('Schedules')
 @Controller('schedules')
@@ -35,18 +36,19 @@ export class SchedulesController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
   @Post()
-  public async add(@Body() dto: CreateDto): Promise<Schedule> {
+  public async add(@Body() dto: CreateDto): Promise<IScheduleResponce> {
     const user = await this.usersService.getById(dto.coach.toString());
 
     if (!user.classes.some((userClass) => userClass.id === dto.class)) {
       throw new HttpException(
-        `${user.firstname} ${user.lastname} doesn't conduct requested class!`,
+        `${user.firstname} ${user.lastname} doesn't give requested class!`,
         HttpStatus.BAD_REQUEST,
       );
     }
     const availablePoles = await this.hallsService.getPolesAmount(dto.hall);
 
-    return await this.scheduleService.create(dto, availablePoles);
+    const newItem = await this.scheduleService.create(dto, availablePoles);
+    return this.mapScheduleToResponce(newItem);
   }
 
   @ApiHeader({
@@ -62,7 +64,19 @@ export class SchedulesController {
   public async update(
     @Body() scheduleDto: UpdateDto,
     @Param('id') id: string,
-  ): Promise<Schedule> {
-    return await this.scheduleService.update(scheduleDto, id);
+  ): Promise<string> {
+    const updatedSchedule = await this.scheduleService.update(scheduleDto, id);
+    return updatedSchedule ? 'success' : 'error';
+  }
+
+  private mapScheduleToResponce(item: Schedule): IScheduleResponce {
+    return {
+      coach: item.coach,
+      hall: item.hall,
+      class: item.class,
+      date_time: item.date_time,
+      places_left: item.places_left,
+      id: item.id,
+    };
   }
 }

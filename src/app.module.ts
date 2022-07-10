@@ -27,7 +27,7 @@ import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.env.${process.env.NODE_ENV}`,
+      envFilePath: '.env',
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
@@ -36,15 +36,6 @@ import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
-      models: [
-        User,
-        Role,
-        UserRoles,
-        Class,
-        UserClasses,
-        Payment,
-        Registration,
-      ],
       autoLoadModels: true,
     }),
     UsersModule,

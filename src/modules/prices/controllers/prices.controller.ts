@@ -5,6 +5,7 @@ import { CreateDto } from '@pricesModule/dto/add.dto';
 import { UpdateDto } from '@pricesModule/dto/update.dto';
 import { PricesService } from '@pricesModule/services/prices.service';
 import { Price } from '@pricesModule/models/prices.model';
+import { IPriceResponce } from '@pricesModule/types/types';
 
 @ApiTags('Prices')
 @Controller('prices')
@@ -21,8 +22,10 @@ export class PricesController {
   })
   @Roles('admin')
   @Post()
-  public async ceate(@Body() dto: CreateDto): Promise<Price> {
-    return await this.pricesService.create(dto);
+  public async ceate(@Body() dto: CreateDto): Promise<IPriceResponce> {
+    const newPrice = await this.pricesService.create(dto);
+
+    return this.mapPriceToResponce(newPrice);
   }
 
   @ApiOperation({ summary: 'Get prices' })
@@ -34,8 +37,10 @@ export class PricesController {
     description: 'Bearer token',
   })
   @Get()
-  public async getAll(): Promise<Price[]> {
-    return await this.pricesService.getAll();
+  public async getAll(): Promise<IPriceResponce[]> {
+    const prices = await this.pricesService.getAll();
+
+    return prices.map((price) => this.mapPriceToResponce(price));
   }
 
   @ApiOperation({ summary: 'Update price' })
@@ -47,7 +52,17 @@ export class PricesController {
   public async update(
     @Body() dto: UpdateDto,
     @Param('id') id: string,
-  ): Promise<Price> {
-    return await this.pricesService.update(dto, id);
+  ): Promise<string> {
+    const updatedPrice = await this.pricesService.update(dto, id);
+
+    return updatedPrice ? 'success' : 'error';
+  }
+
+  private mapPriceToResponce(price: Price): IPriceResponce {
+    return {
+      classes_amount: price.classes_amount,
+      price: price.price,
+      id: price.id,
+    };
   }
 }

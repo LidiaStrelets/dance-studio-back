@@ -10,7 +10,7 @@ import { User } from '@usersModule/models/users.model';
 
 interface PaymentCreationAttrs {
   classes_left: number;
-  price: number;
+  price_id: string;
   client_id: string;
   id: string;
 }

@@ -5,6 +5,7 @@ import { CreateDto } from '@hallsModule/dto/create.dto';
 import { UpdateDto } from '@hallsModule/dto/update.dto';
 import { HallsService } from '@hallsModule/services/halls.service';
 import { Hall } from '@hallsModule/models/halls.model';
+import { IHallResponce } from '@hallsModule/types/types';
 
 @ApiTags('Halls')
 @Controller('halls')
@@ -17,8 +18,10 @@ export class HallsController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
   @Post()
-  public async ceate(@Body() вto: CreateDto): Promise<Hall> {
-    return await this.hallService.create(вto);
+  public async ceate(@Body() вto: CreateDto): Promise<IHallResponce> {
+    const newHall = await this.hallService.create(вto);
+
+    return this.mapHallToResponce(newHall);
   }
 
   @ApiOperation({ summary: 'Update hall' })
@@ -30,7 +33,18 @@ export class HallsController {
   public async update(
     @Body() dto: UpdateDto,
     @Param('id') id: string,
-  ): Promise<Hall> {
-    return await this.hallService.update(dto, id);
+  ): Promise<string> {
+    const updatedHall = await this.hallService.update(dto, id);
+
+    return updatedHall ? 'success' : 'error';
+  }
+
+  private mapHallToResponce(hall: Hall): IHallResponce {
+    return {
+      name: hall.name,
+      description: hall.description,
+      poles_amount: hall.poles_amount,
+      id: hall.id,
+    };
   }
 }
