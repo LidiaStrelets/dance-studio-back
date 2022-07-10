@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsInt, IsOptional } from 'class-validator';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 import { DateDataType } from 'sequelize/types';
 
 export class UpdateDto {
   @IsOptional()
-  @IsInt()
+  @IsString()
   @ApiProperty({
     example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
     description: 'Unique coach id',
@@ -12,7 +12,7 @@ export class UpdateDto {
   readonly coach: string;
 
   @IsOptional()
-  @IsInt()
+  @IsString()
   @ApiProperty({
     example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
     description: 'Unique class id',
@@ -20,7 +20,7 @@ export class UpdateDto {
   readonly class: string;
 
   @IsOptional()
-  @IsInt()
+  @IsString()
   @ApiProperty({
     example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
     description: 'Unique hall id',

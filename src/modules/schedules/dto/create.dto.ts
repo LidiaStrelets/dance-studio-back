@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsInt, IsNotEmpty } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
 import { DateDataType } from 'sequelize/types';
 
 export class CreateDto {
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
   @ApiProperty({
     example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
@@ -11,7 +11,7 @@ export class CreateDto {
   })
   readonly coach: string;
 
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
   @ApiProperty({
     example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
@@ -19,7 +19,7 @@ export class CreateDto {
   })
   readonly class: string;
 
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
   @ApiProperty({
     example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',

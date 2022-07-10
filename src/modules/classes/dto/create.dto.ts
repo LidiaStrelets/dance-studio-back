@@ -1,11 +1,17 @@
+import { Classes } from '@classesModule/types/types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateDto {
   @IsNotEmpty()
-  @IsIn(['stretching', 'pole sport', 'pole exotic', 'stripplastic'])
+  @IsIn([
+    Classes.poleExotic,
+    Classes.poleSport,
+    Classes.stretching,
+    Classes.stripPlastic,
+  ])
   @ApiProperty({
-    example: 'stretching',
+    example: Classes.stretching,
     description: 'The name of a class',
   })
   readonly name: string;

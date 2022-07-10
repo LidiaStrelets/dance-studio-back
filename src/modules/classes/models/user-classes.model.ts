@@ -19,13 +19,13 @@ export class UserClasses extends Model<UserClasses> {
 
   @ForeignKey(() => User)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
   })
   user_id: string;
 
   @ForeignKey(() => Class)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
   })
   class_id: string;
 }
