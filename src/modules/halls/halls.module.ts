@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { AuthModule } from 'src/modules/auth/auth.module';
-import { HallsController } from './halls.controller';
-import { Hall } from './halls.model';
-import { HallsService } from './halls.service';
+import { AuthModule } from '@authModule/auth.module';
+import { HallsController } from '@hallsModule/halls.controller';
+import { Hall } from '@hallsModule/halls.model';
+import { HallsService } from '@hallsModule/halls.service';
 
 @Module({
   controllers: [HallsController],

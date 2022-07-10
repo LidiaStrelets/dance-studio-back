@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { CreateDto } from 'src/modules/roles/dto/add.dto';
-import { LoginDto } from 'src/modules/users/dto/login.dto';
-import { RegisterDto } from 'src/modules/users/dto/register.dto';
+import { CreateDto } from '@rolesModule/dto/add.dto';
+import { LoginDto } from '@usersModule/dto/login.dto';
+import { RegisterDto } from '@usersModule/dto/register.dto';
 
 @Injectable()
 export class ValidationPipe

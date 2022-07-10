@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/core/decorators/roles.decorator';
-import { CreateDto } from './dto/add.dto';
-import { UpdateDto } from './dto/update.dto';
-import { PricesService } from './prices.service';
+import { Roles } from '@decorators/roles.decorator';
+import { CreateDto } from '@pricesModule/dto/add.dto';
+import { UpdateDto } from '@pricesModule/dto/update.dto';
+import { PricesService } from '@pricesModule/prices.service';
 
 @ApiTags('Prices')
 @Controller('prices')

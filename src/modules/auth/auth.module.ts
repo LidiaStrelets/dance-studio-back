@@ -1,9 +1,9 @@
 import { forwardRef, Module, RequestMethod } from '@nestjs/common';
-import { CoreJwtModule } from 'src/core/jwt.module';
-import { UsersModule } from 'src/modules/users/users.module';
-import { RolesModule } from '../roles/roles.module';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { CoreJwtModule } from '@core/jwt.module';
+import { UsersModule } from '@usersModule/users.module';
+import { RolesModule } from '@rolesModule/roles.module';
+import { AuthController } from '@authModule/auth.controller';
+import { AuthService } from '@authModule/auth.service';
 import {
   LoginModule,
   RegistrationModule,

@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { RequestService } from 'src/core/services/request.service';
-import { PaymentsModule } from 'src/modules/payments/payments.module';
-import { SchedulesModule } from 'src/modules/schedules/schedules.module';
-import { User } from 'src/modules/users/users.model';
-import { UsersModule } from 'src/modules/users/users.module';
-import { RegistrationsController } from './registrations.controller';
-import { Registration } from './registrations.model';
-import { RegistrationsService } from './registrations.service';
+import { RequestService } from '@services/request.service';
+import { PaymentsModule } from '@paymentsModule/payments.module';
+import { SchedulesModule } from '@schedulesModule/schedules.module';
+import { User } from '@usersModule/users.model';
+import { UsersModule } from '@usersModule/users.module';
+import { RegistrationsController } from '@registrationsModule/registrations.controller';
+import { Registration } from '@registrationsModule/registrations.model';
+import { RegistrationsService } from '@registrationsModule/registrations.service';
 
 @Module({
   controllers: [RegistrationsController],

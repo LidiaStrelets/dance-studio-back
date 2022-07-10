@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateDto } from './dto/add.dto';
-import { UpdateDto } from './dto/update.dto';
-import { Price } from './prices.model';
+import { CreateDto } from '@pricesModule/dto/add.dto';
+import { UpdateDto } from '@pricesModule/dto/update.dto';
+import { Price } from '@pricesModule/prices.model';
 
 @Injectable()
 export class PricesService {

@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { UsersService } from 'src/modules/users/users.service';
+import { UsersService } from '@usersModule/users.service';
 
 @Injectable()
 export class IsCoachMiddleware {

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { AuthModule } from 'src/modules/auth/auth.module';
-import { PricesController } from './prices.controller';
-import { Price } from './prices.model';
-import { PricesService } from './prices.service';
+import { AuthModule } from '@authModule/auth.module';
+import { PricesController } from '@pricesModule/prices.controller';
+import { Price } from '@pricesModule/prices.model';
+import { PricesService } from '@pricesModule/prices.service';
 
 @Module({
   controllers: [PricesController],

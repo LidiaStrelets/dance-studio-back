@@ -10,13 +10,13 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/core/decorators/roles.decorator';
-import { RequestService } from 'src/core/services/request.service';
-import { PaymentsService } from '../payments/payments.service';
-import { SchedulesService } from '../schedules/schedules.service';
-import { UsersService } from '../users/users.service';
-import { CreateDto } from './dto/add.dto';
-import { Registration } from './registrations.model';
+import { Roles } from '@decorators/roles.decorator';
+import { RequestService } from '@services/request.service';
+import { PaymentsService } from '@paymentsModule/payments.service';
+import { SchedulesService } from '@schedulesModule/schedules.service';
+import { UsersService } from '@usersModule/users.service';
+import { CreateDto } from '@registrationsModule/dto/add.dto';
+import { Registration } from '@registrationsModule/registrations.model';
 import {
   convertMilisecondsToDays,
   convertMilisecondsToHours,

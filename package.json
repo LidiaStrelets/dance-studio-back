@@ -5,6 +5,53 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "_moduleAliases": {
+    "@authModule": [
+      "dist/auth"
+    ],
+    "@classesModule": [
+      "dist/classes"
+    ],
+    "@hallsModule": [
+      "dist/halls"
+    ],
+    "@paymentsModule": [
+      "dist/payments"
+    ],
+    "@pricesModule": [
+      "dist/prices"
+    ],
+    "@registrationsModule": [
+      "dist/registrations"
+    ],
+    "@rolesModule": [
+      "dist/roles"
+    ],
+    "@schedulesModule": [
+      "dist/schedules"
+    ],
+    "@usersModule": [
+      "dist/users"
+    ],
+    "@decorators": [
+      "dist/src/core/decorators"
+    ],
+    "@guards": [
+      "dist/src/core/guards"
+    ],
+    "@middlewares": [
+      "dist/src/core/middlewares"
+    ],
+    "@pipes": [
+      "dist/src/core/pipes"
+    ],
+    "@servises": [
+      "dist/src/core/servises"
+    ],
+    "@core": [
+      "dist/src/core"
+    ]
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -33,6 +80,7 @@
     "class-validator": "^0.13.2",
     "create-nestjs-middleware-module": "^0.2.2",
     "cross-env": "^7.0.3",
+    "module-alias": "^2.2.2",
     "mysql2": "^2.3.3",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",

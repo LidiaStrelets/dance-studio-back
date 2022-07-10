@@ -1,8 +1,6 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/modules/users/users.model';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { RequestService } from '../services/request.service';
+import { RequestService } from '@services/request.service';
 
 @Injectable()
 export class DataOwnerOrAdminMiddleware {

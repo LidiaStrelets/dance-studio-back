@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response, NextFunction } from 'express';
-import { RequestService } from '../services/request.service';
-import { UsersService } from 'src/modules/users/users.service';
+import { RequestService } from '@services/request.service';
+import { UsersService } from '@usersModule/users.service';
 
 @Injectable()
 export class UnauthorizedMiddleware {

@@ -1,12 +1,12 @@
 import { Body, Controller, Inject, Param, Post } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LoginDto } from 'src/modules/users/dto/login.dto';
-import { RegisterDto } from 'src/modules/users/dto/register.dto';
-import { User } from 'src/modules/users/users.model';
-import { RolesService } from '../roles/roles.service';
-import { UsersService } from '../users/users.service';
-import { AuthService } from './auth.service';
+import { LoginDto } from '@usersModule/dto/login.dto';
+import { RegisterDto } from '@usersModule/dto/register.dto';
+import { User } from '@usersModule/users.model';
+import { RolesService } from '@rolesModule/roles.service';
+import { UsersService } from '@usersModule/users.service';
+import { AuthService } from '@authModule/auth.service';
 
 @ApiTags('Authorization')
 @Controller('auth')

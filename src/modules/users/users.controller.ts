@@ -8,12 +8,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/core/decorators/roles.decorator';
-import { RolesGuard } from 'src/core/guards/roles.guard';
-import { AddToUserDto } from 'src/modules/classes/dto/add-to-user.dto';
-import { RegisterDto } from './dto/register.dto';
-import { UpdateDto } from './dto/update.dto';
-import { UsersService } from './users.service';
+import { Roles } from '@decorators/roles.decorator';
+import { RolesGuard } from '@guards/roles.guard';
+import { AddToUserDto } from '@classesModule/dto/add-to-user.dto';
+import { RegisterDto } from '@usersModule/dto/register.dto';
+import { UpdateDto } from '@usersModule/dto/update.dto';
+import { UsersService } from '@usersModule/users.service';
 
 @ApiTags('Users')
 @Controller('users')

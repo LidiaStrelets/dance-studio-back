@@ -1,9 +1,9 @@
 import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/core/decorators/roles.decorator';
-import { CreateDto } from './dto/create.dto';
-import { UpdateDto } from './dto/update.dto';
-import { HallsService } from './halls.service';
+import { Roles } from '@decorators/roles.decorator';
+import { CreateDto } from '@hallsModule/dto/create.dto';
+import { UpdateDto } from '@hallsModule/dto/update.dto';
+import { HallsService } from '@hallsModule/halls.service';
 
 @ApiTags('Halls')
 @Controller('halls')

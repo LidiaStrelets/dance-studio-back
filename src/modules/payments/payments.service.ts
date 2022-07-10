@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateDto } from './dto/add.dto';
-import { Payment } from './payments.model';
+import { CreateDto } from '@paymentsModule/dto/add.dto';
+import { Payment } from '@paymentsModule/payments.model';
 
 @Injectable()
 export class PaymentsService {

@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { SchedulesService } from './schedules.service';
-import { SchedulesController } from './schedules.controller';
+import { SchedulesService } from '@schedulesModule/schedules.service';
+import { SchedulesController } from '@schedulesModule/schedules.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Schedule } from './schedules.model';
-import { AuthModule } from 'src/modules/auth/auth.module';
-import { HallsModule } from 'src/modules/halls/halls.module';
-import { UsersModule } from 'src/modules/users/users.module';
-import { IsCoachMiddleware } from 'src/core/middlewares/isCoach.middleware';
+import { Schedule } from '@schedulesModule/schedules.model';
+import { AuthModule } from '@authModule/auth.module';
+import { HallsModule } from '@hallsModule/halls.module';
+import { UsersModule } from '@usersModule/users.module';
 
 @Module({
   providers: [SchedulesService],

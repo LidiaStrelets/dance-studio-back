@@ -8,12 +8,12 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/core/decorators/roles.decorator';
-import { HallsService } from '../halls/halls.service';
-import { UsersService } from '../users/users.service';
-import { CreateDto } from './dto/create.dto';
-import { UpdateDto } from './dto/update.dto';
-import { SchedulesService } from './schedules.service';
+import { Roles } from '@decorators/roles.decorator';
+import { HallsService } from '@hallsModule/halls.service';
+import { UsersService } from '@usersModule/users.service';
+import { CreateDto } from '@schedulesModule/dto/create.dto';
+import { UpdateDto } from '@schedulesModule/dto/update.dto';
+import { SchedulesService } from '@schedulesModule/schedules.service';
 
 @ApiTags('Schedules')
 @Controller('schedules')

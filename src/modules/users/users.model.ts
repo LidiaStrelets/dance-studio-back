@@ -7,12 +7,12 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { DateDataType } from 'sequelize/types';
-import { Class } from 'src/modules/classes/classes.model';
-import { UserClasses } from 'src/modules/classes/user-classes.model';
-import { Payment } from 'src/modules/payments/payments.model';
-import { Registration } from 'src/modules/registrations/registrations.model';
-import { Role } from 'src/modules/roles/roles.model';
-import { UserRoles } from 'src/modules/roles/user-roles.model';
+import { Class } from '@classesModule/classes.model';
+import { UserClasses } from '@classesModule/user-classes.model';
+import { Payment } from '@paymentsModule/payments.model';
+import { Registration } from '@registrationsModule/registrations.model';
+import { Role } from '@rolesModule/roles.model';
+import { UserRoles } from '@rolesModule/user-roles.model';
 
 interface UserCreationAttrs {
   email: string;

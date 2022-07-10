@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateDto } from './dto/add.dto';
-import { Registration } from './registrations.model';
+import { CreateDto } from '@registrationsModule/dto/add.dto';
+import { Registration } from '@registrationsModule/registrations.model';
 
 export const convertMilisecondsToDays = (ms) => ms / 1000 / 60 / 60 / 24;
 export const convertMilisecondsToHours = (ms) => ms / 1000 / 60 / 60;

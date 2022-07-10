@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { HallsService } from 'src/modules/halls/halls.service';
-import { UsersService } from 'src/modules/users/users.service';
-import { CreateDto } from './dto/create.dto';
-import { UpdateDto } from './dto/update.dto';
-import { Schedule } from './schedules.model';
+import { HallsService } from '@hallsModule/halls.service';
+import { UsersService } from '@usersModule/users.service';
+import { CreateDto } from '@schedulesModule/dto/create.dto';
+import { UpdateDto } from '@schedulesModule/dto/update.dto';
+import { Schedule } from '@schedulesModule/schedules.model';
 
 @Injectable()
 export class SchedulesService {

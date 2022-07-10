@@ -1,9 +1,9 @@
 import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/core/decorators/roles.decorator';
-import { CreateDto } from './dto/add.dto';
-import { UpdateDto } from './dto/update.dto';
-import { RolesService } from './roles.service';
+import { Roles } from '@decorators/roles.decorator';
+import { CreateDto } from '@rolesModule/dto/add.dto';
+import { UpdateDto } from '@rolesModule/dto/update.dto';
+import { RolesService } from '@rolesModule/roles.service';
 
 @ApiTags('Roles')
 @Controller('roles')

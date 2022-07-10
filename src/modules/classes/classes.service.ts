@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Class } from './classes.model';
-import { CreateDto } from './dto/create.dto';
-import { UpdateDto } from './dto/update.dto';
+import { Class } from '@classesModule/classes.model';
+import { CreateDto } from '@classesModule/dto/create.dto';
+import { UpdateDto } from '@classesModule/dto/update.dto';
 
 @Injectable()
 export class ClassesService {

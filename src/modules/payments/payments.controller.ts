@@ -9,13 +9,13 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Roles } from 'src/core/decorators/roles.decorator';
-import { RequestService } from 'src/core/services/request.service';
-import { PricesService } from '../prices/prices.service';
-import { UsersService } from '../users/users.service';
-import { CreateDto } from './dto/add.dto';
-import { Payment } from './payments.model';
-import { PaymentsService } from './payments.service';
+import { Roles } from '@decorators/roles.decorator';
+import { RequestService } from '@services/request.service';
+import { PricesService } from '@pricesModule/prices.service';
+import { UsersService } from '@usersModule/users.service';
+import { CreateDto } from '@paymentsModule/dto/add.dto';
+import { Payment } from '@paymentsModule/payments.model';
+import { PaymentsService } from '@paymentsModule/payments.service';
 
 @Controller('payments')
 export class PaymentsController {

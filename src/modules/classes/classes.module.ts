@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { AuthModule } from 'src/modules/auth/auth.module';
-import { User } from 'src/modules/users/users.model';
-import { ClassesController } from './classes.controller';
-import { Class } from './classes.model';
-import { ClassesService } from './classes.service';
-import { UserClasses } from './user-classes.model';
+import { AuthModule } from '@authModule/auth.module';
+import { User } from '@usersModule/users.model';
+import { ClassesController } from '@classesModule/classes.controller';
+import { Class } from '@classesModule/classes.model';
+import { ClassesService } from '@classesModule/classes.service';
+import { UserClasses } from '@classesModule/user-classes.model';
 
 @Module({
   controllers: [ClassesController],

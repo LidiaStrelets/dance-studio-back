@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { User } from 'src/modules/users/users.model';
+import { User } from '@usersModule/users.model';
 
 export function registrationMiddleware() {
   return async (req, res, next) => {

@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { CoreJwtModule } from 'src/core/jwt.module';
-import { Class } from 'src/modules/classes/classes.model';
-import { ClassesModule } from 'src/modules/classes/classes.module';
-import { UserClasses } from 'src/modules/classes/user-classes.model';
-import { Payment } from 'src/modules/payments/payments.model';
-import { Registration } from 'src/modules/registrations/registrations.model';
-import { Role } from 'src/modules/roles/roles.model';
-import { UserRoles } from 'src/modules/roles/user-roles.model';
-import { RolesModule } from '../roles/roles.module';
-import { UsersController } from './users.controller';
-import { User } from './users.model';
-import { UsersService } from './users.service';
+import { CoreJwtModule } from '@core/jwt.module';
+import { Class } from '@classesModule/classes.model';
+import { ClassesModule } from '@classesModule/classes.module';
+import { UserClasses } from '@classesModule/user-classes.model';
+import { Payment } from '@paymentsModule/payments.model';
+import { Registration } from '@registrationsModule/registrations.model';
+import { Role } from '@rolesModule/roles.model';
+import { UserRoles } from '@rolesModule/user-roles.model';
+import { RolesModule } from '@rolesModule/roles.module';
+import { UsersController } from '@usersModule/users.controller';
+import { User } from '@usersModule/users.model';
+import { UsersService } from '@usersModule/users.service';
 
 @Module({
   controllers: [UsersController],

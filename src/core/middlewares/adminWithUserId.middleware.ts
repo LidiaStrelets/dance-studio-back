@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { RequestService } from '../services/request.service';
+import { RequestService } from '@services/request.service';
 
 @Injectable()
 export class AdminWithUserIdMiddleware {

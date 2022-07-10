@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateDto } from './dto/create.dto';
-import { UpdateDto } from './dto/update.dto';
-import { Hall } from './halls.model';
+import { CreateDto } from '@hallsModule/dto/create.dto';
+import { UpdateDto } from '@hallsModule/dto/update.dto';
+import { Hall } from '@hallsModule/halls.model';
 
 export interface HallUpdate {
   name?: string;
