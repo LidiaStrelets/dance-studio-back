@@ -61,9 +61,7 @@ export class UsersService {
       include: { all: true },
     });
 
-    return user
-      ? user.roles.some((role) => role.title === RolesEnum.coach)
-      : false;
+    return user.roles.some((role) => role.title === RolesEnum.coach) ?? false;
   }
 
   public async update(data: UpdateDto, id: string): Promise<User> {
