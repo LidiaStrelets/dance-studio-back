@@ -8,11 +8,11 @@ import { UpdateDto } from '@classesModule/dto/update.dto';
 export class ClassesService {
   constructor(@InjectModel(Class) private classRepo: typeof Class) {}
 
-  async create(dto: CreateDto) {
+  create(dto: CreateDto) {
     return this.classRepo.create(dto);
   }
 
-  async getById(id: number) {
+  getById(id: number) {
     return this.classRepo.findOne({ where: { id } });
   }
 

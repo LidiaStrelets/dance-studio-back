@@ -6,7 +6,7 @@ import { RequestService } from '@services/request.service';
 export class DataOwnerOrAdminMiddleware {
   constructor(private requestService: RequestService) {}
 
-  async use(req: Request, res: Response, next: NextFunction) {
+  use(req: Request, res: Response, next: NextFunction) {
     const userId = this.requestService.getUserId();
     const userRole = this.requestService.getUserRole();
 

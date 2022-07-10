@@ -22,18 +22,18 @@ export class UsersService {
     return user;
   }
 
-  async findByEmail(email: string) {
+  findByEmail(email: string) {
     return this.userRepo.findOne({
       where: { email },
       include: { all: true },
     });
   }
 
-  async getAll() {
+  getAll() {
     return this.userRepo.findAll({ include: { all: true } });
   }
 
-  async getById(userId: string) {
+  getById(userId: string) {
     return this.userRepo.findOne({
       where: { id: Number(userId) },
       include: { all: true },

@@ -6,7 +6,7 @@ import { RequestService } from '@services/request.service';
 export class AdminWithUserIdMiddleware {
   constructor(private requestService: RequestService) {}
 
-  async use(req: Request, res: Response, next: NextFunction) {
+  use(req: Request, res: Response, next: NextFunction) {
     if (req.method !== 'POST') {
       next();
       return;
@@ -20,7 +20,7 @@ export class AdminWithUserIdMiddleware {
           {
             message: ['User idrequired!'],
             problem_field: null,
-            name: 'User idis required in admin request',
+            name: 'User id is required in admin request',
           },
         ],
         HttpStatus.BAD_REQUEST,

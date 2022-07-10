@@ -7,7 +7,7 @@ import { Payment } from '@paymentsModule/payments.model';
 export class PaymentsService {
   constructor(@InjectModel(Payment) private paymentRepo: typeof Payment) {}
 
-  async create(dto: CreateDto, client_id: number, classes_amount: number) {
+  create(dto: CreateDto, client_id: number, classes_amount: number) {
     return this.paymentRepo.create({
       ...dto,
       client_id,
@@ -15,7 +15,7 @@ export class PaymentsService {
     });
   }
 
-  async getAllByUser(id: number) {
+  getAllByUser(id: number) {
     return this.paymentRepo.findAll({ where: { client_id: id } });
   }
 

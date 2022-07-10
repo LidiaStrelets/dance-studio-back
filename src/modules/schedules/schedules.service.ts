@@ -14,14 +14,14 @@ export class SchedulesService {
     private userService: UsersService,
   ) {}
 
-  async create(dto: CreateDto, availablePoles: number) {
+  create(dto: CreateDto, availablePoles: number) {
     return this.scheduleRepo.create({
       ...dto,
       places_left: availablePoles,
     });
   }
 
-  async get(id: number) {
+  get(id: number) {
     return this.scheduleRepo.findOne({ where: { id } });
   }
 

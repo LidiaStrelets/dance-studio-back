@@ -8,11 +8,11 @@ import { Role } from '@rolesModule/roles.model';
 export class RolesService {
   constructor(@InjectModel(Role) private roleRepo: typeof Role) {}
 
-  async create(dto: CreateDto) {
+  create(dto: CreateDto) {
     return this.roleRepo.create(dto);
   }
 
-  async getByTitle(title: string) {
+  getByTitle(title: string) {
     return this.roleRepo.findOne({ where: { title } });
   }
 

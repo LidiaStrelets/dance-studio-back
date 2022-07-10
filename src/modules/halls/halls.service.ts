@@ -13,7 +13,7 @@ export interface HallUpdate {
 export class HallsService {
   constructor(@InjectModel(Hall) private hallRepo: typeof Hall) {}
 
-  async create(dto: CreateDto) {
+  create(dto: CreateDto) {
     return this.hallRepo.create(dto);
   }
 

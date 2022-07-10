@@ -8,15 +8,15 @@ import { Price } from '@pricesModule/prices.model';
 export class PricesService {
   constructor(@InjectModel(Price) private priceRepo: typeof Price) {}
 
-  async create(dto: CreateDto) {
+  create(dto: CreateDto) {
     return this.priceRepo.create(dto);
   }
 
-  async getById(id: number) {
+  getById(id: number) {
     return this.priceRepo.findOne({ where: { id } });
   }
 
-  async getAll() {
+  getAll() {
     return this.priceRepo.findAll();
   }
 
