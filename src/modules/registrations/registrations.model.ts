@@ -9,8 +9,9 @@ import {
 import { User } from '@usersModule/users.model';
 
 interface RegistrationCreationAttrs {
-  schedule_id: number;
-  client_id: number;
+  schedule_id: string;
+  client_id: string;
+  id: string;
 }
 
 @Table({ tableName: 'registrations' })
@@ -19,24 +20,23 @@ export class Registration extends Model<
   RegistrationCreationAttrs
 > {
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     unique: true,
-    autoIncrement: true,
     primaryKey: true,
   })
-  id: number;
+  id: string;
 
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: false,
   })
-  schedule_id: number;
+  schedule_id: string;
 
   @ForeignKey(() => User)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
   })
-  client_id: number;
+  client_id: string;
 
   @BelongsTo(() => User)
   client: User[];

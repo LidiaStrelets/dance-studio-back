@@ -26,7 +26,7 @@ export class HallsController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Roles('admin')
   @Patch('/:id')
-  update(@Body() вto: UpdateDto, @Param('id') id: string) {
-    return this.hallService.update(вto, Number(id));
+  update(@Body() dto: UpdateDto, @Param('id') id: string) {
+    return this.hallService.update(dto, id);
   }
 }

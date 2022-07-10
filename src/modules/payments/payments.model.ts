@@ -11,18 +11,18 @@ import { User } from '@usersModule/users.model';
 interface PaymentCreationAttrs {
   classes_left: number;
   price: number;
-  client_id: number;
+  client_id: string;
+  id: string;
 }
 
 @Table({ tableName: 'payments' })
 export class Payment extends Model<Payment, PaymentCreationAttrs> {
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     unique: true,
-    autoIncrement: true,
     primaryKey: true,
   })
-  id: number;
+  id: string;
 
   @Column({
     type: DataType.INTEGER,
@@ -31,16 +31,16 @@ export class Payment extends Model<Payment, PaymentCreationAttrs> {
   classes_left: number;
 
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: false,
   })
-  price_id: number;
+  price_id: string;
 
   @ForeignKey(() => User)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
   })
-  client_id: number;
+  client_id: string;
 
   @BelongsTo(() => User)
   client: User;

@@ -6,7 +6,7 @@ import { UsersService } from '@usersModule/users.service';
 export class IsCoachMiddleware {
   constructor(private usersService: UsersService) {}
 
-  use(req: Request, res: Response, next: NextFunction) {
+  async use(req: Request, res: Response, next: NextFunction) {
     const userIsCoach = await this.usersService.isCoach(req.body.coach);
     if (!userIsCoach)
       throw new HttpException(

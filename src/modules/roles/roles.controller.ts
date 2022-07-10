@@ -31,6 +31,6 @@ export class RolesController {
   @Roles('admin')
   @Patch('/:id')
   update(@Body() dto: UpdateDto, @Param('id') id: string) {
-    return this.rolesService.update(dto, Number(id));
+    return this.rolesService.update(dto, id);
   }
 }

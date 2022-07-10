@@ -13,7 +13,7 @@ export class UnauthorizedMiddleware {
     private userService: UsersService,
   ) {}
 
-  use(req: Request, res: Response, next: NextFunction) {
+  async use(req: Request, res: Response, next: NextFunction) {
     const {
       headers: { authorization },
     } = req;

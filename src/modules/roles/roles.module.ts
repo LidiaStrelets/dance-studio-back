@@ -17,3 +17,9 @@ import { UserRoles } from '@rolesModule/user-roles.model';
   exports: [RolesService],
 })
 export class RolesModule {}
+
+export enum Roles {
+  admin = 'admin',
+  coach = 'coach',
+  client = 'client',
+}

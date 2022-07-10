@@ -1,20 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateDto {
   @IsNotEmpty()
-  @IsInt()
+  @IsString()
   @ApiProperty({
     example: 1,
     description: 'The schedule item unique id',
   })
-  readonly schedule_id: number;
+  readonly schedule_id: string;
 
   @IsOptional()
-  @IsInt()
+  @IsString()
   @ApiProperty({
     example: 1,
     description: 'The user unique id',
   })
-  readonly client_id: number;
+  readonly client_id: string;
 }

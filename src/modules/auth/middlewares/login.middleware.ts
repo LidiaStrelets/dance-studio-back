@@ -9,48 +9,34 @@ export function loginMiddleware() {
     } = req;
 
     if (!password || !email) {
-      throw new HttpException(
-        [
-          {
-            message: ['Incorrect credentials!'],
-            problem_field: null,
-            name: 'Login Error',
-          },
-        ],
-        HttpStatus.BAD_REQUEST,
-      );
+      throwError();
     }
 
     const candidate = await User.findOne({ where: { email } });
 
     if (!candidate) {
-      throw new HttpException(
-        [
-          {
-            message: ['Incorrect credentials!'],
-            problem_field: null,
-            name: 'Login Error',
-          },
-        ],
-        HttpStatus.BAD_REQUEST,
-      );
+      throwError();
     }
 
     const isMatch = await bcrypt.compare(password, candidate.password);
 
     if (!isMatch) {
-      throw new HttpException(
-        [
-          {
-            message: ['Incorrect credentials!'],
-            problem_field: null,
-            name: 'Login Error',
-          },
-        ],
-        HttpStatus.BAD_REQUEST,
-      );
+      throwError();
     }
 
     next();
   };
+}
+
+function throwError() {
+  throw new HttpException(
+    [
+      {
+        message: ['Incorrect credentials!'],
+        problem_field: null,
+        name: 'Login Error',
+      },
+    ],
+    HttpStatus.BAD_REQUEST,
+  );
 }

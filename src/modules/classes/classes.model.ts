@@ -11,17 +11,17 @@ import { UserClasses } from '@classesModule/user-classes.model';
 interface ClassCreationAttrs {
   name: string;
   description: string;
+  id: string;
 }
 
 @Table({ tableName: 'classes' })
 export class Class extends Model<Class, ClassCreationAttrs> {
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     unique: true,
-    autoIncrement: true,
     primaryKey: true,
   })
-  id: number;
+  id: string;
 
   @Column({
     type: DataType.STRING,

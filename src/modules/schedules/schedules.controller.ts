@@ -37,7 +37,7 @@ export class SchedulesController {
   async add(@Body() dto: CreateDto) {
     const user = await this.usersService.getById(dto.coach.toString());
 
-    if (!user.classes.some((cl) => cl.id === dto.class))
+    if (!user.classes.some((user_class) => user_class.id === dto.class))
       throw new HttpException(
         `${user.firstname} ${user.lastname} doesn't conduct requested class!`,
         HttpStatus.BAD_REQUEST,
@@ -58,6 +58,6 @@ export class SchedulesController {
   @Roles('admin')
   @Patch('/:id')
   update(@Body() scheduleDto: UpdateDto, @Param('id') id: string) {
-    return this.scheduleService.update(scheduleDto, Number(id));
+    return this.scheduleService.update(scheduleDto, id);
   }
 }

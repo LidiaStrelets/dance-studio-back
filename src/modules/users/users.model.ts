@@ -21,17 +21,17 @@ interface UserCreationAttrs {
   lastname: string;
   birth_date: DateDataType | null;
   information: string | null;
+  id: string;
 }
 
 @Table({ tableName: 'users' })
 export class User extends Model<User, UserCreationAttrs> {
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     unique: true,
-    autoIncrement: true,
     primaryKey: true,
   })
-  id: number;
+  id: string;
 
   @Column({
     type: DataType.STRING,

@@ -6,6 +6,7 @@ import { Role } from '@rolesModule/roles.model';
 import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateDto } from '@usersModule/dto/update.dto';
 import { User } from '@usersModule/users.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +16,8 @@ export class UsersService {
   ) {}
 
   async registrate(dto: RegisterDto, role: Role) {
-    const user = await this.userRepo.create({ ...dto });
+    const id: string = uuidv4();
+    const user = await this.userRepo.create({ ...dto, id });
     await user.$set('roles', [role.id]);
 
     user.roles = [role];
@@ -33,9 +35,9 @@ export class UsersService {
     return this.userRepo.findAll({ include: { all: true } });
   }
 
-  getById(userId: string) {
+  getById(id: string) {
     return this.userRepo.findOne({
-      where: { id: Number(userId) },
+      where: { id },
       include: { all: true },
     });
   }
@@ -51,17 +53,17 @@ export class UsersService {
     }
   }
 
-  async isCoach(id: number) {
+  async isCoach(id: string) {
     const user = await this.userRepo.findOne({
       where: { id },
       include: { all: true },
     });
 
-    return user ? user.roles.some((r) => r.id === 2) : false;
+    return user ? user.roles.some((role) => role.title === 'coach') : false;
   }
 
-  async update(data: UpdateDto, id: number) {
-    const user = await this.userRepo.findOne({ where: { id } });
+  async update(data: UpdateDto, id: string) {
+    const user = await this.userRepo.findByPk(id);
 
     await user.update(data);
     return user;

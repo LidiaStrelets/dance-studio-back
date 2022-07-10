@@ -3,17 +3,17 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript';
 interface PriceCreationAttrs {
   classes_amount: number;
   price: number;
+  id: string;
 }
 
 @Table({ tableName: 'prices' })
 export class Price extends Model<Price, PriceCreationAttrs> {
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     unique: true,
-    autoIncrement: true,
     primaryKey: true,
   })
-  id: number;
+  id: string;
 
   @Column({
     type: DataType.INTEGER,

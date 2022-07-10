@@ -11,22 +11,21 @@ import { Class } from '@classesModule/classes.model';
 @Table({ tableName: 'user_classes', createdAt: false, updatedAt: false })
 export class UserClasses extends Model<UserClasses> {
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     unique: true,
-    autoIncrement: true,
     primaryKey: true,
   })
-  id: number;
+  id: string;
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
   })
-  user_id: number;
+  user_id: string;
 
   @ForeignKey(() => Class)
   @Column({
     type: DataType.INTEGER,
   })
-  class_id: number;
+  class_id: string;
 }

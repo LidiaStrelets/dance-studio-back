@@ -31,6 +31,6 @@ export class ClassesController {
   @Roles('admin')
   @Patch('/:id')
   async update(@Body() dto: UpdateDto, @Param('id') id: string) {
-    return await this.classesService.update(dto, Number(id));
+    return await this.classesService.update(dto, id);
   }
 }

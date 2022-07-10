@@ -11,17 +11,17 @@ import { UserRoles } from '@rolesModule/user-roles.model';
 interface RoleCreationAttrs {
   value: string;
   description: string;
+  id: string;
 }
 
 @Table({ tableName: 'roles' })
 export class Role extends Model<Role, RoleCreationAttrs> {
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     unique: true,
-    autoIncrement: true,
     primaryKey: true,
   })
-  id: number;
+  id: string;
 
   @Column({
     type: DataType.STRING,

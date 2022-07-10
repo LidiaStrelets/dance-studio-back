@@ -4,18 +4,17 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.createTable('registrations', {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
-        autoIncrement: true,
         unique: true,
         primaryKey: true,
       },
       schedule_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       client_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
     });

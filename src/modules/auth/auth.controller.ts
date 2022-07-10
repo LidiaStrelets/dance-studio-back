@@ -32,7 +32,7 @@ export class AuthController {
 
     const token = await this.jwtService.sign({
       email: dto.email,
-      roles: user.roles.map((r) => r.title),
+      roles: user.roles.map((role) => role.title),
       id: user.id,
     });
 
@@ -62,7 +62,7 @@ export class AuthController {
 
     const token = await this.jwtService.sign({
       email: dto.email,
-      roles: user.roles.map((r) => r.title),
+      roles: user.roles.map((role) => role.title),
       id: user.id,
     });
 

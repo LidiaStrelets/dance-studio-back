@@ -44,6 +44,6 @@ export class PricesController {
   @Roles('admin')
   @Patch('/:id')
   update(@Body() dto: UpdateDto, @Param('id') id: string) {
-    return this.pricesService.update(dto, Number(id));
+    return this.pricesService.update(dto, id);
   }
 }

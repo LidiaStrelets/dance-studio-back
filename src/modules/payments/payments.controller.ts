@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Headers,
   HttpException,
   HttpStatus,
   Param,
@@ -35,20 +34,20 @@ export class PaymentsController {
   })
   @Roles('admin', 'client')
   @Post()
-  async create(@Body() dto: CreateDto, @Headers() headers) {
-    const price = await this.priceService.getById(Number(dto.price_id));
+  async create(@Body() dto: CreateDto) {
+    const price = await this.priceService.getById(dto.price_id);
 
     const client_id = dto.user_id || this.requestServise.getUserId();
     const user = await this.userService.getById(client_id.toString());
 
-    if (user.roles.some((r) => r.id !== 1))
+    if (user.roles.some((role) => role.title !== 'client'))
       throw new HttpException(
         { message: 'Payments can be created only for the clients!' },
         HttpStatus.BAD_REQUEST,
       );
     return await this.paymentsService.create(
       dto,
-      +client_id,
+      client_id,
       price.classes_amount,
     );
   }
@@ -65,6 +64,6 @@ export class PaymentsController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Get('/:userId')
   async getAllByUser(@Param('userId') userId: string) {
-    return await this.paymentsService.getAllByUser(Number(userId));
+    return await this.paymentsService.getAllByUser(userId);
   }
 }

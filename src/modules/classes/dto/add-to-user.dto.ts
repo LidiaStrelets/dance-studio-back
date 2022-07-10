@@ -5,15 +5,15 @@ export class AddToUserDto {
   @IsNotEmpty()
   @IsInt()
   @ApiProperty({
-    example: '1',
+    example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
     description: 'Coach class id',
   })
-  readonly class: number;
+  readonly class: string;
 
   @IsInt()
   @ApiProperty({
-    example: 1,
+    example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
     description: 'Unique coach id',
   })
-  readonly user_id: number;
+  readonly user_id: string;
 }

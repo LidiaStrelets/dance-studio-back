@@ -70,6 +70,6 @@ export class UsersController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Patch('/:userId')
   update(@Body() dto: UpdateDto, @Param('userId') id: string) {
-    return this.userService.update(dto, Number(id));
+    return this.userService.update(dto, id);
   }
 }

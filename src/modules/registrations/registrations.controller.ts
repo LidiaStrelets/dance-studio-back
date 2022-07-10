@@ -61,13 +61,13 @@ export class RegistrationsController {
       dto.client_id.toString() || userid,
     );
 
-    if (user.roles.some((r) => r.id !== 1))
+    if (user.roles.some((role) => role.title !== 'client'))
       throw new HttpException(
         { message: 'Registration can be created only for the clients!' },
         HttpStatus.BAD_REQUEST,
       );
 
-    const client_id = dto.client_id || +userid;
+    const client_id = dto.client_id || userid;
 
     if (await this.registrationsService.find(client_id, dto.schedule_id))
       throw new HttpException(
@@ -160,6 +160,6 @@ export class RegistrationsController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Get('/:userId')
   async getAllByUser(@Param('userId') userId: string) {
-    return await this.registrationsService.getAllByUser(Number(userId));
+    return await this.registrationsService.getAllByUser(userId);
   }
 }

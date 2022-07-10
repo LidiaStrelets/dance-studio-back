@@ -2,40 +2,40 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript';
 import { DateDataType } from 'sequelize/types';
 
 interface ScheduleCreationAttrs {
-  coach: number;
-  hall: number;
-  class: number;
+  coach: string;
+  hall: string;
+  class: string;
   date_time: DateDataType;
   places_left: number;
+  id: string;
 }
 
 @Table({ tableName: 'schedules' })
 export class Schedule extends Model<Schedule, ScheduleCreationAttrs> {
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     unique: true,
-    autoIncrement: true,
     primaryKey: true,
   })
-  id: number;
+  id: string;
 
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: false,
   })
-  class: number;
+  class: string;
 
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: false,
   })
-  coach: number;
+  coach: string;
 
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: false,
   })
-  hall: number;
+  hall: string;
 
   @Column({
     type: DataType.DATE,
