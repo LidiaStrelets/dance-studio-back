@@ -12,17 +12,17 @@ import {
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { RequestService } from '@services/request.service';
-import { PaymentsService } from '@paymentsModule/payments.service';
-import { SchedulesService } from '@schedulesModule/schedules.service';
-import { UsersService } from '@usersModule/users.service';
+import { PaymentsService } from '@paymentsModule/services/payments.service';
+import { SchedulesService } from '@schedulesModule/services/schedules.service';
+import { UsersService } from '@usersModule/services/users.service';
 import { CreateDto } from '@registrationsModule/dto/add.dto';
-import { Registration } from '@registrationsModule/registrations.model';
+import { Registration } from '@registrationsModule/models/registrations.model';
 import {
   convertMilisecondsToDays,
   convertMilisecondsToHours,
   RegistrationsService,
-} from './registrations.service';
-import { Roles as RolesEnum } from '@rolesModule/types';
+} from '../services/registrations.service';
+import { Roles as RolesEnum } from '@rolesModule/types/types';
 
 @ApiTags('Registrations')
 @Controller('registrations')

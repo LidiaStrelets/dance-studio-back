@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateDto } from '@hallsModule/dto/create.dto';
 import { UpdateDto } from '@hallsModule/dto/update.dto';
-import { Hall } from '@hallsModule/halls.model';
+import { Hall } from '@hallsModule/models/halls.model';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface HallUpdate {

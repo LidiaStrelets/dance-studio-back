@@ -5,7 +5,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { User } from '@usersModule/users.model';
+import { User } from '@usersModule/models/users.model';
 import { UserClasses } from '@classesModule/models/user-classes.model';
 
 interface ClassCreationAttrs {

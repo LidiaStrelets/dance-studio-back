@@ -13,9 +13,9 @@ import { RolesGuard } from '@guards/roles.guard';
 import { AddToUserDto } from '@classesModule/dto/add-to-user.dto';
 import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateDto } from '@usersModule/dto/update.dto';
-import { UsersService } from '@usersModule/users.service';
-import { User } from '@usersModule/users.model';
-import { Class } from '@classesModule/classes.model';
+import { UsersService } from '@usersModule/services/users.service';
+import { User } from '@usersModule/models/users.model';
+import { Class } from '@classesModule/models/classes.model';
 
 @ApiTags('Users')
 @Controller('users')

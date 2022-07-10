@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { ClassesService } from '@classesModule/classes.service';
+import { ClassesService } from '@classesModule/services/classes.service';
 import { AddToUserDto } from '@classesModule/dto/add-to-user.dto';
-import { Role } from '@rolesModule/roles.model';
+import { Role } from '@rolesModule/models/roles.model';
 import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateDto } from '@usersModule/dto/update.dto';
-import { User } from '@usersModule/users.model';
+import { User } from '@usersModule/models/users.model';
 import { v4 as uuidv4 } from 'uuid';
-import { Roles as RolesEnum } from '@rolesModule/types';
-import { Class } from '@classesModule/classes.model';
+import { Roles as RolesEnum } from '@rolesModule/types/types';
+import { Class } from '@classesModule/models/classes.model';
 
 @Injectable()
 export class UsersService {

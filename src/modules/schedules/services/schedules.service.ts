@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateDto } from '@schedulesModule/dto/create.dto';
 import { UpdateDto } from '@schedulesModule/dto/update.dto';
-import { Schedule } from '@schedulesModule/schedules.model';
+import { Schedule } from '@schedulesModule/models/schedules.model';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()

@@ -10,12 +10,12 @@ import {
 import { ApiHeader, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { RequestService } from '@services/request.service';
-import { PricesService } from '@pricesModule/prices.service';
-import { UsersService } from '@usersModule/users.service';
+import { PricesService } from '@pricesModule/services/prices.service';
+import { UsersService } from '@usersModule/services/users.service';
 import { CreateDto } from '@paymentsModule/dto/add.dto';
-import { Payment } from '@paymentsModule/payments.model';
-import { PaymentsService } from '@paymentsModule/payments.service';
-import { Roles as RolesEnum } from '@rolesModule/types';
+import { Payment } from '@paymentsModule/models/payments.model';
+import { PaymentsService } from '@paymentsModule/services/payments.service';
+import { Roles as RolesEnum } from '@rolesModule/types/types';
 
 @Controller('payments')
 export class PaymentsController {

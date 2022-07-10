@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Class } from '@classesModule/classes.model';
+import { Class } from '@classesModule/models/classes.model';
 import { CreateDto } from '@classesModule/dto/create.dto';
 import { UpdateDto } from '@classesModule/dto/update.dto';
 import { v4 as uuidv4 } from 'uuid';

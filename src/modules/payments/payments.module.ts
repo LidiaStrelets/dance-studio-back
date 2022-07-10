@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PaymentsService } from '@paymentsModule/payments.service';
-import { PaymentsController } from '@paymentsModule/payments.controller';
+import { PaymentsService } from '@paymentsModule/services/payments.service';
+import { PaymentsController } from '@paymentsModule/controllers/payments.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { User } from '@usersModule/users.model';
-import { Payment } from '@paymentsModule/payments.model';
-import { Price } from '@pricesModule/prices.model';
+import { User } from '@usersModule/models/users.model';
+import { Payment } from '@paymentsModule/models/payments.model';
+import { Price } from '@pricesModule/models/prices.model';
 import { PricesModule } from '@pricesModule/prices.module';
 import { UsersModule } from '@usersModule/users.module';
 import { RequestService } from '@services/request.service';

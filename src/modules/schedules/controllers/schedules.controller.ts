@@ -9,12 +9,12 @@ import {
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
-import { HallsService } from '@hallsModule/halls.service';
-import { UsersService } from '@usersModule/users.service';
+import { HallsService } from '@hallsModule/services/halls.service';
+import { UsersService } from '@usersModule/services/users.service';
 import { CreateDto } from '@schedulesModule/dto/create.dto';
 import { UpdateDto } from '@schedulesModule/dto/update.dto';
-import { SchedulesService } from '@schedulesModule/schedules.service';
-import { Schedule } from '@schedulesModule/schedules.model';
+import { SchedulesService } from '@schedulesModule/services/schedules.service';
+import { Schedule } from '@schedulesModule/models/schedules.model';
 
 @ApiTags('Schedules')
 @Controller('schedules')

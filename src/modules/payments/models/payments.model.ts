@@ -6,7 +6,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { User } from '@usersModule/users.model';
+import { User } from '@usersModule/models/users.model';
 
 interface PaymentCreationAttrs {
   classes_left: number;

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateDto } from '@rolesModule/dto/add.dto';
 import { UpdateDto } from '@rolesModule/dto/update.dto';
-import { Role } from '@rolesModule/roles.model';
+import { Role } from '@rolesModule/models/roles.model';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()

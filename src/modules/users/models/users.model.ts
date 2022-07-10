@@ -9,10 +9,10 @@ import {
 import { DateDataType } from 'sequelize/types';
 import { Class } from '@classesModule/models/classes.model';
 import { UserClasses } from '@classesModule/models/user-classes.model';
-import { Payment } from '@paymentsModule/payments.model';
-import { Registration } from '@registrationsModule/registrations.model';
-import { Role } from '@rolesModule/roles.model';
-import { UserRoles } from '@rolesModule/user-roles.model';
+import { Payment } from '@paymentsModule/models/payments.model';
+import { Registration } from '@registrationsModule/models/registrations.model';
+import { Role } from '@rolesModule/models/roles.model';
+import { UserRoles } from '@rolesModule/models/user-roles.model';
 
 interface UserCreationAttrs {
   email: string;

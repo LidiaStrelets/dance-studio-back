@@ -3,9 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from '@usersModule/dto/login.dto';
 import { RegisterDto } from '@usersModule/dto/register.dto';
-import { User } from '@usersModule/users.model';
-import { RolesService } from '@rolesModule/roles.service';
-import { UsersService } from '@usersModule/users.service';
+import { User } from '@usersModule/models/users.model';
+import { RolesService } from '@rolesModule/services/roles.service';
+import { UsersService } from '@usersModule/services/users.service';
 import { AuthService } from '@authModule/services/auth.service';
 
 @ApiTags('Authorization')

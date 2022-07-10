@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
-import { User } from '@usersModule/users.model';
+import { User } from '@usersModule/models/users.model';
 
 export function loginMiddleware() {
   return async (req, res, next) => {

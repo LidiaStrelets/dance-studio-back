@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@usersModule/users.model';
+import { User } from '@usersModule/models/users.model';
 import { ROLES_KEY } from '@decorators/roles.decorator';
-import { BEARER } from '@authModule/types';
+import { BEARER } from '@authModule/types/types';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
