@@ -23,7 +23,7 @@ export class ValidationPipe
 
     const errors = obj && typeof obj !== 'string' && (await validate(obj));
 
-    if (errors && errors.length)
+    if (errors && errors.length) {
       throw new HttpException(
         {
           message: `${errors.map(
@@ -35,6 +35,7 @@ export class ValidationPipe
         },
         HttpStatus.BAD_REQUEST,
       );
+    }
 
     return value;
   }

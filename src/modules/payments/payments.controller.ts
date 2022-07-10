@@ -41,11 +41,13 @@ export class PaymentsController {
     const client_id = dto.user_id || this.requestServise.getUserId();
     const user = await this.userService.getById(client_id.toString());
 
-    if (user.roles.some((role) => role.title !== RolesEnum.client))
+    if (user.roles.some((role) => role.title !== RolesEnum.client)) {
       throw new HttpException(
         { message: 'Payments can be created only for the clients!' },
         HttpStatus.BAD_REQUEST,
       );
+    }
+
     return await this.paymentsService.create(
       dto,
       client_id,

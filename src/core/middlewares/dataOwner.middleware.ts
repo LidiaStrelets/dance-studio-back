@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { RequestService } from '@services/request.service';
+import { Roles } from '@rolesModule/types';
 
 @Injectable()
 export class DataOwnerOrAdminMiddleware {
@@ -10,7 +11,7 @@ export class DataOwnerOrAdminMiddleware {
     const userId = this.requestService.getUserId();
     const userRole = this.requestService.getUserRole();
 
-    if (userRole !== 'admin' && req.params.userId !== userId) {
+    if (userRole !== Roles.admin && req.params.userId !== userId) {
       throw new HttpException(
         [
           {

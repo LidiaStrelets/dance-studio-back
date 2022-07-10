@@ -62,19 +62,21 @@ export class RegistrationsController {
       dto.client_id.toString() || userid,
     );
 
-    if (user.roles.some((role) => role.title !== RolesEnum.client))
+    if (user.roles.some((role) => role.title !== RolesEnum.client)) {
       throw new HttpException(
         { message: 'Registration can be created only for the clients!' },
         HttpStatus.BAD_REQUEST,
       );
+    }
 
     const client_id = dto.client_id || userid;
 
-    if (await this.registrationsService.find(client_id, dto.schedule_id))
+    if (await this.registrationsService.find(client_id, dto.schedule_id)) {
       throw new HttpException(
         { message: 'You already signed for this class!' },
         HttpStatus.BAD_REQUEST,
       );
+    }
 
     const userPaym = await this.paymentService.getLastByUser(client_id);
 
@@ -82,7 +84,7 @@ export class RegistrationsController {
       Date.now() - new Date(userPaym.createdAt).getTime(),
     );
 
-    if (days > 30 || userPaym.classes_left === 0)
+    if (days > 30 || userPaym.classes_left === 0) {
       throw new HttpException(
         {
           message:
@@ -90,17 +92,18 @@ export class RegistrationsController {
         },
         HttpStatus.PAYMENT_REQUIRED,
       );
+    }
 
     const scheduleItem = await this.scheduleService.get(dto.schedule_id);
 
-    if (scheduleItem.places_left === 0)
+    if (scheduleItem.places_left === 0) {
       throw new HttpException(
         {
           message: 'No places left for this class, try another one!',
         },
         HttpStatus.NOT_FOUND,
       );
-    else {
+    } else {
       this.scheduleService.decreaseAvailableSpots(dto.schedule_id);
       if (userPaym.classes_left !== 1000) {
         this.paymentService.decreaseAvailableClasses(userPaym.id);
@@ -127,11 +130,12 @@ export class RegistrationsController {
   async delete(@Param('regId') regId: string) {
     const existingReg = await this.registrationsService.findById(regId);
 
-    if (!existingReg)
+    if (!existingReg) {
       throw new HttpException(
         { message: `Registration doesn't exist` },
         HttpStatus.NOT_FOUND,
       );
+    }
 
     const userPaym = await this.paymentService.getLastByUser(
       existingReg.client_id,

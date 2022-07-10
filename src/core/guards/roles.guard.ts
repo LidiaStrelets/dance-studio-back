@@ -10,6 +10,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@usersModule/users.model';
 import { ROLES_KEY } from '@decorators/roles.decorator';
+import { BEARER } from '@authModule/types';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -25,7 +26,9 @@ export class RolesGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     );
 
-    if (!requiredRoles) return true;
+    if (!requiredRoles) {
+      return true;
+    }
 
     const req = context.switchToHttp().getRequest();
 
@@ -33,11 +36,12 @@ export class RolesGuard implements CanActivate {
       const authHeader = req.headers.authorization;
       const [bearer, token] = authHeader.split(' ');
 
-      if (bearer !== 'Bearer' || !token)
+      if (bearer !== BEARER || !token) {
         throw new HttpException(
           { message: 'Unauthorized user!' },
           HttpStatus.UNAUTHORIZED,
         );
+      }
 
       const user: User = this.jwtService.verify(token);
 

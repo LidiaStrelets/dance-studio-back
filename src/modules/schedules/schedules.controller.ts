@@ -37,11 +37,12 @@ export class SchedulesController {
   async add(@Body() dto: CreateDto) {
     const user = await this.usersService.getById(dto.coach.toString());
 
-    if (!user.classes.some((userClass) => userClass.id === dto.class))
+    if (!user.classes.some((userClass) => userClass.id === dto.class)) {
       throw new HttpException(
         `${user.firstname} ${user.lastname} doesn't conduct requested class!`,
         HttpStatus.BAD_REQUEST,
       );
+    }
     const availablePoles = await this.hallsService.getPolesAmount(dto.hall);
 
     return await this.scheduleService.create(dto, availablePoles);

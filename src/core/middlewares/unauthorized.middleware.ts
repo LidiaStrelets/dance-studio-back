@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request, Response, NextFunction } from 'express';
 import { RequestService } from '@services/request.service';
 import { UsersService } from '@usersModule/users.service';
+import { BEARER } from '@authModule/types';
 
 @Injectable()
 export class UnauthorizedMiddleware {
@@ -33,7 +34,7 @@ export class UnauthorizedMiddleware {
 
     const [type, authToken] = authorization.split(' ');
 
-    if (!authToken || type !== 'Bearer') {
+    if (!authToken || type !== BEARER) {
       throw new HttpException(
         [
           {

@@ -8,11 +8,12 @@ export class IsCoachMiddleware {
 
   async use(req: Request, res: Response, next: NextFunction) {
     const userIsCoach = await this.usersService.isCoach(req.body.coach);
-    if (!userIsCoach)
+    if (!userIsCoach) {
       throw new HttpException(
         `Requested user is not a coach`,
         HttpStatus.BAD_REQUEST,
       );
+    }
     next();
   }
 }
