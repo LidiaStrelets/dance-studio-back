@@ -36,7 +36,10 @@ export class PaymentsModule {
 
     consumer.apply(ExistingUserMiddleware).forRoutes('payments');
 
-    consumer.apply(DataOwnerOrAdminMiddleware).forRoutes('payments');
+    consumer
+      .apply(DataOwnerOrAdminMiddleware)
+      .exclude({ path: 'payments', method: RequestMethod.POST })
+      .forRoutes('payments');
 
     consumer
       .apply(ExistsPriceMiddleware)

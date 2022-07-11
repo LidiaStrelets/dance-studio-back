@@ -1,45 +1,35 @@
 import {
   CanActivate,
   ExecutionContext,
-  HttpException,
-  HttpStatus,
   Inject,
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
 import { ROLES_KEY } from '@decorators/roles.decorator';
-import { BEARER, IToken } from '@authModule/types/types';
+import { RequestService } from '@services/request.service';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(
     @Inject('CoreJwtService')
-    private jwtService: JwtService,
     private reflector: Reflector,
+    private requestService: RequestService,
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles: [string] = this.reflector.getAllAndOverride(
+    const requiredRoles: [string] = this.reflector.get(
       ROLES_KEY,
-      [context.getHandler(), context.getClass()],
+      context.getHandler(),
     );
 
     if (!requiredRoles) {
       return true;
     }
 
-    const req = context.switchToHttp().getRequest();
-
-    const authHeader = req.headers.authorization;
-    const [, token] = authHeader.split(' ');
-
-    const decodedToken: IToken = this.jwtService.verify(token);
-
-    req.user = decodedToken.id;
+    const userRoles = this.requestService.getUserRole();
 
     return requiredRoles.some((requiredRole) =>
-      decodedToken.roles.some((userRole) => userRole === requiredRole),
+      userRoles.some((userRole) => userRole === requiredRole),
     );
   }
 }

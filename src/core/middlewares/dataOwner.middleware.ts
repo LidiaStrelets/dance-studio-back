@@ -11,7 +11,10 @@ export class DataOwnerOrAdminMiddleware {
     const userId = this.requestService.getUserId();
     const userRole = this.requestService.getUserRole();
 
-    if (userRole !== Roles.admin && req.params.userId !== userId) {
+    if (
+      !userRole.some((role) => role === Roles.admin || role === Roles.coach) &&
+      req.params.userId !== userId
+    ) {
       throw new HttpException(
         [
           {

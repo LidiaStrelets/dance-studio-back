@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from '@usersModule/users.module';
@@ -11,11 +11,9 @@ import { PricesModule } from '@pricesModule/prices.module';
 import { PaymentsModule } from '@paymentsModule/payments.module';
 import { RegistrationsModule } from '@registrationsModule/registrations.module';
 import { CoreJwtModule } from '@core/jwt.module';
-import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { RequestService } from '@services/request.service';
-import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
-import { AdminWithUserIdMiddleware } from '@middlewares/adminWithUserId.middleware';
-import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from '@exceptionFilters/http.filter';
 
 @Module({
   imports: [
@@ -43,27 +41,12 @@ import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
     RegistrationsModule,
   ],
   controllers: [],
-  providers: [RequestService],
+  providers: [
+    RequestService,
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(UnauthorizedMiddleware)
-      .forRoutes('registrations', 'roles', 'schedules', 'users');
-
-    consumer
-      .apply(DataOwnerOrAdminMiddleware)
-      .forRoutes(
-        'users/:userId',
-        'registrations/:regId',
-        'registrations/:userId',
-      );
-
-    consumer.apply(AdminWithUserIdMiddleware).forRoutes('registrations');
-
-    consumer
-      .apply(IsCoachMiddleware)
-      .exclude('schedules/:id')
-      .forRoutes('schedules');
-  }
-}
+export class AppModule {}

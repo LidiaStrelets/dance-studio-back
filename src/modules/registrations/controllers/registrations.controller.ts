@@ -4,26 +4,20 @@ import {
   Delete,
   Get,
   Headers,
-  HttpException,
-  HttpStatus,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { RequestService } from '@services/request.service';
 import { PaymentsService } from '@paymentsModule/services/payments.service';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
-import { UsersService } from '@usersModule/services/users.service';
 import { CreateDto } from '@registrationsModule/dto/add.dto';
 import { Registration } from '@registrationsModule/models/registrations.model';
-import {
-  convertMilisecondsToDays,
-  convertMilisecondsToHours,
-  RegistrationsService,
-} from '../services/registrations.service';
-import { Roles as RolesEnum } from '@rolesModule/types/types';
+import { RegistrationsService } from '../services/registrations.service';
 import { IRegistrationResponce } from '@registrationsModule/types/types';
+import { RolesGuard } from '@guards/roles.guard';
 
 @ApiTags('Registrations')
 @Controller('registrations')
@@ -31,7 +25,6 @@ export class RegistrationsController {
   constructor(
     private registrationsService: RegistrationsService,
     private requestService: RequestService,
-    private userService: UsersService,
     private paymentService: PaymentsService,
     private scheduleService: SchedulesService,
   ) {}
@@ -55,6 +48,7 @@ export class RegistrationsController {
     description: 'Bearer token',
   })
   @Roles('admin', 'client')
+  @UseGuards(RolesGuard)
   @Post()
   public async create(
     @Body() dto: CreateDto,
@@ -62,60 +56,21 @@ export class RegistrationsController {
   ): Promise<IRegistrationResponce> {
     const userid = this.requestService.getUserId();
 
-    // const user = await this.userService.getById(dto.client_id || userid);
-
-    // if (user.roles.some((role) => role.title !== RolesEnum.client)) {
-    //   throw new HttpException(
-    //     { message: 'Registration can be created only for the clients!' },
-    //     HttpStatus.BAD_REQUEST,
-    //   );
-    // }
-
     const client_id = dto.client_id || userid;
-
-    if (await this.registrationsService.find(client_id, dto.schedule_id)) {
-      throw new HttpException(
-        { message: 'You already signed for this class!' },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
 
     const userPaym = await this.paymentService.getLastByUser(client_id);
 
-    const days = convertMilisecondsToDays(
-      Date.now() - new Date(userPaym.createdAt).getTime(),
-    );
+    this.scheduleService.decreaseAvailableSpots(dto.schedule_id);
 
-    if (days > 30 || userPaym.classes_left === 0) {
-      throw new HttpException(
-        {
-          message:
-            'Your pass has ended! Make a new payment to create a registration!',
-        },
-        HttpStatus.PAYMENT_REQUIRED,
-      );
-    }
-
-    const scheduleItem = await this.scheduleService.get(dto.schedule_id);
-
-    if (scheduleItem.places_left === 0) {
-      throw new HttpException(
-        {
-          message: 'No places left for this class, try another one!',
-        },
-        HttpStatus.NOT_FOUND,
-      );
-    } else {
-      this.scheduleService.decreaseAvailableSpots(dto.schedule_id);
-      if (userPaym.classes_left !== 1000) {
-        this.paymentService.decreaseAvailableClasses(userPaym.id);
-      }
+    if (userPaym.classes_left !== 1000) {
+      this.paymentService.decreaseAvailableClasses(userPaym.id);
     }
 
     const newRegistration = await this.registrationsService.create(
       dto,
       headers,
     );
+
     return this.mapRegistrationToResponce(newRegistration);
   }
 
@@ -132,29 +87,27 @@ export class RegistrationsController {
     description: 'Bearer token',
   })
   @Roles('admin', 'client')
+  @UseGuards(RolesGuard)
   @Delete('/:regId')
   public async delete(@Param('regId') regId: string): Promise<number> {
-    const existingReg = await this.registrationsService.findById(regId);
-
-    if (!existingReg) {
-      throw new HttpException(
-        { message: `Registration doesn't exist` },
-        HttpStatus.NOT_FOUND,
-      );
-    }
-
-    const userPaym = await this.paymentService.getLastByUser(
-      existingReg.client_id,
+    const existingRegistration = await this.registrationsService.findById(
+      regId,
     );
 
-    const hours = convertMilisecondsToHours(
-      Date.now() - new Date(existingReg.createdAt).getTime(),
+    const userPaym = await this.paymentService.getLastByUser(
+      existingRegistration.client_id,
+    );
+
+    const hours = this.registrationsService.convertMilisecondsToHours(
+      Date.now() - new Date(existingRegistration.createdAt).getTime(),
     );
     if (hours < 24) {
       this.paymentService.increaseAvailableClasses(userPaym.id);
     }
 
-    this.scheduleService.increaseAvailableSpots(existingReg.schedule_id);
+    this.scheduleService.increaseAvailableSpots(
+      existingRegistration.schedule_id,
+    );
 
     return await this.registrationsService.cancel(regId);
   }

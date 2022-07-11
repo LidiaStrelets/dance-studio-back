@@ -19,6 +19,7 @@
     "@guards": "dist/core/guards",
     "@middlewares": "dist/core/middlewares",
     "@services": "dist/core/services",
+    "@exceptionFilters/*": "dist/core/exceptionFilters/",
     "@core": "dist/core"
   },
   "scripts": {

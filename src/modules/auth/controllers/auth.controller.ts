@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  HttpException,
-  HttpStatus,
-  Inject,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from '@usersModule/dto/login.dto';
@@ -14,7 +7,6 @@ import { User } from '@usersModule/models/users.model';
 import { RolesService } from '@rolesModule/services/roles.service';
 import { UsersService } from '@usersModule/services/users.service';
 import { AuthService } from '@authModule/services/auth.service';
-import { Roles } from '@rolesModule/types/types';
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -38,13 +30,7 @@ export class AuthController {
   public async login(@Body() dto: LoginDto) {
     const user = await this.usersService.findByEmail(dto.email);
 
-    const token = await this.jwtService.sign({
-      email: dto.email,
-      roles: user.roles.map((role) => role.title),
-      id: user.id,
-    });
-
-    return token;
+    return this.signToken(user);
   }
 
   @ApiOperation({ summary: 'Register user' })
@@ -69,12 +55,14 @@ export class AuthController {
       roleObj,
     );
 
-    const token = await this.jwtService.sign({
-      email: dto.email,
+    return this.signToken(user);
+  }
+
+  private signToken(user: User) {
+    return this.jwtService.sign({
+      email: user.email,
       roles: user.roles.map((role) => role.title),
       id: user.id,
     });
-
-    return token;
   }
 }

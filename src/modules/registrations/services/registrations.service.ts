@@ -4,14 +4,15 @@ import { CreateDto } from '@registrationsModule/dto/add.dto';
 import { Registration } from '@registrationsModule/models/registrations.model';
 import { v4 as uuidv4 } from 'uuid';
 
-export const convertMilisecondsToDays = (ms) => ms / 1000 / 60 / 60 / 24;
-export const convertMilisecondsToHours = (ms) => ms / 1000 / 60 / 60;
-
 @Injectable()
 export class RegistrationsService {
   constructor(
     @InjectModel(Registration) private registrationRepo: typeof Registration,
   ) {}
+
+  public convertMilisecondsToDays = (ms) => ms / 1000 / 60 / 60 / 24;
+
+  public convertMilisecondsToHours = (ms) => ms / 1000 / 60 / 60;
 
   public create(dto: CreateDto, client_id: string): Promise<Registration> {
     const id: string = uuidv4();

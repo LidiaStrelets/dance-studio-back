@@ -11,6 +11,11 @@ import { RegistrationsService } from '@registrationsModule/services/registration
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { AdminWithUserIdMiddleware } from '@middlewares/adminWithUserId.middleware';
 import { CoreJwtModule } from '@core/jwt.module';
+import { ExistsRegistrationMiddleware } from './middlewares/existsRegistration.middleware';
+import { PaymentAvailableMiddleware } from './middlewares/paymentAvailable.middleware';
+import { SpotsAvailableMiddleware } from './middlewares/spotsAvailable.middleware';
+import { MissingRegistrationMiddleware } from './middlewares/missingRegistration.middleware';
+import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 
 @Module({
   controllers: [RegistrationsController],
@@ -30,5 +35,25 @@ export class RegistrationsModule {
     consumer
       .apply(AdminWithUserIdMiddleware)
       .forRoutes({ path: 'registrations', method: RequestMethod.POST });
+
+    consumer
+      .apply(ExistsRegistrationMiddleware)
+      .forRoutes({ path: 'registrations', method: RequestMethod.POST });
+
+    consumer
+      .apply(PaymentAvailableMiddleware)
+      .forRoutes({ path: 'registrations', method: RequestMethod.POST });
+
+    consumer
+      .apply(SpotsAvailableMiddleware)
+      .forRoutes({ path: 'registrations', method: RequestMethod.POST });
+
+    consumer
+      .apply(MissingRegistrationMiddleware)
+      .forRoutes({ path: 'registrations', method: RequestMethod.DELETE });
+
+    consumer
+      .apply(DataOwnerOrAdminMiddleware)
+      .forRoutes('registrations/:regId', 'registrations/:userId');
   }
 }

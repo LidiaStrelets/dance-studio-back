@@ -3,7 +3,6 @@ import { ApiHeader, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { RequestService } from '@services/request.service';
 import { PricesService } from '@pricesModule/services/prices.service';
-import { UsersService } from '@usersModule/services/users.service';
 import { CreateDto } from '@paymentsModule/dto/add.dto';
 import { Payment } from '@paymentsModule/models/payments.model';
 import { PaymentsService } from '@paymentsModule/services/payments.service';
@@ -16,7 +15,6 @@ export class PaymentsController {
     private paymentsService: PaymentsService,
     private requestServise: RequestService,
     private priceService: PricesService,
-    private userService: UsersService,
   ) {}
 
   @ApiOperation({ summary: 'Create payment' })

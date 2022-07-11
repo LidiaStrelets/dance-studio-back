@@ -38,7 +38,7 @@ export class UnauthorizedMiddleware {
     }
 
     this.requestService.setUserId(candidate.id.toString());
-    this.requestService.setUserRole(decoded.roles.join(','));
+    this.requestService.setUserRole(decoded.roles);
 
     next();
   }

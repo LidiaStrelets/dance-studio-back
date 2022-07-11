@@ -15,7 +15,7 @@ export class AdminWithUserIdMiddleware {
     const userId = req.body.user_id || req.body.client_id;
     const userRole = this.requestService.getUserRole();
 
-    if (userRole === Roles.admin) {
+    if (userRole.some((role) => role === Roles.admin)) {
       if (!userId) {
         throw new HttpException(
           [

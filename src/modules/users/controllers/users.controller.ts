@@ -52,6 +52,8 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'Unauthorized user!' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Get('/:userId')
+  @Roles('admin', 'client')
+  @UseGuards(RolesGuard)
   public async getById(
     @Param('userId') userId: string,
   ): Promise<IUserWithRolesResponce> {
