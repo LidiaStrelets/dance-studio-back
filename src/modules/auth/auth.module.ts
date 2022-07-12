@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { CoreJwtModule } from '@core/jwt.module';
 import { UsersModule } from '@usersModule/users.module';
-import { RolesModule } from '@rolesModule/roles.module';
 import { AuthController } from '@authModule/controllers/auth.controller';
 import { AuthService } from '@authModule/services/auth.service';
 import { LoginMiddleware } from './middlewares/login.middleware';

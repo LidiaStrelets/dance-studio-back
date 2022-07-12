@@ -4,7 +4,7 @@ import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateDto } from '@usersModule/dto/update.dto';
 import { User } from '@usersModule/models/users.model';
 import { v4 as uuidv4 } from 'uuid';
-import { Roles as RolesEnum } from '@rolesModule/types/types';
+import { Roles as RolesEnum } from '@core/types';
 import { UpdateRoleDto } from '@usersModule/dto/update-role.dto';
 
 @Injectable()
@@ -55,6 +55,9 @@ export class UsersService {
 
   public async update(data: UpdateDto, id: string): Promise<User> {
     const user = await this.userRepo.findByPk(id);
+    if (!user) {
+      return null;
+    }
 
     await user.update(data);
     return user;

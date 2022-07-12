@@ -29,7 +29,12 @@ export class UnauthorizedMiddleware {
       throwError();
     }
 
-    const decoded: IToken = this.jwtService.verify(authToken);
+    let decoded: IToken;
+    try {
+      decoded = this.jwtService.verify(authToken);
+    } catch (e) {
+      throwError();
+    }
 
     const candidate = await this.userService.getById(decoded.id);
 

@@ -4,6 +4,7 @@ import {
   Get,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   UseGuards,
@@ -20,6 +21,7 @@ import {
   IUserWithRolesResponce,
 } from '@usersModule/types/types';
 import { UpdateRoleDto } from '@usersModule/dto/update-role.dto';
+import { BodyValidPipe } from '@usersModule/pipes/bodyValid.pipe';
 
 @ApiTags('Users')
 @Controller('users')
@@ -81,7 +83,7 @@ export class UsersController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @Roles('admin')
   @UseGuards(RolesGuard)
-  @Post('/updateRole')
+  @Patch('/updateRole')
   public async updateRole(@Body() dto: UpdateRoleDto): Promise<string> {
     const updatedUser = await this.userService.updateRole(dto);
 
@@ -95,10 +97,12 @@ export class UsersController {
     description: 'Unauthorized user!',
   })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
+  @Roles('admin', 'client')
+  @UseGuards(RolesGuard)
   @Patch('/:userId')
   public async update(
-    @Body() dto: UpdateDto,
-    @Param('userId') id: string,
+    @Body(BodyValidPipe) dto: UpdateDto,
+    @Param('userId', ParseUUIDPipe) id: string,
   ): Promise<string> {
     const updatedUser = await this.userService.update(dto, id);
 

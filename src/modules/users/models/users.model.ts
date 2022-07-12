@@ -1,4 +1,4 @@
-import { TRoles } from '@rolesModule/types/types';
+import { TRoles } from '@core/types';
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 import { DateDataType } from 'sequelize/types';
 

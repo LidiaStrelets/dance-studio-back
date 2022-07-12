@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Roles, TRoles } from '@rolesModule/types/types';
+import { Roles, TRoles } from '@core/types';
 import {
   IsDateString,
   IsEmail,

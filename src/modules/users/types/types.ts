@@ -12,3 +12,10 @@ export interface IUserResponce {
 export interface IUserWithRolesResponce extends IUserResponce {
   role: string;
 }
+
+export enum EUpdateUser {
+  firstname,
+  lastname,
+  birth_date,
+  information,
+}

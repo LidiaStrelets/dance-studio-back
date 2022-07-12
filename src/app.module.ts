@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from '@usersModule/users.module';
-import { RolesModule } from '@rolesModule/roles.module';
 import { AuthModule } from '@authModule/auth.module';
 import { HallsModule } from '@hallsModule/halls.module';
 import { ClassesModule } from '@classesModule/classes.module';
@@ -30,7 +29,6 @@ import { HttpExceptionFilter } from '@exceptionFilters/http.filter';
       autoLoadModels: true,
     }),
     UsersModule,
-    RolesModule,
     AuthModule,
     CoreJwtModule,
     HallsModule,

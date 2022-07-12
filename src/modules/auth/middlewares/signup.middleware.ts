@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Roles } from '@rolesModule/types/types';
+import { Roles } from '@core/types';
 import { User } from '@usersModule/models/users.model';
 import { NextFunction, Request, Response } from 'express';
 
@@ -38,7 +38,10 @@ export class RegistrationMiddleware {
       );
     }
 
-    if (role === Roles.admin && !adminKey) {
+    if (
+      role !== Roles.client &&
+      (!adminKey || adminKey !== process.env.ADMIN_KEY)
+    ) {
       throw new HttpException(
         [
           {

@@ -5,8 +5,6 @@ import { Class } from '@classesModule/models/classes.model';
 import { ClassesModule } from '@classesModule/classes.module';
 import { Payment } from '@paymentsModule/models/payments.model';
 import { Registration } from '@registrationsModule/models/registrations.model';
-import { Role } from '@rolesModule/models/roles.model';
-import { RolesModule } from '@rolesModule/roles.module';
 import { UsersController } from '@usersModule/controllers/users.controller';
 import { User } from '@usersModule/models/users.model';
 import { UsersService } from '@usersModule/services/users.service';
@@ -18,10 +16,9 @@ import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
   controllers: [UsersController],
   providers: [UsersService, RequestService],
   imports: [
-    SequelizeModule.forFeature([User, Role, Class, Payment, Registration]),
+    SequelizeModule.forFeature([User, Class, Payment, Registration]),
     ClassesModule,
     CoreJwtModule,
-    RolesModule,
   ],
   exports: [UsersService],
 })

@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { RequestService } from '@services/request.service';
-import { Roles } from '@rolesModule/types/types';
+import { Roles } from '@core/types';
 
 @Injectable()
 export class DataOwnerOrAdminMiddleware {
