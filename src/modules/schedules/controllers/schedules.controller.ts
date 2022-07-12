@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { HallsService } from '@hallsModule/services/halls.service';
@@ -21,9 +28,12 @@ export class SchedulesController {
     description: 'Bearer token',
   })
   @ApiOperation({ summary: 'Add item to the schedule' })
-  @ApiResponse({ status: 200, type: CreateDto })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: CreateDto })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @Roles('admin')
   @Post()
   public async add(@Body() dto: CreateDto): Promise<IScheduleResponce> {
@@ -38,9 +48,12 @@ export class SchedulesController {
     description: 'Bearer token',
   })
   @ApiOperation({ summary: 'Update schedule' })
-  @ApiResponse({ status: 200, type: CreateDto })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: CreateDto })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @Roles('admin')
   @Patch('/:id')
   public async update(

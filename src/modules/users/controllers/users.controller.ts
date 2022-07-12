@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -10,7 +11,6 @@ import {
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { RolesGuard } from '@guards/roles.guard';
-import { AddToUserDto } from '@classesModule/dto/add-to-user.dto';
 import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateDto } from '@usersModule/dto/update.dto';
 import { UsersService } from '@usersModule/services/users.service';
@@ -19,6 +19,7 @@ import {
   IUserResponce,
   IUserWithRolesResponce,
 } from '@usersModule/types/types';
+import { UpdateRoleDto } from '@usersModule/dto/update-role.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -30,9 +31,12 @@ export class UsersController {
     name: 'Authorization',
     description: 'Bearer token',
   })
-  @ApiResponse({ status: 200, type: [RegisterDto] })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: [RegisterDto] })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Get()
@@ -48,9 +52,12 @@ export class UsersController {
     name: 'Authorization',
     description: 'Bearer token',
   })
-  @ApiResponse({ status: 200, type: RegisterDto })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: RegisterDto })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @Get('/:userId')
   @Roles('admin', 'client')
   @UseGuards(RolesGuard)
@@ -66,22 +73,28 @@ export class UsersController {
     description: 'Bearer token',
   })
   @ApiOperation({ summary: 'Add classes to the coach' })
-  @ApiResponse({ status: 200, type: RegisterDto })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @Roles('admin', 'coach')
+  @ApiResponse({ status: HttpStatus.OK, type: RegisterDto })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
+  @Roles('admin')
   @UseGuards(RolesGuard)
-  @Post('/classes')
-  public async addClass(@Body() dto: AddToUserDto): Promise<string> {
-    const updatedUser = await this.userService.addClass(dto);
+  @Post('/updateRole')
+  public async updateRole(@Body() dto: UpdateRoleDto): Promise<string> {
+    const updatedUser = await this.userService.updateRole(dto);
 
     return updatedUser ? 'success' : 'error';
   }
 
   @ApiOperation({ summary: 'Update schedule' })
-  @ApiResponse({ status: 200, type: RegisterDto })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: RegisterDto })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @Patch('/:userId')
   public async update(
     @Body() dto: UpdateDto,
@@ -106,7 +119,7 @@ export class UsersController {
   private mapUserWithRolesToResponce(user: User): IUserWithRolesResponce {
     return {
       ...this.mapUserToResponce(user),
-      roles: user.roles.map((role) => role.title),
+      role: user.role,
     };
   }
 }

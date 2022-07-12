@@ -9,3 +9,5 @@ export interface IRoleResponce {
   description: string;
   id: string;
 }
+
+export type TRoles = 'admin' | 'coach' | 'client';

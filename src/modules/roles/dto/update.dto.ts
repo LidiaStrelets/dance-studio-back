@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { TRoles } from '@rolesModule/types/types';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 
 export class UpdateDto {
@@ -8,7 +9,7 @@ export class UpdateDto {
     example: 'admin',
     description: 'The name of a user role',
   })
-  readonly title: string;
+  readonly title: TRoles;
 
   @IsOptional()
   @IsString()

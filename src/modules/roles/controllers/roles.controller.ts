@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -21,9 +22,12 @@ export class RolesController {
   constructor(private rolesService: RolesService) {}
 
   @ApiOperation({ summary: 'Create user role' })
-  @ApiResponse({ status: 200, type: CreateDto })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: CreateDto })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
@@ -38,9 +42,12 @@ export class RolesController {
   }
 
   @ApiOperation({ summary: 'Update role' })
-  @ApiResponse({ status: 200, type: CreateDto })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: CreateDto })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Patch('/:id')

@@ -15,11 +15,7 @@ import { RegistrationMiddleware } from './middlewares/signup.middleware';
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
-  imports: [
-    forwardRef(() => UsersModule),
-    CoreJwtModule,
-    forwardRef(() => RolesModule),
-  ],
+  imports: [forwardRef(() => UsersModule), CoreJwtModule],
   exports: [AuthService],
 })
 export class AuthModule {

@@ -1,18 +1,6 @@
-import {
-  BelongsToMany,
-  Column,
-  DataType,
-  HasMany,
-  Model,
-  Table,
-} from 'sequelize-typescript';
+import { TRoles } from '@rolesModule/types/types';
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
 import { DateDataType } from 'sequelize/types';
-import { Class } from '@classesModule/models/classes.model';
-import { UserClasses } from '@classesModule/models/user-classes.model';
-import { Payment } from '@paymentsModule/models/payments.model';
-import { Registration } from '@registrationsModule/models/registrations.model';
-import { Role } from '@rolesModule/models/roles.model';
-import { UserRoles } from '@rolesModule/models/user-roles.model';
 
 interface UserCreationAttrs {
   email: string;
@@ -70,15 +58,9 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   information: string;
 
-  @BelongsToMany(() => Role, () => UserRoles)
-  roles: Role[];
-
-  @BelongsToMany(() => Class, () => UserClasses)
-  classes: Class[];
-
-  @HasMany(() => Payment)
-  payments: Payment[];
-
-  @HasMany(() => Registration)
-  registrations: Registration[];
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  role: TRoles;
 }

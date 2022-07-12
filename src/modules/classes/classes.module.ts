@@ -5,7 +5,6 @@ import { User } from '@usersModule/models/users.model';
 import { ClassesController } from '@classesModule/controllers/classes.controller';
 import { Class } from '@classesModule/models/classes.model';
 import { ClassesService } from '@classesModule/services/classes.service';
-import { UserClasses } from '@classesModule/models/user-classes.model';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { CoreJwtModule } from '@core/jwt.module';
 import { RequestService } from '@services/request.service';
@@ -15,7 +14,7 @@ import { UsersModule } from '@usersModule/users.module';
   controllers: [ClassesController],
   providers: [ClassesService, RequestService],
   imports: [
-    SequelizeModule.forFeature([Class, User, UserClasses]),
+    SequelizeModule.forFeature([Class, User]),
     AuthModule,
     CoreJwtModule,
     forwardRef(() => UsersModule),

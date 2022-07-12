@@ -5,7 +5,6 @@ import { User } from '@usersModule/models/users.model';
 import { RolesController } from '@rolesModule/controllers/roles.controller';
 import { Role } from '@rolesModule/models/roles.model';
 import { RolesService } from '@rolesModule/services/roles.service';
-import { UserRoles } from '@rolesModule/models/user-roles.model';
 import { RequestService } from '@services/request.service';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { CoreJwtModule } from '@core/jwt.module';
@@ -16,7 +15,7 @@ import { ExistsRoleMiddleware } from './middlewares/existsRole.middleware';
   controllers: [RolesController],
   providers: [RolesService, RequestService],
   imports: [
-    SequelizeModule.forFeature([Role, User, UserRoles]),
+    SequelizeModule.forFeature([Role, User]),
     forwardRef(() => AuthModule),
     CoreJwtModule,
     forwardRef(() => UsersModule),

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -21,9 +22,12 @@ export class HallsController {
   constructor(private hallService: HallsService) {}
 
   @ApiOperation({ summary: 'Create hall' })
-  @ApiResponse({ status: 200, type: CreateDto })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: CreateDto })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Post()
@@ -34,9 +38,12 @@ export class HallsController {
   }
 
   @ApiOperation({ summary: 'Update hall' })
-  @ApiResponse({ status: 200, type: CreateDto })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: CreateDto })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Patch('/:id')

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { RequestService } from '@services/request.service';
@@ -18,8 +26,11 @@ export class PaymentsController {
   ) {}
 
   @ApiOperation({ summary: 'Create payment' })
-  @ApiResponse({ status: 200, type: Payment })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
+  @ApiResponse({ status: HttpStatus.OK, type: Payment })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
@@ -48,9 +59,12 @@ export class PaymentsController {
     name: 'Authorization',
     description: 'Bearer token',
   })
-  @ApiResponse({ status: 200, type: [CreateDto] })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: [CreateDto] })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @Roles('admin', 'client')
   @UseGuards(RolesGuard)
   @Get('/:userId')

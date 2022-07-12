@@ -8,10 +8,8 @@ export class ExistingUserMiddleware {
 
   async use(req: Request, res: Response, next: NextFunction) {
     const userId = req.params.userId;
-    console.log('userId', userId);
 
     const user = await this.usersService.getById(userId);
-    console.log('ExistingUserMiddleware', user);
 
     if (!user) {
       throw new HttpException(

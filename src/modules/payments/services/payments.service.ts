@@ -26,12 +26,10 @@ export class PaymentsService {
     return this.paymentRepo.findAll({ where: { client_id: id } });
   }
 
-  public async getLastByUser(id: string): Promise<Payment> {
-    const payments = await this.paymentRepo.findAll({
+  public getLastByUser(id: string): Promise<Payment> {
+    return this.paymentRepo.findOne({
       where: { client_id: id },
-      order: [['createdAt', 'DESC']],
     });
-    return payments[0];
   }
 
   public async decreaseAvailableClasses(id: string): Promise<Payment> {

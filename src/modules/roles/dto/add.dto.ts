@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { TRoles } from '@rolesModule/types/types';
 import { IsIn, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateDto {
@@ -8,7 +9,7 @@ export class CreateDto {
     example: 'admin',
     description: 'The name of a user role',
   })
-  readonly title: string;
+  readonly title: TRoles;
 
   @IsString()
   @ApiProperty({

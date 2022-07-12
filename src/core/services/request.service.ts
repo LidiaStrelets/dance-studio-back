@@ -3,7 +3,7 @@ import { Injectable, Scope } from '@nestjs/common';
 @Injectable({ scope: Scope.REQUEST })
 export class RequestService {
   private userId: string;
-  private userRole: string[];
+  private userRole: string;
 
   public setUserId(id: string) {
     this.userId = id;
@@ -13,8 +13,8 @@ export class RequestService {
     return this.userId;
   }
 
-  public setUserRole(roles: string[]) {
-    this.userRole = roles;
+  public setUserRole(role: string) {
+    this.userRole = role;
   }
 
   public getUserRole() {

@@ -1,12 +1,4 @@
-import {
-  BelongsTo,
-  Column,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-} from 'sequelize-typescript';
-import { User } from '@usersModule/models/users.model';
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface RegistrationCreationAttrs {
   schedule_id: string;
@@ -32,12 +24,8 @@ export class Registration extends Model<
   })
   schedule_id: string;
 
-  @ForeignKey(() => User)
   @Column({
     type: DataType.STRING,
   })
   client_id: string;
-
-  @BelongsTo(() => User)
-  client: User[];
 }

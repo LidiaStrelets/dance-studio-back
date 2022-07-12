@@ -18,6 +18,10 @@ export class ClassesService {
     return this.classRepo.findByPk(id);
   }
 
+  public getByCoach(id: string) {
+    return this.classRepo.findAll({ where: { coach: id } });
+  }
+
   public async update(data: UpdateDto, id: string): Promise<Class> {
     const classObj = await this.classRepo.findByPk(id);
 

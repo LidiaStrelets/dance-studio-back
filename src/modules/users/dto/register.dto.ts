@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Roles } from '@rolesModule/types/types';
+import { Roles, TRoles } from '@rolesModule/types/types';
 import {
   IsDateString,
   IsEmail,
@@ -53,7 +53,7 @@ export class RegisterDto {
     example: 'admin',
     description: 'User role',
   })
-  readonly role: string;
+  readonly role: TRoles;
 
   @IsOptional()
   @IsDateString()

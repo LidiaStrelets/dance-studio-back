@@ -10,3 +10,9 @@ export enum Classes {
   poleExotic = 'pole_exotic',
   stripPlastic = 'stripplastic',
 }
+
+export type TClass =
+  | 'stretching'
+  | 'pole_sport'
+  | 'pole_exotic'
+  | 'stripplastic';

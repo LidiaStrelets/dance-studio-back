@@ -1,12 +1,4 @@
-import {
-  BelongsTo,
-  Column,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-} from 'sequelize-typescript';
-import { User } from '@usersModule/models/users.model';
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface PaymentCreationAttrs {
   classes_left: number;
@@ -36,12 +28,8 @@ export class Payment extends Model<Payment, PaymentCreationAttrs> {
   })
   price_id: string;
 
-  @ForeignKey(() => User)
   @Column({
     type: DataType.STRING,
   })
   client_id: string;
-
-  @BelongsTo(() => User)
-  client: User;
 }

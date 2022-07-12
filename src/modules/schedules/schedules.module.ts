@@ -11,6 +11,7 @@ import { CoreJwtModule } from '@core/jwt.module';
 import { RequestService } from '@services/request.service';
 import { ClassAvailableMiddleware } from './middlewares/classAvailable.middleware';
 import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
+import { ClassesModule } from '@classesModule/classes.module';
 
 @Module({
   providers: [SchedulesService, RequestService],
@@ -21,6 +22,7 @@ import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
     HallsModule,
     UsersModule,
     CoreJwtModule,
+    ClassesModule,
   ],
   exports: [SchedulesService],
 })

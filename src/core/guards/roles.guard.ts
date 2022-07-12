@@ -1,9 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '@decorators/roles.decorator';
 import { RequestService } from '@services/request.service';
@@ -11,7 +6,6 @@ import { RequestService } from '@services/request.service';
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(
-    @Inject('CoreJwtService')
     private reflector: Reflector,
     private requestService: RequestService,
   ) {}
@@ -26,10 +20,8 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    const userRoles = this.requestService.getUserRole();
+    const userRole = this.requestService.getUserRole();
 
-    return requiredRoles.some((requiredRole) =>
-      userRoles.some((userRole) => userRole === requiredRole),
-    );
+    return requiredRoles.some((requiredRole) => userRole === requiredRole);
   }
 }

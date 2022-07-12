@@ -1,6 +1,6 @@
-import { Classes } from '@classesModule/types/types';
+import { Classes, TClass } from '@classesModule/types/types';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsNotEmpty, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateDto {
   @IsNotEmpty()
@@ -14,7 +14,7 @@ export class CreateDto {
     example: Classes.stretching,
     description: 'The name of a class',
   })
-  readonly name: string;
+  readonly name: TClass;
 
   @IsString()
   @ApiProperty({
@@ -22,4 +22,12 @@ export class CreateDto {
     description: 'Describes what the class allows',
   })
   readonly description: string;
+
+  @IsString()
+  @IsUUID()
+  @ApiProperty({
+    example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
+    description: 'Unique coach id',
+  })
+  readonly coach_id: string;
 }

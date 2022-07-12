@@ -1,17 +1,11 @@
-import {
-  BelongsToMany,
-  Column,
-  DataType,
-  Model,
-  Table,
-} from 'sequelize-typescript';
-import { User } from '@usersModule/models/users.model';
-import { UserClasses } from '@classesModule/models/user-classes.model';
+import { TClass } from '@classesModule/types/types';
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface ClassCreationAttrs {
-  name: string;
+  name: TClass;
   description: string;
   id: string;
+  coach: string;
 }
 
 @Table({ tableName: 'classes' })
@@ -28,7 +22,7 @@ export class Class extends Model<Class, ClassCreationAttrs> {
     unique: true,
     allowNull: false,
   })
-  name: string;
+  name: TClass;
 
   @Column({
     type: DataType.STRING,
@@ -36,6 +30,9 @@ export class Class extends Model<Class, ClassCreationAttrs> {
   })
   description: string;
 
-  @BelongsToMany(() => User, () => UserClasses)
-  coaches: User[];
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  coach: string;
 }

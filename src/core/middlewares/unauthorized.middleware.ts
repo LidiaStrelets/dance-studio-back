@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request, Response, NextFunction } from 'express';
 import { RequestService } from '@services/request.service';
 import { UsersService } from '@usersModule/services/users.service';
-import { BEARER } from '@authModule/types/types';
+import { BEARER, IToken } from '@authModule/types/types';
 
 @Injectable()
 export class UnauthorizedMiddleware {
@@ -29,7 +29,7 @@ export class UnauthorizedMiddleware {
       throwError();
     }
 
-    const decoded = this.jwtService.verify(authToken);
+    const decoded: IToken = this.jwtService.verify(authToken);
 
     const candidate = await this.userService.getById(decoded.id);
 
@@ -38,7 +38,7 @@ export class UnauthorizedMiddleware {
     }
 
     this.requestService.setUserId(candidate.id.toString());
-    this.requestService.setUserRole(decoded.roles);
+    this.requestService.setUserRole(decoded.role);
 
     next();
   }

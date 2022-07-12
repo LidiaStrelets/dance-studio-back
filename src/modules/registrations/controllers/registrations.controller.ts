@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Headers,
+  HttpStatus,
   Param,
   Post,
   UseGuards,
@@ -30,17 +31,23 @@ export class RegistrationsController {
   ) {}
 
   @ApiOperation({ summary: 'Create registration' })
-  @ApiResponse({ status: 200, type: Registration })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 400, description: 'Wrong data passed' })
+  @ApiResponse({ status: HttpStatus.OK, type: Registration })
   @ApiResponse({
-    status: 402,
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Wrong data passed',
+  })
+  @ApiResponse({
+    status: HttpStatus.PAYMENT_REQUIRED,
     description:
       'Your pass has ended! Make a new payment to create a registration!',
   })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'No places left for this class, try another one!',
   })
   @ApiHeader({
@@ -54,9 +61,7 @@ export class RegistrationsController {
     @Body() dto: CreateDto,
     @Headers() headers,
   ): Promise<IRegistrationResponce> {
-    const userid = this.requestService.getUserId();
-
-    const client_id = dto.client_id || userid;
+    const client_id = dto.client_id || this.requestService.getUserId();
 
     const userPaym = await this.paymentService.getLastByUser(client_id);
 
@@ -75,11 +80,14 @@ export class RegistrationsController {
   }
 
   @ApiOperation({ summary: 'Delete registration' })
-  @ApiResponse({ status: 200, type: CreateDto })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: CreateDto })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
     description: `Registration doesn't exist`,
   })
   @ApiHeader({
@@ -119,9 +127,12 @@ export class RegistrationsController {
     name: 'Authorization',
     description: 'Bearer token',
   })
-  @ApiResponse({ status: 200, type: [CreateDto] })
-  @ApiResponse({ status: 401, description: 'Unauthorized user!' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: [CreateDto] })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized user!',
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @Get('/:userId')
   public async getAllByUser(
     @Param('userId') userId: string,

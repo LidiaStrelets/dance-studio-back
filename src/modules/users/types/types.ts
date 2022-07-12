@@ -10,5 +10,5 @@ export interface IUserResponce {
 }
 
 export interface IUserWithRolesResponce extends IUserResponce {
-  roles: string[];
+  role: string;
 }
