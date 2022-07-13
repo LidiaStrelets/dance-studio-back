@@ -9,6 +9,7 @@ import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { CoreJwtModule } from '@core/jwt.module';
 import { RequestService } from '@services/request.service';
 import { UsersModule } from '@usersModule/users.module';
+import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
 
 @Module({
   controllers: [ClassesController],
@@ -24,5 +25,7 @@ import { UsersModule } from '@usersModule/users.module';
 export class ClassesModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(UnauthorizedMiddleware).forRoutes('classes');
+
+    consumer.apply(IsCoachMiddleware).forRoutes('classes');
   }
 }
