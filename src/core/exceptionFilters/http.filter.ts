@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
-@Catch(HttpException)
+@Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(exception, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -16,23 +16,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const message = exception.message;
 
+    console.log('message', message);
+
     if (message === 'Validation failed (uuid  is expected)') {
       response.status(status).json({
         statusCode: status,
         message: 'Query parameter is invalid!',
       });
+    } else {
+      response.status(status).json({
+        statusCode: status,
+        message: message.join(','),
+      });
     }
 
-    response.status(status).json({
-      statusCode: status,
-      message,
-    });
-
-    console.log('exception caught :', {
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      message,
-    });
+    console.log('exception caught :', exception);
   }
 }

@@ -11,24 +11,18 @@ export class LoginMiddleware {
     } = req;
 
     if (!password || !email) {
-      console.log('bla');
-
       this.throwError();
     }
 
     const candidate = await User.findOne({ where: { email } });
 
     if (!candidate) {
-      console.log('blo');
-
       this.throwError();
     }
 
     const isMatch = await bcrypt.compare(password, candidate.password);
 
     if (!isMatch) {
-      console.log('bli');
-
       this.throwError();
     }
 
