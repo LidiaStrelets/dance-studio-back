@@ -76,14 +76,18 @@ export class PricesController {
   ): Promise<string> {
     const updatedPrice = await this.pricesService.update(dto, id);
 
-    return updatedPrice ? 'success' : 'error';
+    return updatedPrice.length >= 1 ? 'success' : 'error';
   }
 
-  private mapPriceToResponce(price: Price): IPriceResponce {
+  private mapPriceToResponce({
+    classes_amount,
+    price,
+    id,
+  }: Price): IPriceResponce {
     return {
-      classes_amount: price.classes_amount,
-      price: price.price,
-      id: price.id,
+      classes_amount,
+      price,
+      id,
     };
   }
 }

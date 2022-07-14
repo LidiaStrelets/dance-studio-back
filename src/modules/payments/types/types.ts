@@ -4,3 +4,5 @@ export interface IPaymentResponce {
   client_id: string;
   id: string;
 }
+
+export const CLASSES_FIELD = 'classes_left';

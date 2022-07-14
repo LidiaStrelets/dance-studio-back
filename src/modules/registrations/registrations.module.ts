@@ -14,7 +14,6 @@ import { CoreJwtModule } from '@core/jwt.module';
 import { ExistsRegistrationMiddleware } from './middlewares/existsRegistration.middleware';
 import { PaymentAvailableMiddleware } from './middlewares/paymentAvailable.middleware';
 import { SpotsAvailableMiddleware } from './middlewares/spotsAvailable.middleware';
-import { MissingRegistrationMiddleware } from './middlewares/missingRegistration.middleware';
 import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 
 @Module({
@@ -47,10 +46,6 @@ export class RegistrationsModule {
     consumer
       .apply(SpotsAvailableMiddleware)
       .forRoutes({ path: 'registrations', method: RequestMethod.POST });
-
-    consumer
-      .apply(MissingRegistrationMiddleware)
-      .forRoutes({ path: 'registrations', method: RequestMethod.DELETE });
 
     consumer
       .apply(DataOwnerOrAdminMiddleware)

@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Headers,
   HttpStatus,
   Param,
   Post,
@@ -19,6 +18,7 @@ import { Registration } from '@registrationsModule/models/registrations.model';
 import { RegistrationsService } from '../services/registrations.service';
 import { IRegistrationResponce } from '@registrationsModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
+import { IN_DAY_HOURS, UNLIMITED_AMOUNT } from '@core/constants';
 
 @ApiTags('Registrations')
 @Controller('registrations')
@@ -57,24 +57,18 @@ export class RegistrationsController {
   @Roles('admin', 'client')
   @UseGuards(RolesGuard)
   @Post()
-  public async create(
-    @Body() dto: CreateDto,
-    @Headers() headers,
-  ): Promise<IRegistrationResponce> {
+  public async create(@Body() dto: CreateDto): Promise<IRegistrationResponce> {
     const client_id = dto.client_id || this.requestService.getUserId();
 
     const userPaym = await this.paymentService.getLastByUser(client_id);
 
     this.scheduleService.decreaseAvailableSpots(dto.schedule_id);
 
-    if (userPaym.classes_left !== 1000) {
+    if (userPaym.classes_left !== UNLIMITED_AMOUNT) {
       this.paymentService.decreaseAvailableClasses(userPaym.id);
     }
 
-    const newRegistration = await this.registrationsService.create(
-      dto,
-      headers,
-    );
+    const newRegistration = await this.registrationsService.create(dto);
 
     return this.mapRegistrationToResponce(newRegistration);
   }
@@ -109,7 +103,7 @@ export class RegistrationsController {
     const hours = this.registrationsService.convertMilisecondsToHours(
       Date.now() - new Date(existingRegistration.createdAt).getTime(),
     );
-    if (hours < 24) {
+    if (hours < IN_DAY_HOURS) {
       this.paymentService.increaseAvailableClasses(userPaym.id);
     }
 
@@ -142,11 +136,15 @@ export class RegistrationsController {
     return registrations.map((item) => this.mapRegistrationToResponce(item));
   }
 
-  private mapRegistrationToResponce(item: Registration): IRegistrationResponce {
+  private mapRegistrationToResponce({
+    schedule_id,
+    client_id,
+    id,
+  }: Registration): IRegistrationResponce {
     return {
-      schedule_id: item.schedule_id,
-      client_id: item.client_id,
-      id: item.id,
+      schedule_id,
+      client_id,
+      id,
     };
   }
 }

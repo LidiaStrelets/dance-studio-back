@@ -41,10 +41,10 @@ import { HttpExceptionFilter } from '@exceptionFilters/http.filter';
   controllers: [],
   providers: [
     RequestService,
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: HttpExceptionFilter,
+    // },
   ],
 })
 export class AppModule {}

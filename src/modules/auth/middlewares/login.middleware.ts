@@ -1,15 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { User } from '@usersModule/models/users.model';
-import { Request, Response, NextFunction } from 'express';
+import { Request, NextFunction } from 'express';
 
 @Injectable()
 export class LoginMiddleware {
-  async use(req: Request, res: Response, next: NextFunction) {
-    const {
-      body: { password, email },
-    } = req;
-
+  async use({ body: { password, email } }: Request, _, next: NextFunction) {
     if (!password || !email) {
       this.throwError();
     }
@@ -34,7 +30,6 @@ export class LoginMiddleware {
       [
         {
           message: ['Incorrect credentials!'],
-          problem_field: null,
           name: 'Login Error',
         },
       ],

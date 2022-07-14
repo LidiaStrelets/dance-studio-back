@@ -6,7 +6,6 @@ import {
   Param,
   ParseUUIDPipe,
   Patch,
-  Post,
   UseGuards,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -16,10 +15,7 @@ import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateDto } from '@usersModule/dto/update.dto';
 import { UsersService } from '@usersModule/services/users.service';
 import { User } from '@usersModule/models/users.model';
-import {
-  IUserResponce,
-  IUserWithRolesResponce,
-} from '@usersModule/types/types';
+import { IUserResponce } from '@usersModule/types/types';
 import { UpdateRoleDto } from '@usersModule/dto/update-role.dto';
 import { BodyValidPipe } from '@usersModule/pipes/bodyValid.pipe';
 
@@ -42,9 +38,9 @@ export class UsersController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Get()
-  public async getAll(): Promise<IUserWithRolesResponce[]> {
+  public async getAll(): Promise<IUserResponce[]> {
     const users = await this.userService.getAll();
-    return users.map((user) => this.mapUserWithRolesToResponce(user));
+    return users.map((user) => this.mapUserToResponce(user));
   }
 
   @ApiOperation({
@@ -65,9 +61,9 @@ export class UsersController {
   @UseGuards(RolesGuard)
   public async getById(
     @Param('userId') userId: string,
-  ): Promise<IUserWithRolesResponce> {
+  ): Promise<IUserResponce> {
     const user = await this.userService.getById(userId);
-    return this.mapUserWithRolesToResponce(user);
+    return this.mapUserToResponce(user);
   }
 
   @ApiHeader({
@@ -87,7 +83,7 @@ export class UsersController {
   public async updateRole(@Body() dto: UpdateRoleDto): Promise<string> {
     const updatedUser = await this.userService.updateRole(dto);
 
-    return updatedUser ? 'success' : 'error';
+    return updatedUser.length >= 1 ? 'success' : 'error';
   }
 
   @ApiOperation({ summary: 'Update schedule' })
@@ -106,24 +102,26 @@ export class UsersController {
   ): Promise<string> {
     const updatedUser = await this.userService.update(dto, id);
 
-    return updatedUser ? 'success' : 'error';
+    return updatedUser.length >= 1 ? 'success' : 'error';
   }
 
-  private mapUserToResponce(user: User): IUserResponce {
+  private mapUserToResponce({
+    email,
+    firstname,
+    lastname,
+    birth_date,
+    information,
+    id,
+    role,
+  }: User): IUserResponce {
     return {
-      email: user.email,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      birth_date: user.birth_date,
-      information: user.information,
-      id: user.id,
-    };
-  }
-
-  private mapUserWithRolesToResponce(user: User): IUserWithRolesResponce {
-    return {
-      ...this.mapUserToResponce(user),
-      role: user.role,
+      email,
+      firstname,
+      lastname,
+      birth_date,
+      information,
+      id,
+      role,
     };
   }
 }

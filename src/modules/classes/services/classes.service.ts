@@ -22,10 +22,10 @@ export class ClassesService {
     return this.classRepo.findAll({ where: { coach: id } });
   }
 
-  public async update(data: UpdateDto, id: string): Promise<Class> {
-    const classObj = await this.classRepo.findByPk(id);
-
-    await classObj.update(data);
-    return classObj;
+  public async update(
+    data: UpdateDto,
+    id: string,
+  ): Promise<[affectedCount: number]> {
+    return this.classRepo.update(data, { where: { id } });
   }
 }

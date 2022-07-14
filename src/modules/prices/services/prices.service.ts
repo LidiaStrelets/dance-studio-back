@@ -22,10 +22,10 @@ export class PricesService {
     return this.priceRepo.findAll();
   }
 
-  public async update(data: UpdateDto, id: string): Promise<Price> {
-    const price = await this.priceRepo.findByPk(id);
-
-    await price.update(data);
-    return price;
+  public async update(
+    data: UpdateDto,
+    id: string,
+  ): Promise<[affectedCount: number]> {
+    return this.priceRepo.update(data, { where: { id } });
   }
 }

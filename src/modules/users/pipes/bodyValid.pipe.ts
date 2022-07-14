@@ -12,8 +12,6 @@ export class BodyValidPipe implements PipeTransform<any> {
     if (!metatype || !this.toValidate(metatype)) {
       return value;
     }
-    console.log('value', Object.keys(value));
-    console.log('dto', Object.keys(EUpdateUser));
 
     if (
       Object.keys(value).some(

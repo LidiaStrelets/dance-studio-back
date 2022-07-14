@@ -1,21 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Roles } from '@core/types';
 import { User } from '@usersModule/models/users.model';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request } from 'express';
 
 @Injectable()
 export class RegistrationMiddleware {
-  async use(req: Request, res: Response, next: NextFunction) {
-    const {
-      body: { email, firstname, lastname, password, adminKey, role },
-    } = req;
-
+  async use(
+    { body: { email, firstname, lastname, password, adminKey, role } }: Request,
+    next: NextFunction,
+  ) {
     if (!email || !firstname || !lastname || !password || !role) {
       throw new HttpException(
         [
           {
             message: ['Incorrect credentials!'],
-            problem_field: null,
             name: 'Registration Error',
           },
         ],
@@ -46,7 +44,6 @@ export class RegistrationMiddleware {
         [
           {
             message: ['Unauthorized!'],
-            problem_field: null,
             name: 'Unauthorized Error',
           },
         ],

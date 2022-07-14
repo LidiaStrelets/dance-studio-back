@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Request, NextFunction } from 'express';
 import { RequestService } from '@services/request.service';
 import { Roles } from '@core/types';
 import { UsersService } from '@usersModule/services/users.service';
@@ -11,7 +11,7 @@ export class AdminWithUserIdMiddleware {
     private userServise: UsersService,
   ) {}
 
-  async use(req: Request, res: Response, next: NextFunction) {
+  async use(req: Request, _, next: NextFunction) {
     const userId = req.body.user_id || req.body.client_id;
     const userRole = this.requestService.getUserRole();
 

@@ -14,11 +14,10 @@ export class RegistrationsService {
 
   public convertMilisecondsToHours = (ms) => ms / 1000 / 60 / 60;
 
-  public create(dto: CreateDto, client_id: string): Promise<Registration> {
+  public create(dto: CreateDto): Promise<Registration> {
     const id: string = uuidv4();
     return this.registrationRepo.create({
       ...dto,
-      client_id,
       id,
     });
   }
@@ -33,13 +32,13 @@ export class RegistrationsService {
     return this.registrationRepo.findByPk(id);
   }
 
-  public find(userId: string, schId: string): Promise<Registration> {
+  public find(client_id: string, schedule_id: string): Promise<Registration> {
     return this.registrationRepo.findOne({
-      where: { client_id: userId, schedule_id: schId },
+      where: { client_id, schedule_id },
     });
   }
 
-  public getAllByUser(id: string): Promise<Registration[]> {
-    return this.registrationRepo.findAll({ where: { client_id: id } });
+  public getAllByUser(client_id: string): Promise<Registration[]> {
+    return this.registrationRepo.findAll({ where: { client_id } });
   }
 }

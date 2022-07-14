@@ -1,21 +1,19 @@
+import { UUID_EXAMPLE } from '@core/constants';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsOptional, IsUUID } from 'class-validator';
 
 export class CreateDto {
-  @IsNotEmpty()
-  @IsString()
   @IsUUID()
   @ApiProperty({
-    example: 1,
+    example: UUID_EXAMPLE,
     description: 'The schedule item unique id',
   })
   readonly schedule_id: string;
 
   @IsOptional()
-  @IsString()
   @IsUUID()
   @ApiProperty({
-    example: 1,
+    example: UUID_EXAMPLE,
     description: 'The user unique id',
   })
   readonly client_id: string;

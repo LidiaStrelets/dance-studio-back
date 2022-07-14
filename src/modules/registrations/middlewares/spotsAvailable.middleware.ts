@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Request, NextFunction } from 'express';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
 
 @Injectable()
 export class SpotsAvailableMiddleware {
   constructor(private scheduleService: SchedulesService) {}
 
-  async use(req: Request, res: Response, next: NextFunction) {
-    const scheduleItem = await this.scheduleService.get(req.body.schedule_id);
+  async use({ body: { schedule_id } }: Request, _, next: NextFunction) {
+    const scheduleItem = await this.scheduleService.get(schedule_id);
 
     if (scheduleItem.places_left === 0) {
       throw new HttpException(

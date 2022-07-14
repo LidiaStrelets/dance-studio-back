@@ -61,17 +61,24 @@ export class SchedulesController {
     @Param('id') id: string,
   ): Promise<string> {
     const updatedSchedule = await this.scheduleService.update(scheduleDto, id);
-    return updatedSchedule ? 'success' : 'error';
+    return updatedSchedule.length >= 1 ? 'success' : 'error';
   }
 
-  private mapScheduleToResponce(item: Schedule): IScheduleResponce {
+  private mapScheduleToResponce({
+    coach,
+    hall,
+    class: class_id,
+    date_time,
+    places_left,
+    id,
+  }: Schedule): IScheduleResponce {
     return {
-      coach: item.coach,
-      hall: item.hall,
-      class: item.class,
-      date_time: item.date_time,
-      places_left: item.places_left,
-      id: item.id,
+      coach,
+      hall,
+      class: class_id,
+      date_time,
+      places_left,
+      id,
     };
   }
 }

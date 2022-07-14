@@ -8,3 +8,5 @@ export interface IScheduleResponce {
   places_left: number;
   id: string;
 }
+
+export const PLACES_FIELD = 'places_left';

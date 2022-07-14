@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Request, NextFunction } from 'express';
 import { UsersService } from '@usersModule/services/users.service';
 
 @Injectable()
 export class ExistingUserMiddleware {
   constructor(private usersService: UsersService) {}
 
-  async use(req: Request, res: Response, next: NextFunction) {
+  async use(req: Request, next: NextFunction) {
     const userId = req.params.userId;
 
     const user = await this.usersService.getById(userId);

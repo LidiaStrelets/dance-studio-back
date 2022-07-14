@@ -7,7 +7,13 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiHeader,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { ClassesService } from '@classesModule/services/classes.service';
 import { CreateDto } from '@classesModule/dto/create.dto';
@@ -49,6 +55,7 @@ export class ClassesController {
   })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @Roles('admin')
+  @ApiBearerAuth()
   @UseGuards(RolesGuard)
   @Patch('/:id')
   public async update(
@@ -57,10 +64,10 @@ export class ClassesController {
   ): Promise<string> {
     const updatedClass = await this.classesService.update(dto, id);
 
-    return updatedClass ? 'success' : 'error';
+    return updatedClass.length >= 1 ? 'success' : 'error';
   }
 
-  private mapClassToResponce(item: Class): IClassResponce {
-    return { name: item.name, description: item.description, id: item.id };
+  private mapClassToResponce({ name, description, id }: Class): IClassResponce {
+    return { name, description, id };
   }
 }

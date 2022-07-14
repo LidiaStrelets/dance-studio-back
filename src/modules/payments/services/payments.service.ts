@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateDto } from '@paymentsModule/dto/add.dto';
 import { Payment } from '@paymentsModule/models/payments.model';
+import { CLASSES_FIELD } from '@paymentsModule/types/types';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -33,18 +34,10 @@ export class PaymentsService {
   }
 
   public async decreaseAvailableClasses(id: string): Promise<Payment> {
-    const payment = await this.paymentRepo.findByPk(id);
-
-    payment.classes_left -= 1;
-    await payment.save();
-    return payment;
+    return this.paymentRepo.decrement(CLASSES_FIELD, { by: 1, where: { id } });
   }
 
   public async increaseAvailableClasses(id: string): Promise<Payment> {
-    const payment = await this.paymentRepo.findByPk(id);
-
-    payment.classes_left += 1;
-    await payment.save();
-    return payment;
+    return this.paymentRepo.increment(CLASSES_FIELD, { by: 1, where: { id } });
   }
 }

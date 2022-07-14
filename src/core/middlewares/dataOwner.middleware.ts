@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Request, NextFunction } from 'express';
 import { RequestService } from '@services/request.service';
 import { Roles } from '@core/types';
 
@@ -7,7 +7,7 @@ import { Roles } from '@core/types';
 export class DataOwnerOrAdminMiddleware {
   constructor(private requestService: RequestService) {}
 
-  use(req: Request, res: Response, next: NextFunction) {
+  use(req: Request, _, next: NextFunction) {
     const userId = this.requestService.getUserId();
     const userRole = this.requestService.getUserRole();
 

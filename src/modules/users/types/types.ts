@@ -7,9 +7,6 @@ export interface IUserResponce {
   birth_date: DateDataType | null;
   information: string | null;
   id: string;
-}
-
-export interface IUserWithRolesResponce extends IUserResponce {
   role: string;
 }
 

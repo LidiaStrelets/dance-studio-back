@@ -1,8 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Request, NextFunction } from 'express';
 import { RegistrationsService } from '@registrationsModule/services/registrations.service';
 import { RequestService } from '@services/request.service';
 import { PaymentsService } from '@paymentsModule/services/payments.service';
+import { DAYS_IN_MONTH, NO_DEYS_LEFT } from '@core/constants';
 
 @Injectable()
 export class PaymentAvailableMiddleware {
@@ -12,16 +13,16 @@ export class PaymentAvailableMiddleware {
     private registrationsService: RegistrationsService,
   ) {}
 
-  async use(req: Request, res: Response, next: NextFunction) {
+  async use({ body: { client_id } }: Request, _, next: NextFunction) {
     const userPaym = await this.paymentService.getLastByUser(
-      req.body.client_id || this.requestService.getUserId(),
+      client_id || this.requestService.getUserId(),
     );
 
     const days = this.registrationsService.convertMilisecondsToDays(
       Date.now() - new Date(userPaym.createdAt).getTime(),
     );
 
-    if (days > 30 || userPaym.classes_left === 0) {
+    if (days > DAYS_IN_MONTH || userPaym.classes_left === NO_DEYS_LEFT) {
       throw new HttpException(
         {
           message:

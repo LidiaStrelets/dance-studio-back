@@ -1,31 +1,26 @@
+import { UUID_EXAMPLE } from '@core/constants';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsDateString, IsUUID } from 'class-validator';
 import { DateDataType } from 'sequelize/types';
 
 export class CreateDto {
-  @IsString()
   @IsUUID()
-  @IsNotEmpty()
   @ApiProperty({
-    example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
+    example: UUID_EXAMPLE,
     description: 'Unique coach id',
   })
   readonly coach: string;
 
-  @IsString()
   @IsUUID()
-  @IsNotEmpty()
   @ApiProperty({
-    example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
+    example: UUID_EXAMPLE,
     description: 'Unique class id',
   })
   readonly class: string;
 
-  @IsString()
   @IsUUID()
-  @IsNotEmpty()
   @ApiProperty({
-    example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
+    example: UUID_EXAMPLE,
     description: 'Unique hall id',
   })
   readonly hall: string;

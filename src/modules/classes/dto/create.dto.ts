@@ -1,9 +1,9 @@
 import { Classes, TClass } from '@classesModule/types/types';
+import { UUID_EXAMPLE } from '@core/constants';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsIn, IsString, IsUUID } from 'class-validator';
 
 export class CreateDto {
-  @IsNotEmpty()
   @IsIn([
     Classes.poleExotic,
     Classes.poleSport,
@@ -23,10 +23,9 @@ export class CreateDto {
   })
   readonly description: string;
 
-  @IsString()
   @IsUUID()
   @ApiProperty({
-    example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
+    example: UUID_EXAMPLE,
     description: 'Unique coach id',
   })
   readonly coach: string;

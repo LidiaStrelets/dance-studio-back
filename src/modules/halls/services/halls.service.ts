@@ -19,11 +19,11 @@ export class HallsService {
     return this.hallRepo.create({ ...dto, id });
   }
 
-  public async update(data: UpdateDto, id: string): Promise<Hall> {
-    const hall = await this.hallRepo.findByPk(id);
-
-    await hall.update(data);
-    return hall;
+  public async update(
+    data: UpdateDto,
+    id: string,
+  ): Promise<[affectedCount: number]> {
+    return this.hallRepo.update(data, { where: { id } });
   }
 
   public async getPolesAmount(id: string): Promise<number> {

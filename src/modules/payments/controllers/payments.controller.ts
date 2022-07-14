@@ -76,12 +76,17 @@ export class PaymentsController {
     return payments.map((payment) => this.mapPaymentToResponce(payment));
   }
 
-  private mapPaymentToResponce(payment: Payment): IPaymentResponce {
+  private mapPaymentToResponce({
+    classes_left,
+    price_id,
+    client_id,
+    id,
+  }: Payment): IPaymentResponce {
     return {
-      classes_left: payment.classes_left,
-      price_id: payment.price_id,
-      client_id: payment.client_id,
-      id: payment.id,
+      classes_left,
+      price_id,
+      client_id,
+      id,
     };
   }
 }

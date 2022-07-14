@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Request, NextFunction } from 'express';
 import { PricesService } from '@pricesModule/services/prices.service';
 
 @Injectable()
 export class ExistsPriceMiddleware {
   constructor(private priceService: PricesService) {}
 
-  async use(req: Request, res: Response, next: NextFunction) {
+  async use(req: Request, _, next: NextFunction) {
     const price = await this.priceService.getById(req.body.price_id);
 
     if (!price) {

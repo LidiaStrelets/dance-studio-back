@@ -12,8 +12,6 @@ import {
 import { DateDataType } from 'sequelize/types';
 
 export class RegisterDto {
-  @IsString()
-  @IsNotEmpty()
   @IsEmail()
   @ApiProperty({
     example: 'my-email@gmail.com',
@@ -22,7 +20,6 @@ export class RegisterDto {
   readonly email: string;
 
   @IsString()
-  @IsNotEmpty()
   @Length(8, 20)
   @ApiProperty({
     example: 'qwerty235!',
@@ -31,7 +28,6 @@ export class RegisterDto {
   readonly password: string;
 
   @IsString()
-  @IsNotEmpty()
   @ApiProperty({
     example: 'Anna',
     description: 'User name',
@@ -39,18 +35,15 @@ export class RegisterDto {
   readonly firstname: string;
 
   @IsString()
-  @IsNotEmpty()
   @ApiProperty({
     example: 'Ivanova',
     description: 'User lastname',
   })
   readonly lastname: string;
 
-  @IsString()
   @IsIn([Roles.admin, Roles.client, Roles.coach])
-  @IsNotEmpty()
   @ApiProperty({
-    example: 'admin',
+    example: Roles.admin,
     description: 'User role',
   })
   readonly role: TRoles;

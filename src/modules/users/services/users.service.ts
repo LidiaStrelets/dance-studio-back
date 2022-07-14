@@ -13,53 +13,38 @@ export class UsersService {
 
   public async registrate(dto: RegisterDto): Promise<User> {
     const id: string = uuidv4();
-    const user = await this.userRepo.create({ ...dto, id });
 
-    user.role = dto.role;
-    return user;
+    return this.userRepo.create({ ...dto, id });
   }
 
-  public async updateRole(dto: UpdateRoleDto) {
-    const user = await this.userRepo.findByPk(dto.userId);
-
-    user.role = dto.role;
-    return user;
+  public async updateRole({ role, userId: id }: UpdateRoleDto) {
+    return this.userRepo.update({ role }, { where: { id } });
   }
 
   public findByEmail(email: string): Promise<User> {
     return this.userRepo.findOne({
       where: { email },
-      include: { all: true },
     });
   }
 
   public getAll(): Promise<User[]> {
-    return this.userRepo.findAll({ include: { all: true } });
+    return this.userRepo.findAll();
   }
 
   public getById(id: string): Promise<User> {
-    return this.userRepo.findOne({
-      where: { id },
-      include: { all: true },
-    });
+    return this.userRepo.findByPk(id);
   }
 
   public async isCoach(id: string): Promise<boolean> {
-    const user = await this.userRepo.findOne({
-      where: { id },
-      include: { all: true },
-    });
+    const user = await this.userRepo.findByPk(id);
 
-    return user.role === RolesEnum.coach ?? false;
+    return user.role === RolesEnum.coach;
   }
 
-  public async update(data: UpdateDto, id: string): Promise<User> {
-    const user = await this.userRepo.findByPk(id);
-    if (!user) {
-      return null;
-    }
-
-    await user.update(data);
-    return user;
+  public async update(
+    data: UpdateDto,
+    id: string,
+  ): Promise<[affectedCount: number]> {
+    return this.userRepo.update(data, { where: { id } });
   }
 }

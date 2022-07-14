@@ -53,15 +53,20 @@ export class HallsController {
   ): Promise<string> {
     const updatedHall = await this.hallService.update(dto, id);
 
-    return updatedHall ? 'success' : 'error';
+    return updatedHall.length >= 1 ? 'success' : 'error';
   }
 
-  private mapHallToResponce(hall: Hall): IHallResponce {
+  private mapHallToResponce({
+    name,
+    description,
+    poles_amount,
+    id,
+  }: Hall): IHallResponce {
     return {
-      name: hall.name,
-      description: hall.description,
-      poles_amount: hall.poles_amount,
-      id: hall.id,
+      name,
+      description,
+      poles_amount,
+      id,
     };
   }
 }
