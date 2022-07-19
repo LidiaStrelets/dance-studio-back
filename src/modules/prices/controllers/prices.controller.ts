@@ -2,20 +2,28 @@ import {
   Body,
   Controller,
   Get,
-  HttpStatus,
   Param,
   Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
-import { CreateDto } from '@pricesModule/dto/add.dto';
-import { UpdateDto } from '@pricesModule/dto/update.dto';
+import { CreatePriceDto } from '@pricesModule/dto/add.dto';
+import { UpdatePriceDto } from '@pricesModule/dto/update.dto';
 import { PricesService } from '@pricesModule/services/prices.service';
 import { Price } from '@pricesModule/models/prices.model';
 import { IPriceResponce } from '@pricesModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
+import { ResponceDescription, UpdateResponce } from '@core/types';
+import { Roles as RolesEnum } from '@core/types';
 
 @ApiTags('Prices')
 @Controller('prices')
@@ -23,36 +31,27 @@ export class PricesController {
   constructor(private pricesService: PricesService) {}
 
   @ApiOperation({ summary: 'Create price' })
-  @ApiResponse({ status: HttpStatus.OK, type: CreateDto })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized user!',
+  @ApiOkResponse({ type: CreatePriceDto })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
   })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-  })
-  @Roles('admin')
+  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
+  @ApiBearerAuth()
+  @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Post()
-  public async ceate(@Body() dto: CreateDto): Promise<IPriceResponce> {
+  public async ceate(@Body() dto: CreatePriceDto): Promise<IPriceResponce> {
     const newPrice = await this.pricesService.create(dto);
 
     return this.mapPriceToResponce(newPrice);
   }
 
   @ApiOperation({ summary: 'Get prices' })
-  @ApiResponse({ status: HttpStatus.OK, type: [CreateDto] })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized user!',
+  @ApiOkResponse({ type: [CreatePriceDto] })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
   })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-  })
+  @ApiBearerAuth()
   @Get()
   public async getAll(): Promise<IPriceResponce[]> {
     const prices = await this.pricesService.getAll();
@@ -61,22 +60,24 @@ export class PricesController {
   }
 
   @ApiOperation({ summary: 'Update price' })
-  @ApiResponse({ status: HttpStatus.OK, type: CreateDto })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized user!',
+  @ApiOkResponse({ description: ResponceDescription.update })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
   })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
-  @Roles('admin')
+  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
+  @ApiBearerAuth()
+  @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Patch('/:id')
   public async update(
-    @Body() dto: UpdateDto,
+    @Body() dto: UpdatePriceDto,
     @Param('id') id: string,
   ): Promise<string> {
     const updatedPrice = await this.pricesService.update(dto, id);
 
-    return updatedPrice.length >= 1 ? 'success' : 'error';
+    return updatedPrice.length >= 1
+      ? UpdateResponce.success
+      : UpdateResponce.error;
   }
 
   private mapPriceToResponce({

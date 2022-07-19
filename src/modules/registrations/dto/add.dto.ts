@@ -1,8 +1,9 @@
+import { BaseEntity } from '@core/baseEntity';
 import { UUID_EXAMPLE } from '@core/constants';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsUUID } from 'class-validator';
 
-export class CreateDto {
+export class CreateRegistrationDto extends BaseEntity {
   @IsUUID()
   @ApiProperty({
     example: UUID_EXAMPLE,

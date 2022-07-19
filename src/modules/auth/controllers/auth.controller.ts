@@ -1,12 +1,19 @@
-import { Body, Controller, HttpStatus, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { LoginDto } from '@usersModule/dto/login.dto';
 import { RegisterDto } from '@usersModule/dto/register.dto';
 import { User } from '@usersModule/models/users.model';
 import { UsersService } from '@usersModule/services/users.service';
 import { AuthService } from '@authModule/services/auth.service';
 import { JWT_SERVICE, TOKEN_EXAMPLE } from '@core/constants';
+import { ResponceDescription } from '@core/types';
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -19,7 +26,8 @@ export class AuthController {
   ) {}
 
   @ApiOperation({ summary: 'Login user' })
-  @ApiResponse({ status: HttpStatus.OK, type: User })
+  @ApiOkResponse({ description: TOKEN_EXAMPLE })
+  @ApiUnauthorizedResponse({ description: ResponceDescription.credentials })
   @Post('/login')
   public async login(@Body() dto: LoginDto) {
     const user = await this.usersService.findByEmail(dto.email);
@@ -28,17 +36,12 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'Register user' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: TOKEN_EXAMPLE,
+  @ApiOkResponse({ description: TOKEN_EXAMPLE })
+  @ApiBadRequestResponse({
+    description: ResponceDescription.duplicateUser,
   })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Attach an admin key to registrate admin user!!',
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: `User with email already exists!`,
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.adinKey,
   })
   @Post('/registration')
   public async register(@Body() dto: RegisterDto): Promise<string> {

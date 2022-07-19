@@ -1,7 +1,8 @@
+import { BaseEntity } from '@core/baseEntity';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsNumber } from 'class-validator';
 
-export class CreateDto {
+export class CreatePriceDto extends BaseEntity {
   @IsInt()
   @ApiProperty({
     example: 8,

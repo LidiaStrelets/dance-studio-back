@@ -1,9 +1,10 @@
 import { Classes, TClass } from '@classesModule/types/types';
+import { BaseEntity } from '@core/baseEntity';
 import { UUID_EXAMPLE } from '@core/constants';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsString, IsUUID } from 'class-validator';
 
-export class CreateDto {
+export class CreateClassDto extends BaseEntity {
   @IsIn([
     Classes.poleExotic,
     Classes.poleSport,

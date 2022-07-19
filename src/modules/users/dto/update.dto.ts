@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { DateDataType } from 'sequelize/types';
 
-export class UpdateDto {
+export class UpdateUserDto {
   @IsOptional()
   @IsString()
   @IsEmail()

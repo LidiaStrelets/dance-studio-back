@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { RegisterDto } from '@usersModule/dto/register.dto';
-import { UpdateDto } from '@usersModule/dto/update.dto';
+import { UpdateUserDto } from '@usersModule/dto/update.dto';
 import { User } from '@usersModule/models/users.model';
 import { v4 as uuidv4 } from 'uuid';
 import { Roles as RolesEnum } from '@core/types';
@@ -42,7 +42,7 @@ export class UsersService {
   }
 
   public async update(
-    data: UpdateDto,
+    data: UpdateUserDto,
     id: string,
   ): Promise<[affectedCount: number]> {
     return this.userRepo.update(data, { where: { id } });

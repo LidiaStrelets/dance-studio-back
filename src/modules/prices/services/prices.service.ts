@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateDto } from '@pricesModule/dto/add.dto';
-import { UpdateDto } from '@pricesModule/dto/update.dto';
+import { CreatePriceDto } from '@pricesModule/dto/add.dto';
+import { UpdatePriceDto } from '@pricesModule/dto/update.dto';
 import { Price } from '@pricesModule/models/prices.model';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class PricesService {
   constructor(@InjectModel(Price) private priceRepo: typeof Price) {}
 
-  public create(dto: CreateDto): Promise<Price> {
+  public create(dto: CreatePriceDto): Promise<Price> {
     const id: string = uuidv4();
     return this.priceRepo.create({ ...dto, id });
   }
@@ -23,7 +23,7 @@ export class PricesService {
   }
 
   public async update(
-    data: UpdateDto,
+    data: UpdatePriceDto,
     id: string,
   ): Promise<[affectedCount: number]> {
     return this.priceRepo.update(data, { where: { id } });

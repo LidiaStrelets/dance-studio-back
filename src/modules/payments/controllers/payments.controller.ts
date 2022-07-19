@@ -1,21 +1,22 @@
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
-  Body,
-  Controller,
-  Get,
-  HttpStatus,
-  Param,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
-import { ApiHeader, ApiOperation, ApiResponse } from '@nestjs/swagger';
+  ApiBasicAuth,
+  ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { RequestService } from '@services/request.service';
 import { PricesService } from '@pricesModule/services/prices.service';
-import { CreateDto } from '@paymentsModule/dto/add.dto';
+import { CreatePaymentDto } from '@paymentsModule/dto/add.dto';
 import { Payment } from '@paymentsModule/models/payments.model';
 import { PaymentsService } from '@paymentsModule/services/payments.service';
 import { IPaymentResponce } from '@paymentsModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
+import { ResponceDescription } from '@core/types';
+import { Roles as RolesEnum } from '@core/types';
 
 @Controller('payments')
 export class PaymentsController {
@@ -26,19 +27,18 @@ export class PaymentsController {
   ) {}
 
   @ApiOperation({ summary: 'Create payment' })
-  @ApiResponse({ status: HttpStatus.OK, type: Payment })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized user!',
+  @ApiOkResponse({ type: CreatePaymentDto })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
   })
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-  })
-  @Roles('admin', 'client')
+  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
+  @ApiBasicAuth()
+  @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   @Post()
-  public async create(@Body() dto: CreateDto): Promise<IPaymentResponce> {
+  public async create(
+    @Body() dto: CreatePaymentDto,
+  ): Promise<IPaymentResponce> {
     const price = await this.priceService.getById(dto.price_id);
 
     const client_id = dto.user_id || this.requestServise.getUserId();
@@ -55,17 +55,13 @@ export class PaymentsController {
   @ApiOperation({
     summary: 'Get user payments information',
   })
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: [CreatePaymentDto] })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
   })
-  @ApiResponse({ status: HttpStatus.OK, type: [CreateDto] })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized user!',
-  })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
-  @Roles('admin', 'client')
+  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
+  @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   @Get('/:userId')
   public async getAllByUser(

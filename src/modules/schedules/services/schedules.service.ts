@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateDto } from '@schedulesModule/dto/create.dto';
-import { UpdateDto } from '@schedulesModule/dto/update.dto';
+import { CreateScheduleDto } from '@schedulesModule/dto/create.dto';
+import { UpdateScheduleDto } from '@schedulesModule/dto/update.dto';
 import { Schedule } from '@schedulesModule/models/schedules.model';
 import { PLACES_FIELD } from '@schedulesModule/types/types';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,7 +10,10 @@ import { v4 as uuidv4 } from 'uuid';
 export class SchedulesService {
   constructor(@InjectModel(Schedule) private scheduleRepo: typeof Schedule) {}
 
-  public create(dto: CreateDto, places_left: number): Promise<Schedule> {
+  public create(
+    dto: CreateScheduleDto,
+    places_left: number,
+  ): Promise<Schedule> {
     const id: string = uuidv4();
     return this.scheduleRepo.create({
       ...dto,
@@ -32,7 +35,7 @@ export class SchedulesService {
   }
 
   public async update(
-    data: UpdateDto,
+    data: UpdateScheduleDto,
     id: string,
   ): Promise<[affectedCount: number]> {
     return this.scheduleRepo.update(data, { where: { id } });

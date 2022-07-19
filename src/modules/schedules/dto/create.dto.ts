@@ -1,9 +1,10 @@
+import { BaseEntity } from '@core/baseEntity';
 import { UUID_EXAMPLE } from '@core/constants';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsUUID } from 'class-validator';
 import { DateDataType } from 'sequelize/types';
 
-export class CreateDto {
+export class CreateScheduleDto extends BaseEntity {
   @IsUUID()
   @ApiProperty({
     example: UUID_EXAMPLE,

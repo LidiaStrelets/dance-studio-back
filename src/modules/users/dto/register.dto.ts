@@ -4,14 +4,14 @@ import {
   IsDateString,
   IsEmail,
   IsIn,
-  IsNotEmpty,
   IsOptional,
   IsString,
   Length,
 } from 'class-validator';
 import { DateDataType } from 'sequelize/types';
+import { BaseEntity } from '@core/baseEntity';
 
-export class RegisterDto {
+export class RegisterDto extends BaseEntity {
   @IsEmail()
   @ApiProperty({
     example: 'my-email@gmail.com',

@@ -2,7 +2,7 @@ import { Classes, TClass } from '@classesModule/types/types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 
-export class UpdateDto {
+export class UpdateClassDto {
   @IsOptional()
   @IsIn([
     Classes.poleExotic,

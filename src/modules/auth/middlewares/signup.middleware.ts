@@ -7,6 +7,7 @@ import { NextFunction, Request } from 'express';
 export class RegistrationMiddleware {
   async use(
     { body: { email, firstname, lastname, password, adminKey, role } }: Request,
+    _,
     next: NextFunction,
   ) {
     if (!email || !firstname || !lastname || !password || !role) {

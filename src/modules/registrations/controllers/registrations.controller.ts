@@ -8,17 +8,28 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { RequestService } from '@services/request.service';
 import { PaymentsService } from '@paymentsModule/services/payments.service';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
-import { CreateDto } from '@registrationsModule/dto/add.dto';
+import { CreateRegistrationDto } from '@registrationsModule/dto/add.dto';
 import { Registration } from '@registrationsModule/models/registrations.model';
 import { RegistrationsService } from '../services/registrations.service';
 import { IRegistrationResponce } from '@registrationsModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
 import { IN_DAY_HOURS, UNLIMITED_AMOUNT } from '@core/constants';
+import { ResponceDescription, Roles as RolesEnum } from '@core/types';
 
 @ApiTags('Registrations')
 @Controller('registrations')
@@ -31,33 +42,28 @@ export class RegistrationsController {
   ) {}
 
   @ApiOperation({ summary: 'Create registration' })
-  @ApiResponse({ status: HttpStatus.OK, type: Registration })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized user!',
+  @ApiOkResponse({ type: CreateRegistrationDto })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
   })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Wrong data passed',
+  @ApiBadRequestResponse({
+    description: ResponceDescription.userIdRequired,
   })
   @ApiResponse({
     status: HttpStatus.PAYMENT_REQUIRED,
-    description:
-      'Your pass has ended! Make a new payment to create a registration!',
+    description: ResponceDescription.passExpired,
   })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'No places left for this class, try another one!',
+  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
+  @ApiNotFoundResponse({
+    description: ResponceDescription.noPlaces,
   })
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-  })
-  @Roles('admin', 'client')
+  @ApiBearerAuth()
+  @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   @Post()
-  public async create(@Body() dto: CreateDto): Promise<IRegistrationResponce> {
+  public async create(
+    @Body() dto: CreateRegistrationDto,
+  ): Promise<IRegistrationResponce> {
     const client_id = dto.client_id || this.requestService.getUserId();
 
     const userPaym = await this.paymentService.getLastByUser(client_id);
@@ -74,21 +80,15 @@ export class RegistrationsController {
   }
 
   @ApiOperation({ summary: 'Delete registration' })
-  @ApiResponse({ status: HttpStatus.OK, type: CreateDto })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized user!',
+  @ApiResponse({ status: HttpStatus.OK, type: CreateRegistrationDto })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
   })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: `Registration doesn't exist`,
+  @ApiForbiddenResponse({
+    description: `${ResponceDescription.notCoachRoute}, ${ResponceDescription.userIdRequired}`,
   })
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-  })
-  @Roles('admin', 'client')
+  @ApiBearerAuth()
+  @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   @Delete('/:regId')
   public async delete(@Param('regId') regId: string): Promise<number> {
@@ -117,16 +117,10 @@ export class RegistrationsController {
   @ApiOperation({
     summary: 'Get user registrations information',
   })
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-  })
-  @ApiResponse({ status: HttpStatus.OK, type: [CreateDto] })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized user!',
-  })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
+  @ApiUnauthorizedResponse({ description: ResponceDescription.token })
+  @ApiForbiddenResponse({ description: ResponceDescription.userIdRequired })
   @Get('/:userId')
   public async getAllByUser(
     @Param('userId') userId: string,

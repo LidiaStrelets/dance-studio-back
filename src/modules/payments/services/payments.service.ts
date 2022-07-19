@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateDto } from '@paymentsModule/dto/add.dto';
+import { CreatePaymentDto } from '@paymentsModule/dto/add.dto';
 import { Payment } from '@paymentsModule/models/payments.model';
 import { CLASSES_FIELD } from '@paymentsModule/types/types';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,7 +10,7 @@ export class PaymentsService {
   constructor(@InjectModel(Payment) private paymentRepo: typeof Payment) {}
 
   public create(
-    dto: CreateDto,
+    dto: CreatePaymentDto,
     client_id: string,
     classes_amount: number,
   ): Promise<Payment> {

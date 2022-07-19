@@ -1,7 +1,8 @@
+import { BaseEntity } from '@core/baseEntity';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsInt } from 'class-validator';
 
-export class CreateDto {
+export class CreateHallDto extends BaseEntity {
   @IsString()
   @ApiProperty({
     example: 'The big hall',

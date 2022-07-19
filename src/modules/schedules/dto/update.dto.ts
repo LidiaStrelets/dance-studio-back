@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsOptional, IsString, IsUUID } from 'class-validator';
 import { DateDataType } from 'sequelize/types';
 
-export class UpdateDto {
+export class UpdateScheduleDto {
   @IsOptional()
   @IsString()
   @IsUUID()
