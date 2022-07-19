@@ -11,8 +11,6 @@ import { PaymentsModule } from '@paymentsModule/payments.module';
 import { RegistrationsModule } from '@registrationsModule/registrations.module';
 import { CoreJwtModule } from '@core/jwt.module';
 import { RequestService } from '@services/request.service';
-import { APP_FILTER } from '@nestjs/core';
-import { HttpExceptionFilter } from '@exceptionFilters/http.filter';
 
 @Module({
   imports: [
@@ -39,12 +37,6 @@ import { HttpExceptionFilter } from '@exceptionFilters/http.filter';
     RegistrationsModule,
   ],
   controllers: [],
-  providers: [
-    RequestService,
-    // {
-    //   provide: APP_FILTER,
-    //   useClass: HttpExceptionFilter,
-    // },
-  ],
+  providers: [RequestService],
 })
 export class AppModule {}
