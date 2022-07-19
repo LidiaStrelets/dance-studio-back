@@ -3,11 +3,13 @@ import {
   Controller,
   Get,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -24,6 +26,7 @@ import { IPriceResponce } from '@pricesModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
 import { ResponceDescription, UpdateResponce } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
+import { throwUuidException } from '@core/util';
 
 @ApiTags('Prices')
 @Controller('prices')
@@ -64,6 +67,7 @@ export class PricesController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @ApiBearerAuth()
   @Roles(RolesEnum.admin)
@@ -71,7 +75,13 @@ export class PricesController {
   @Patch('/:id')
   public async update(
     @Body() dto: UpdatePriceDto,
-    @Param('id') id: string,
+    @Param(
+      'id',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    id: string,
   ): Promise<string> {
     const updatedPrice = await this.pricesService.update(dto, id);
 

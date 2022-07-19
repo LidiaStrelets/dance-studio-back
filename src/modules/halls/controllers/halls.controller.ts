@@ -2,11 +2,13 @@ import {
   Body,
   Controller,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -23,6 +25,7 @@ import { IHallResponce } from '@hallsModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
 import { ResponceDescription, UpdateResponce } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
+import { throwUuidException } from '@core/util';
 
 @ApiTags('Halls')
 @Controller('halls')
@@ -51,13 +54,20 @@ export class HallsController {
     description: ResponceDescription.token,
   })
   @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @ApiBearerAuth()
   @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Patch('/:id')
   public async update(
     @Body() dto: UpdateHallDto,
-    @Param('id') id: string,
+    @Param(
+      'id',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    id: string,
   ): Promise<string> {
     const updatedHall = await this.hallService.update(dto, id);
 

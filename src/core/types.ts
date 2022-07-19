@@ -24,6 +24,7 @@ export enum ResponceDescription {
   userIdRequired = 'For admin request user id is required',
   noPlaces = 'No places left for this class, try another one!',
   passExpired = 'Your pass has ended! Make a new payment to create a registration!',
+  uuidException = 'The request param should be of uuid type',
 }
 
 export enum UpdateResponce {

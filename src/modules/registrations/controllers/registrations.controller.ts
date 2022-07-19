@@ -5,6 +5,7 @@ import {
   Get,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -30,6 +31,7 @@ import { IRegistrationResponce } from '@registrationsModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
 import { IN_DAY_HOURS, UNLIMITED_AMOUNT } from '@core/constants';
 import { ResponceDescription, Roles as RolesEnum } from '@core/types';
+import { throwUuidException } from '@core/util';
 
 @ApiTags('Registrations')
 @Controller('registrations')
@@ -87,11 +89,20 @@ export class RegistrationsController {
   @ApiForbiddenResponse({
     description: `${ResponceDescription.notCoachRoute}, ${ResponceDescription.userIdRequired}`,
   })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @ApiBearerAuth()
   @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   @Delete('/:regId')
-  public async delete(@Param('regId') regId: string): Promise<number> {
+  public async delete(
+    @Param(
+      'regId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    regId: string,
+  ): Promise<number> {
     const existingRegistration = await this.registrationsService.findById(
       regId,
     );
@@ -121,9 +132,16 @@ export class RegistrationsController {
   @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
   @ApiUnauthorizedResponse({ description: ResponceDescription.token })
   @ApiForbiddenResponse({ description: ResponceDescription.userIdRequired })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Get('/:userId')
   public async getAllByUser(
-    @Param('userId') userId: string,
+    @Param(
+      'userId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    userId: string,
   ): Promise<IRegistrationResponce[]> {
     const registrations = await this.registrationsService.getAllByUser(userId);
 

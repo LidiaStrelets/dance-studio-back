@@ -1,5 +1,13 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import {
+  Body,
+  Controller,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -16,6 +24,7 @@ import { Schedule } from '@schedulesModule/models/schedules.model';
 import { IScheduleResponce } from '@schedulesModule/types/types';
 import { ResponceDescription, UpdateResponce } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
+import { throwUuidException } from '@core/util';
 
 @ApiTags('Schedules')
 @Controller('schedules')
@@ -48,11 +57,18 @@ export class SchedulesController {
     description: ResponceDescription.token,
   })
   @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Roles(RolesEnum.admin)
   @Patch('/:id')
   public async update(
     @Body() scheduleDto: UpdateScheduleDto,
-    @Param('id') id: string,
+    @Param(
+      'id',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    id: string,
   ): Promise<string> {
     const updatedSchedule = await this.scheduleService.update(scheduleDto, id);
     return updatedSchedule.length >= 1

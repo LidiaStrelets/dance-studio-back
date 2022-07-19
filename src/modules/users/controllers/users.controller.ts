@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -8,10 +9,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -26,6 +29,7 @@ import { UpdateRoleDto } from '@usersModule/dto/update-role.dto';
 import { BodyValidPipe } from '@usersModule/pipes/bodyValid.pipe';
 import { ResponceDescription, UpdateResponce } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
+import { throwUuidException } from '@core/util';
 
 @ApiTags('Users')
 @Controller('users')
@@ -54,11 +58,18 @@ export class UsersController {
     description: ResponceDescription.token,
   })
   @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Get('/:userId')
   @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   public async getById(
-    @Param('userId') userId: string,
+    @Param(
+      'userId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    userId: string,
   ): Promise<IUserResponce> {
     const user = await this.userService.getById(userId);
     return this.mapUserToResponce(user);
@@ -91,7 +102,13 @@ export class UsersController {
   @Patch('/:userId')
   public async update(
     @Body(BodyValidPipe) dto: UpdateUserDto,
-    @Param('userId', ParseUUIDPipe) id: string,
+    @Param(
+      'userId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    id: string,
   ): Promise<string> {
     const updatedUser = await this.userService.update(dto, id);
 

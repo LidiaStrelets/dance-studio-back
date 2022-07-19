@@ -1,5 +1,14 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
   ApiBasicAuth,
   ApiBearerAuth,
   ApiForbiddenResponse,
@@ -17,6 +26,7 @@ import { IPaymentResponce } from '@paymentsModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
 import { ResponceDescription } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
+import { throwUuidException } from '@core/util';
 
 @Controller('payments')
 export class PaymentsController {
@@ -61,11 +71,18 @@ export class PaymentsController {
     description: ResponceDescription.token,
   })
   @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   @Get('/:userId')
   public async getAllByUser(
-    @Param('userId') userId: string,
+    @Param(
+      'userId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    userId: string,
   ): Promise<IPaymentResponce[]> {
     const payments = await this.paymentsService.getAllByUser(userId);
 

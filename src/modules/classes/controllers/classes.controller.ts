@@ -2,11 +2,13 @@ import {
   Body,
   Controller,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
   ApiForbiddenResponse,
@@ -24,6 +26,7 @@ import { IClassResponce } from '@classesModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
 import { ResponceDescription, UpdateResponce } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
+import { throwUuidException } from '@core/util';
 
 @ApiTags('Classes')
 @Controller('classes')
@@ -57,13 +60,20 @@ export class ClassesController {
   @ApiForbiddenResponse({
     description: ResponceDescription.adminRoute,
   })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Roles(RolesEnum.admin)
   @ApiBearerAuth()
   @UseGuards(RolesGuard)
   @Patch('/:id')
   public async update(
     @Body() dto: UpdateClassDto,
-    @Param('id') id: string,
+    @Param(
+      'id',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    id: string,
   ): Promise<string> {
     const updatedClass = await this.classesService.update(dto, id);
 
