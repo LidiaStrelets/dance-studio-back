@@ -89,7 +89,8 @@ export class UsersController {
       : UpdateResponce.error;
   }
 
-  @ApiOperation({ summary: 'Update schedule' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update user' })
   @ApiOkResponse({ description: ResponceDescription.update })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,

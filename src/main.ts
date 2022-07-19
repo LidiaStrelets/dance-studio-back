@@ -15,6 +15,7 @@ async function startServer() {
     .setDescription('The dance studio api description')
     .setVersion('1.0')
     .addTag('dance_studio')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
