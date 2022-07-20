@@ -9,7 +9,6 @@ import { UsersModule } from '@usersModule/users.module';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { CoreJwtModule } from '@core/jwt.module';
 import { RequestService } from '@services/request.service';
-import { ClassAvailableMiddleware } from './middlewares/classAvailable.middleware';
 import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
 import { ClassesModule } from '@classesModule/classes.module';
 
@@ -34,9 +33,5 @@ export class SchedulesModule {
       .apply(IsCoachMiddleware)
       .exclude('schedules/:id')
       .forRoutes('schedules');
-
-    consumer
-      .apply(ClassAvailableMiddleware)
-      .forRoutes({ path: 'schedules', method: RequestMethod.POST });
   }
 }

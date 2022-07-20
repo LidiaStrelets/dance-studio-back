@@ -1,9 +1,9 @@
+import { BaseFields } from '@core/baseEntity';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreatePaymentDto } from '@paymentsModule/dto/add.dto';
 import { Payment } from '@paymentsModule/models/payments.model';
 import { CLASSES_FIELD } from '@paymentsModule/types/types';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class PaymentsService {
@@ -14,12 +14,11 @@ export class PaymentsService {
     client_id: string,
     classes_amount: number,
   ): Promise<Payment> {
-    const id: string = uuidv4();
     return this.paymentRepo.create({
       ...dto,
       client_id,
       classes_left: classes_amount,
-      id,
+      ...BaseFields,
     });
   }
 

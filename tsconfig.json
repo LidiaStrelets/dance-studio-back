@@ -24,7 +24,7 @@
       "@guards/*": ["src/core/guards/*"],
       "@middlewares/*": ["src/core/middlewares/*"],
       "@services/*": ["src/core/services/*"],
-      "@exceptionFilters/*": ["src/core/exceptionFilters/*"],
+      "@pipes/*": ["src/core/pipes/*"],
       "@core/*": ["src/core/*"]
     },
     "incremental": true,

@@ -25,10 +25,12 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE,
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     return queryInterface.dropTable('schedules');
   },
 };

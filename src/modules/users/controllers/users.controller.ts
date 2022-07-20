@@ -22,9 +22,9 @@ import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateUserDto } from '@usersModule/dto/update.dto';
 import { UsersService } from '@usersModule/services/users.service';
 import { User } from '@usersModule/models/users.model';
-import { IUserResponce } from '@usersModule/types/types';
+import { EUpdateUser, IUserResponce } from '@usersModule/types/types';
 import { UpdateRoleDto } from '@usersModule/dto/update-role.dto';
-import { BodyValidPipe } from '@usersModule/pipes/bodyValid.pipe';
+import { BodyValidPipe } from '@pipes/bodyValid.pipe';
 import { ResponceDescription, UpdateResponce } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
@@ -100,7 +100,7 @@ export class UsersController {
   @UseGuards(RolesGuard)
   @Patch('/:userId')
   public async update(
-    @Body(BodyValidPipe) dto: UpdateUserDto,
+    @Body(new BodyValidPipe(EUpdateUser)) dto: UpdateUserDto,
     @Param(
       'userId',
       new ParseUUIDPipe({

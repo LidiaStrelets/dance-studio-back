@@ -21,10 +21,12 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE,
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     return queryInterface.dropTable('halls');
   },
 };

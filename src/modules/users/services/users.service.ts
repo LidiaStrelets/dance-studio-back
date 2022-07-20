@@ -3,18 +3,16 @@ import { InjectModel } from '@nestjs/sequelize';
 import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateUserDto } from '@usersModule/dto/update.dto';
 import { User } from '@usersModule/models/users.model';
-import { v4 as uuidv4 } from 'uuid';
 import { Roles as RolesEnum } from '@core/types';
 import { UpdateRoleDto } from '@usersModule/dto/update-role.dto';
+import { BaseFields } from '@core/baseEntity';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User) private userRepo: typeof User) {}
 
   public async registrate(dto: RegisterDto): Promise<User> {
-    const id: string = uuidv4();
-
-    return this.userRepo.create({ ...dto, id });
+    return this.userRepo.create({ ...dto, ...BaseFields });
   }
 
   public async updateRole({ role, userId: id }: UpdateRoleDto) {

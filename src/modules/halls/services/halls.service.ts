@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CreateHallDto } from '@hallsModule/dto/create.dto';
 import { UpdateHallDto } from '@hallsModule/dto/update.dto';
 import { Hall } from '@hallsModule/models/halls.model';
-import { v4 as uuidv4 } from 'uuid';
+import { BaseFields } from '@core/baseEntity';
 
 export interface HallUpdate {
   name?: string;
@@ -15,8 +15,7 @@ export class HallsService {
   constructor(@InjectModel(Hall) private hallRepo: typeof Hall) {}
 
   public create(dto: CreateHallDto): Promise<Hall> {
-    const id: string = uuidv4();
-    return this.hallRepo.create({ ...dto, id });
+    return this.hallRepo.create({ ...dto, ...BaseFields });
   }
 
   public async update(

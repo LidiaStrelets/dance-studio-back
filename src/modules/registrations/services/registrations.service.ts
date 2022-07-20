@@ -1,8 +1,8 @@
+import { BaseFields } from '@core/baseEntity';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateRegistrationDto } from '@registrationsModule/dto/add.dto';
 import { Registration } from '@registrationsModule/models/registrations.model';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class RegistrationsService {
@@ -15,10 +15,9 @@ export class RegistrationsService {
   public convertMilisecondsToHours = (ms) => ms / 1000 / 60 / 60;
 
   public create(dto: CreateRegistrationDto): Promise<Registration> {
-    const id: string = uuidv4();
     return this.registrationRepo.create({
       ...dto,
-      id,
+      ...BaseFields,
     });
   }
 

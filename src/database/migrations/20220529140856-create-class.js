@@ -13,14 +13,24 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      coach: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      hall: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       description: {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE,
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     return queryInterface.dropTable('classes');
   },
 };

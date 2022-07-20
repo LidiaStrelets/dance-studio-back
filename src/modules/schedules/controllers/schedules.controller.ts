@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  HttpException,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -25,6 +27,7 @@ import { IScheduleResponce } from '@schedulesModule/types/types';
 import { ResponceDescription, UpdateResponce } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
+import { ClassesService } from '@classesModule/services/classes.service';
 
 @ApiTags('Schedules')
 @Controller('schedules')
@@ -32,6 +35,7 @@ export class SchedulesController {
   constructor(
     private scheduleService: SchedulesService,
     private hallsService: HallsService,
+    private classesService: ClassesService,
   ) {}
 
   @ApiBearerAuth()
@@ -44,6 +48,15 @@ export class SchedulesController {
   @Roles(RolesEnum.admin)
   @Post()
   public async add(@Body() dto: CreateScheduleDto): Promise<IScheduleResponce> {
+    const coachClasses = await this.classesService.getByCoach(dto.coach);
+
+    if (!coachClasses || coachClasses.length < 1) {
+      throw new HttpException(
+        `Requested class not found!`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const availablePoles = await this.hallsService.getPolesAmount(dto.hall);
 
     const newItem = await this.scheduleService.create(dto, availablePoles);

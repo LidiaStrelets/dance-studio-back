@@ -1,10 +1,10 @@
+import { BaseFields } from '@core/baseEntity';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateScheduleDto } from '@schedulesModule/dto/create.dto';
 import { UpdateScheduleDto } from '@schedulesModule/dto/update.dto';
 import { Schedule } from '@schedulesModule/models/schedules.model';
 import { PLACES_FIELD } from '@schedulesModule/types/types';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class SchedulesService {
@@ -14,11 +14,10 @@ export class SchedulesService {
     dto: CreateScheduleDto,
     places_left: number,
   ): Promise<Schedule> {
-    const id: string = uuidv4();
     return this.scheduleRepo.create({
       ...dto,
       places_left,
-      id,
+      ...BaseFields,
     });
   }
 
