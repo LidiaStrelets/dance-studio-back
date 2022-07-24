@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Dto } from '@usersModule/types/types';
 import {
   IsDateString,
   IsEmail,
@@ -13,8 +14,8 @@ export class UpdateUserDto {
   @IsString()
   @IsEmail()
   @ApiProperty({
-    example: 'my-email@gmail.com',
-    description: 'Unique user email',
+    example: Dto.emailExample,
+    description: Dto.emailDescription,
   })
   readonly email: string;
 
@@ -22,48 +23,48 @@ export class UpdateUserDto {
   @IsString()
   @Length(8, 20)
   @ApiProperty({
-    example: 'qwerty235!',
-    description: 'Password',
+    example: Dto.passwordExample,
+    description: Dto.passwordDescription,
   })
   readonly password: string;
 
   @IsOptional()
   @IsString()
   @ApiProperty({
-    example: 'Anna',
-    description: 'User name',
+    example: Dto.nameExample,
+    description: Dto.nameDescription,
   })
   readonly firstname: string;
 
   @IsOptional()
   @IsString()
   @ApiProperty({
-    example: 'Ivanova',
-    description: 'User lastname',
+    example: Dto.lastNameExample,
+    description: Dto.lastNameDescription,
   })
   readonly lastname: string;
 
   @IsOptional()
   @IsDateString()
   @ApiPropertyOptional({
-    example: '29.07.1996',
-    description: `User's date of birth`,
+    example: Dto.birthDateExample,
+    description: Dto.birthDateDescription,
   })
   readonly birth_date: DateDataType | null;
 
   @IsOptional()
   @IsString()
   @ApiPropertyOptional({
-    example: 'Want to visit classes every day!',
-    description: `Here you can attach some additional information about uuser`,
+    example: Dto.informationExample,
+    description: Dto.informationDescription,
   })
   readonly information: string | null;
 
   @IsOptional()
   @IsString()
   @ApiProperty({
-    example: 'jgvjkb76cghvh',
-    description: `Here you can attach your admin key`,
+    example: Dto.keyExample,
+    description: Dto.keyDescription,
   })
   readonly adminKey: string | null;
 }

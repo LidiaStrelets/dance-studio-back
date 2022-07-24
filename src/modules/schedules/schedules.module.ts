@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
 import { SchedulesController } from '@schedulesModule/controllers/schedules.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
@@ -11,6 +11,7 @@ import { CoreJwtModule } from '@core/jwt.module';
 import { RequestService } from '@services/request.service';
 import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
 import { ClassesModule } from '@classesModule/classes.module';
+import { Path } from '@schedulesModule/types/types';
 
 @Module({
   providers: [SchedulesService, RequestService],
@@ -27,11 +28,8 @@ import { ClassesModule } from '@classesModule/classes.module';
 })
 export class SchedulesModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('schedules');
+    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
 
-    consumer
-      .apply(IsCoachMiddleware)
-      .exclude('schedules/:id')
-      .forRoutes('schedules');
+    consumer.apply(IsCoachMiddleware).exclude(Path.withId).forRoutes('*');
   }
 }

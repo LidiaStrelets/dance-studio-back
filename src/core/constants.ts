@@ -15,4 +15,4 @@ export const IN_DAY_HOURS = 24;
 
 export const DAYS_IN_MONTH = 30;
 
-export const NO_DEYS_LEFT = 0;
+export const NO_LEFT = 0;

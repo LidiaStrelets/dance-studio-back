@@ -25,6 +25,7 @@ export class BodyValidPipe implements PipeTransform<any> {
     ) {
       throw new BadRequestException('Body validation failed');
     }
+
     return value;
   }
 

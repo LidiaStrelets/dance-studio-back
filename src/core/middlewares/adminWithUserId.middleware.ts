@@ -11,42 +11,35 @@ export class AdminWithUserIdMiddleware {
     private userServise: UsersService,
   ) {}
 
+  private throwException(message: string) {
+    throw new HttpException(
+      [
+        {
+          message,
+        },
+      ],
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+
   async use(req: Request, _, next: NextFunction) {
     const userId = req.body.user_id || req.body.client_id;
     const userRole = this.requestService.getUserRole();
 
     if (userRole === Roles.admin) {
       if (!userId) {
-        throw new HttpException(
-          [
-            {
-              message: ['User id required!'],
-              problem_field: null,
-              name: 'User id is required in admin request',
-            },
-          ],
-          HttpStatus.BAD_REQUEST,
-        );
+        this.throwException('User id required!');
       }
 
       const user = await this.userServise.getById(userId);
 
       if (!user) {
-        throw new HttpException(
-          [
-            {
-              message: ['User not found!'],
-              problem_field: null,
-            },
-          ],
-          HttpStatus.BAD_REQUEST,
-        );
+        this.throwException('User not found!');
       }
 
       if (user.role !== Roles.client) {
-        throw new HttpException(
-          { message: 'Registration can be created only for the clients!' },
-          HttpStatus.BAD_REQUEST,
+        this.throwException(
+          'Registration can be created only for the clients!',
         );
       }
     }

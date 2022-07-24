@@ -16,8 +16,6 @@ export class DataOwnerOrAdminMiddleware {
         [
           {
             message: ['Access forbidden!'],
-            problem_field: null,
-            name: 'Forbidden Error',
           },
         ],
         HttpStatus.FORBIDDEN,

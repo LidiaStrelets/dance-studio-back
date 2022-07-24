@@ -22,6 +22,6 @@ import { UsersModule } from '@usersModule/users.module';
 })
 export class PricesModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('prices');
+    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
   }
 }

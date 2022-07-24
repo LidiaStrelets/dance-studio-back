@@ -11,6 +11,7 @@ import { UsersService } from '@usersModule/services/users.service';
 import { RequestService } from '@services/request.service';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
+import { Path } from '@usersModule/types/types';
 
 @Module({
   controllers: [UsersController],
@@ -24,13 +25,13 @@ import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 })
 export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('users');
+    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
 
     consumer
       .apply(DataOwnerOrAdminMiddleware)
       .forRoutes(
-        { path: 'users/:userId', method: RequestMethod.GET },
-        { path: 'users/:userId', method: RequestMethod.PATCH },
+        { path: Path.withId, method: RequestMethod.GET },
+        { path: Path.withId, method: RequestMethod.PATCH },
       );
   }
 }

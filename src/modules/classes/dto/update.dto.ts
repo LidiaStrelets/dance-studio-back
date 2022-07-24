@@ -1,4 +1,4 @@
-import { Classes, TClass } from '@classesModule/types/types';
+import { Classes, Dto, TClass } from '@classesModule/types/types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 
@@ -12,15 +12,15 @@ export class UpdateClassDto {
   ])
   @ApiProperty({
     example: Classes.stretching,
-    description: 'The name of a class',
+    description: Dto.nameDescription,
   })
   readonly name: TClass;
 
   @IsOptional()
   @IsString()
   @ApiProperty({
-    example: 'Stretching class targets on...',
-    description: 'Describes what the class allows',
+    example: Dto.descriptionExample,
+    description: Dto.descriptionDescription,
   })
   readonly description: string;
 }

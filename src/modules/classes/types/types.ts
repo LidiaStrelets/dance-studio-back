@@ -16,3 +16,10 @@ export type TClass =
   | 'pole_sport'
   | 'pole_exotic'
   | 'stripplastic';
+
+export enum Dto {
+  nameDescription = 'The name of a class',
+  descriptionExample = 'Stretching class targets on...',
+  descriptionDescription = 'Describes what the class allows',
+  idDescription = 'Unique class id',
+}

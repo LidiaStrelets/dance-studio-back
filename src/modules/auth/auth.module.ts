@@ -10,6 +10,7 @@ import { AuthController } from '@authModule/controllers/auth.controller';
 import { AuthService } from '@authModule/services/auth.service';
 import { LoginMiddleware } from './middlewares/login.middleware';
 import { RegistrationMiddleware } from './middlewares/signup.middleware';
+import { Paths } from '@authModule/types/types';
 
 @Module({
   controllers: [AuthController],
@@ -21,10 +22,10 @@ export class AuthModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoginMiddleware)
-      .forRoutes({ path: 'auth/login', method: RequestMethod.POST });
+      .forRoutes({ path: Paths.login, method: RequestMethod.POST });
 
     consumer
       .apply(RegistrationMiddleware)
-      .forRoutes({ path: 'auth/registration', method: RequestMethod.POST });
+      .forRoutes({ path: Paths.register, method: RequestMethod.POST });
   }
 }

@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request, NextFunction } from 'express';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
+import { NO_LEFT } from '@core/constants';
 
 @Injectable()
 export class SpotsAvailableMiddleware {
@@ -9,7 +10,7 @@ export class SpotsAvailableMiddleware {
   async use({ body: { schedule_id } }: Request, _, next: NextFunction) {
     const scheduleItem = await this.scheduleService.get(schedule_id);
 
-    if (scheduleItem.places_left === 0) {
+    if (scheduleItem.places_left === NO_LEFT) {
       throw new HttpException(
         {
           message: 'No places left for this class, try another one!',

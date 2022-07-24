@@ -3,7 +3,7 @@ import { Request, NextFunction } from 'express';
 import { RegistrationsService } from '@registrationsModule/services/registrations.service';
 import { RequestService } from '@services/request.service';
 import { PaymentsService } from '@paymentsModule/services/payments.service';
-import { DAYS_IN_MONTH, NO_DEYS_LEFT } from '@core/constants';
+import { DAYS_IN_MONTH, NO_LEFT } from '@core/constants';
 
 @Injectable()
 export class PaymentAvailableMiddleware {
@@ -22,7 +22,7 @@ export class PaymentAvailableMiddleware {
       Date.now() - new Date(userPaym.createdAt).getTime(),
     );
 
-    if (days > DAYS_IN_MONTH || userPaym.classes_left === NO_DEYS_LEFT) {
+    if (days > DAYS_IN_MONTH || userPaym.classes_left === NO_LEFT) {
       throw new HttpException(
         {
           message:

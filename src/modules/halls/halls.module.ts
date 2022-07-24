@@ -8,7 +8,6 @@ import { CoreJwtModule } from '@core/jwt.module';
 import { UsersModule } from '@usersModule/users.module';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { RequestService } from '@services/request.service';
-import { ExistsHallMiddleware } from './middlewares/existsHall.middleware';
 
 @Module({
   controllers: [HallsController],
@@ -23,8 +22,6 @@ import { ExistsHallMiddleware } from './middlewares/existsHall.middleware';
 })
 export class HallsModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('halls');
-
-    consumer.apply(ExistsHallMiddleware).forRoutes('halls/:id');
+    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
   }
 }

@@ -54,8 +54,6 @@ export class UnauthorizedMiddleware {
       [
         {
           message: ['Unauthorized!'],
-          problem_field: null,
-          name: 'Unauthorized Error',
         },
       ],
       HttpStatus.UNAUTHORIZED,

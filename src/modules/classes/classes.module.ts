@@ -24,8 +24,8 @@ import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
 })
 export class ClassesModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('classes');
+    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
 
-    consumer.apply(IsCoachMiddleware).forRoutes('classes');
+    consumer.apply(IsCoachMiddleware).forRoutes('*');
   }
 }

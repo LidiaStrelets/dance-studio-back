@@ -13,12 +13,14 @@ export class IsCoachMiddleware {
     }
 
     const userIsCoach = await this.usersService.isCoach(req.body.coach);
+
     if (!userIsCoach) {
       throw new HttpException(
         `Requested user is not a coach`,
         HttpStatus.BAD_REQUEST,
       );
     }
+
     next();
   }
 }

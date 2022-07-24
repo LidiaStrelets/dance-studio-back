@@ -15,6 +15,7 @@ import { ExistsRegistrationMiddleware } from './middlewares/existsRegistration.m
 import { PaymentAvailableMiddleware } from './middlewares/paymentAvailable.middleware';
 import { SpotsAvailableMiddleware } from './middlewares/spotsAvailable.middleware';
 import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
+import { Paths } from '@registrationsModule/types/types';
 
 @Module({
   controllers: [RegistrationsController],
@@ -29,26 +30,26 @@ import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 })
 export class RegistrationsModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('registrations');
+    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
 
     consumer
       .apply(AdminWithUserIdMiddleware)
-      .forRoutes({ path: 'registrations', method: RequestMethod.POST });
+      .forRoutes({ path: '*', method: RequestMethod.POST });
 
     consumer
       .apply(ExistsRegistrationMiddleware)
-      .forRoutes({ path: 'registrations', method: RequestMethod.POST });
+      .forRoutes({ path: '*', method: RequestMethod.POST });
 
     consumer
       .apply(PaymentAvailableMiddleware)
-      .forRoutes({ path: 'registrations', method: RequestMethod.POST });
+      .forRoutes({ path: '*', method: RequestMethod.POST });
 
     consumer
       .apply(SpotsAvailableMiddleware)
-      .forRoutes({ path: 'registrations', method: RequestMethod.POST });
+      .forRoutes({ path: '*', method: RequestMethod.POST });
 
     consumer
       .apply(DataOwnerOrAdminMiddleware)
-      .forRoutes('registrations/:regId', 'registrations/:userId');
+      .forRoutes(Paths.registrationId, Paths.clientId);
   }
 }

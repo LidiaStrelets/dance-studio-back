@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
@@ -51,6 +53,13 @@ export class PaymentsController {
   ): Promise<IPaymentResponce> {
     const price = await this.priceService.getById(dto.price_id);
 
+    if (!price) {
+      throw new HttpException(
+        { message: 'Price id is invalid', problem_field: 'price_id' },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const client_id = dto.user_id || this.requestServise.getUserId();
 
     const newPayment = await this.paymentsService.create(
@@ -85,6 +94,17 @@ export class PaymentsController {
     userId: string,
   ): Promise<IPaymentResponce[]> {
     const payments = await this.paymentsService.getAllByUser(userId);
+
+    if (payments.length < 1) {
+      throw new HttpException(
+        [
+          {
+            message: 'No payments for requested user',
+          },
+        ],
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     return payments.map((payment) => this.mapPaymentToResponce(payment));
   }

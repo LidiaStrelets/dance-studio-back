@@ -8,10 +8,8 @@ import { Price } from '@pricesModule/models/prices.model';
 import { PricesModule } from '@pricesModule/prices.module';
 import { UsersModule } from '@usersModule/users.module';
 import { RequestService } from '@services/request.service';
-import { ExistsPriceMiddleware } from './middlewares/existsPrice.middleware';
 import { AdminWithUserIdMiddleware } from '@middlewares/adminWithUserId.middleware';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
-import { ExistingUserMiddleware } from '@middlewares/existingUser.middleware';
 import { CoreJwtModule } from '@core/jwt.module';
 import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 
@@ -28,21 +26,15 @@ import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 })
 export class PaymentsModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('payments');
+    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
 
     consumer
       .apply(AdminWithUserIdMiddleware)
-      .forRoutes({ path: 'payments', method: RequestMethod.POST });
-
-    consumer.apply(ExistingUserMiddleware).forRoutes('payments');
+      .forRoutes({ path: '*', method: RequestMethod.POST });
 
     consumer
       .apply(DataOwnerOrAdminMiddleware)
-      .exclude({ path: 'payments', method: RequestMethod.POST })
-      .forRoutes('payments');
-
-    consumer
-      .apply(ExistsPriceMiddleware)
-      .forRoutes({ path: 'payments', method: RequestMethod.POST });
+      .exclude({ path: '*', method: RequestMethod.POST })
+      .forRoutes('*');
   }
 }
