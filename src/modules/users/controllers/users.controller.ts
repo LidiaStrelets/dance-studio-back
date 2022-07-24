@@ -25,7 +25,11 @@ import { User } from '@usersModule/models/users.model';
 import { EUpdateUser, IUserResponce } from '@usersModule/types/types';
 import { UpdateRoleDto } from '@usersModule/dto/update-role.dto';
 import { BodyValidPipe } from '@pipes/bodyValid.pipe';
-import { ResponceDescription, UpdateResponce } from '@core/types';
+import {
+  ResponceDescription,
+  TUpdateResponce,
+  UpdateResponce,
+} from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
 
@@ -44,7 +48,10 @@ export class UsersController {
   @Get()
   public async getAll(): Promise<IUserResponce[]> {
     const users = await this.userService.getAll();
-    return users.map((user) => this.mapUserToResponce(user));
+
+    return users.map((user) => {
+      return this.mapUserToResponce(user);
+    });
   }
 
   @ApiOperation({
@@ -81,7 +88,9 @@ export class UsersController {
   @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Patch('/updateRole')
-  public async updateRole(@Body() dto: UpdateRoleDto): Promise<string> {
+  public async updateRole(
+    @Body() dto: UpdateRoleDto,
+  ): Promise<TUpdateResponce> {
     const updatedUser = await this.userService.updateRole(dto);
 
     return updatedUser.length >= 1
@@ -108,7 +117,7 @@ export class UsersController {
       }),
     )
     id: string,
-  ): Promise<string> {
+  ): Promise<TUpdateResponce> {
     const updatedUser = await this.userService.update(dto, id);
 
     return updatedUser.length >= 1

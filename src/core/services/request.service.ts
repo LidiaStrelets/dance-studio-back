@@ -1,23 +1,24 @@
+import { TRoles } from '@core/types';
 import { Injectable, Scope } from '@nestjs/common';
 
 @Injectable({ scope: Scope.REQUEST })
 export class RequestService {
   private userId: string;
-  private userRole: string;
+  private userRole: TRoles;
 
-  public setUserId(id: string) {
+  public setUserId(id: string): void {
     this.userId = id;
   }
 
-  public getUserId() {
+  public getUserId(): string {
     return this.userId;
   }
 
-  public setUserRole(role: string) {
+  public setUserRole(role: TRoles): void {
     this.userRole = role;
   }
 
-  public getUserRole() {
+  public getUserRole(): TRoles {
     return this.userRole;
   }
 }

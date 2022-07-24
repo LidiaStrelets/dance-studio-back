@@ -1,6 +1,8 @@
+import { TRoles } from '@core/types';
+
 export interface IToken {
   email: string;
-  role: string;
+  role: TRoles;
   id: string;
 }
 

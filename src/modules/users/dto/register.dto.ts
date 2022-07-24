@@ -55,7 +55,7 @@ export class RegisterDto extends BaseEntity {
     example: Dto.birthDateExample,
     description: Dto.birthDateDescription,
   })
-  readonly birth_date: DateDataType | null;
+  readonly birth_date?: DateDataType | null;
 
   @IsOptional()
   @IsString()
@@ -63,7 +63,7 @@ export class RegisterDto extends BaseEntity {
     example: Dto.informationExample,
     description: Dto.informationDescription,
   })
-  readonly information: string | null;
+  readonly information?: string | null;
 
   @IsOptional()
   @IsString()
@@ -71,5 +71,5 @@ export class RegisterDto extends BaseEntity {
     example: Dto.keyExample,
     description: Dto.keyDescription,
   })
-  readonly adminKey: string | null;
+  readonly adminKey?: string | null;
 }

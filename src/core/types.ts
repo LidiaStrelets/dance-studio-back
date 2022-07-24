@@ -31,3 +31,5 @@ export enum UpdateResponce {
   success = 'success',
   error = 'error',
 }
+
+export type TUpdateResponce = 'success' | 'error';

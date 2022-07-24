@@ -2,7 +2,6 @@ import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CoreJwtModule } from '@core/jwt.module';
 import { Class } from '@classesModule/models/classes.model';
-import { ClassesModule } from '@classesModule/classes.module';
 import { Payment } from '@paymentsModule/models/payments.model';
 import { Registration } from '@registrationsModule/models/registrations.model';
 import { UsersController } from '@usersModule/controllers/users.controller';
@@ -18,7 +17,6 @@ import { Path } from '@usersModule/types/types';
   providers: [UsersService, RequestService],
   imports: [
     SequelizeModule.forFeature([User, Class, Payment, Registration]),
-    ClassesModule,
     CoreJwtModule,
   ],
   exports: [UsersService],
