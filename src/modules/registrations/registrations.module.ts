@@ -30,23 +30,23 @@ import { Paths } from '@registrationsModule/types/types';
 })
 export class RegistrationsModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
+    consumer.apply(UnauthorizedMiddleware).forRoutes(Paths.root);
 
     consumer
       .apply(AdminWithUserIdMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.POST });
+      .forRoutes({ path: Paths.root, method: RequestMethod.POST });
 
     consumer
       .apply(ExistsRegistrationMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.POST });
+      .forRoutes({ path: Paths.root, method: RequestMethod.POST });
 
     consumer
       .apply(PaymentAvailableMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.POST });
+      .forRoutes({ path: Paths.root, method: RequestMethod.POST });
 
     consumer
       .apply(SpotsAvailableMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.POST });
+      .forRoutes({ path: Paths.root, method: RequestMethod.POST });
 
     consumer
       .apply(DataOwnerOrAdminMiddleware)

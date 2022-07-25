@@ -8,6 +8,7 @@ import { CoreJwtModule } from '@core/jwt.module';
 import { UsersModule } from '@usersModule/users.module';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { RequestService } from '@services/request.service';
+import { Paths } from '@hallsModule/types/types';
 
 @Module({
   controllers: [HallsController],
@@ -22,6 +23,6 @@ import { RequestService } from '@services/request.service';
 })
 export class HallsModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
+    consumer.apply(UnauthorizedMiddleware).forRoutes(Paths.root);
   }
 }

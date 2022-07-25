@@ -23,3 +23,7 @@ export enum Dto {
   descriptionDescription = 'Describes what the class allows',
   idDescription = 'Unique class id',
 }
+
+export enum Paths {
+  root = 'classes',
+}

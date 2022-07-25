@@ -19,4 +19,5 @@ export enum Dto {
 
 export enum Path {
   withId = 'schedules/:id',
+  root = 'schedules',
 }

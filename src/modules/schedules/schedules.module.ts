@@ -28,8 +28,8 @@ import { Path } from '@schedulesModule/types/types';
 })
 export class SchedulesModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
+    consumer.apply(UnauthorizedMiddleware).forRoutes(Path.root);
 
-    consumer.apply(IsCoachMiddleware).exclude(Path.withId).forRoutes('*');
+    consumer.apply(IsCoachMiddleware).exclude(Path.withId).forRoutes(Path.root);
   }
 }

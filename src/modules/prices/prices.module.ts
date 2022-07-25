@@ -8,6 +8,7 @@ import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { RequestService } from '@services/request.service';
 import { CoreJwtModule } from '@core/jwt.module';
 import { UsersModule } from '@usersModule/users.module';
+import { Paths } from '@pricesModule/types/types';
 
 @Module({
   controllers: [PricesController],
@@ -22,6 +23,6 @@ import { UsersModule } from '@usersModule/users.module';
 })
 export class PricesModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
+    consumer.apply(UnauthorizedMiddleware).forRoutes(Paths.root);
   }
 }

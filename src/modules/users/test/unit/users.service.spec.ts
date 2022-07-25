@@ -1,7 +1,7 @@
 import { Model } from 'sequelize-mock';
 import { Test } from '@nestjs/testing';
 import { UsersService } from '@usersModule/services/users.service';
-import { createUserData } from './data/createUser.data';
+import { createUserData } from '@usersModule/test/data/createUser.data';
 
 describe('UsersService', () => {
   let usersService: UsersService;

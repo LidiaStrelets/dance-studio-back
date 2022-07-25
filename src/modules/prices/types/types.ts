@@ -11,3 +11,7 @@ export enum Dto {
   priceExample = 1200.0,
   priceDescription = 'The price of classes',
 }
+
+export enum Paths {
+  root = 'prices',
+}

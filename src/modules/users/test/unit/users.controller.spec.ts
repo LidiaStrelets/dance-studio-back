@@ -4,9 +4,9 @@ import { RequestService } from '@services/request.service';
 import { UsersController } from '@usersModule/controllers/users.controller';
 import { UsersService } from '@usersModule/services/users.service';
 import { IUserResponce } from '@usersModule/types/types';
-import { mappedUserData } from './data/mapped.user.data';
-import { updateRoleData } from './data/updateRole.data';
-import { userData } from './data/user.data';
+import { mappedUserData } from '../data/mapped.user.data';
+import { updateRoleData } from '../data/updateRole.data';
+import { userData } from '../data/user.data';
 
 jest.mock('@usersModule/services/users.service');
 jest.mock('@core/services/request.service');

@@ -10,6 +10,7 @@ import { CoreJwtModule } from '@core/jwt.module';
 import { RequestService } from '@services/request.service';
 import { UsersModule } from '@usersModule/users.module';
 import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
+import { Paths } from '@classesModule/types/types';
 
 @Module({
   controllers: [ClassesController],
@@ -24,8 +25,8 @@ import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
 })
 export class ClassesModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
+    consumer.apply(UnauthorizedMiddleware).forRoutes(Paths.root);
 
-    consumer.apply(IsCoachMiddleware).forRoutes('*');
+    consumer.apply(IsCoachMiddleware).forRoutes(Paths.root);
   }
 }

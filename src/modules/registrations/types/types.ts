@@ -7,4 +7,5 @@ export interface IRegistrationResponce {
 export enum Paths {
   registrationId = 'registrations/:regId',
   clientId = 'registrations/:userId',
+  root = 'registrations',
 }

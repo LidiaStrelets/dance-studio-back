@@ -40,4 +40,5 @@ export enum Dto {
 
 export enum Path {
   withId = 'users/:userId',
+  root = 'users',
 }

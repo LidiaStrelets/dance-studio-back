@@ -6,3 +6,7 @@ export interface IPaymentResponce {
 }
 
 export const CLASSES_FIELD = 'classes_left';
+
+export enum Paths {
+  root = 'Payments',
+}

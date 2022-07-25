@@ -1,9 +1,6 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CoreJwtModule } from '@core/jwt.module';
-import { Class } from '@classesModule/models/classes.model';
-import { Payment } from '@paymentsModule/models/payments.model';
-import { Registration } from '@registrationsModule/models/registrations.model';
 import { UsersController } from '@usersModule/controllers/users.controller';
 import { User } from '@usersModule/models/users.model';
 import { UsersService } from '@usersModule/services/users.service';
@@ -15,15 +12,12 @@ import { Path } from '@usersModule/types/types';
 @Module({
   controllers: [UsersController],
   providers: [UsersService, RequestService],
-  imports: [
-    SequelizeModule.forFeature([User, Class, Payment, Registration]),
-    CoreJwtModule,
-  ],
+  imports: [SequelizeModule.forFeature([User]), CoreJwtModule],
   exports: [UsersService],
 })
 export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UnauthorizedMiddleware).forRoutes('*');
+    consumer.apply(UnauthorizedMiddleware).forRoutes(Path.root);
 
     consumer
       .apply(DataOwnerOrAdminMiddleware)

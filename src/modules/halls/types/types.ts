@@ -14,3 +14,7 @@ export enum Dto {
   poleAmountDescription = 'Poles available for the hall',
   idDescription = 'Unique hall id',
 }
+
+export enum Paths {
+  root = 'halls',
+}
