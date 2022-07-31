@@ -1,4 +1,3 @@
-import { UUID_EXAMPLE } from '@core/constants';
 import { Roles } from '@core/types';
 import { User } from '@usersModule/models/users.model';
 import { Dto } from '@usersModule/types/types';

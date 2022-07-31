@@ -19,7 +19,13 @@ export class UsersService {
     return this.userRepo.update({ role }, { where: { id } });
   }
 
-  public findByEmail(email: string): Promise<User> {
+  public async findByEmail(email: string): Promise<User> {
+    const user = await this.userRepo.findOne({
+      where: { email },
+    });
+
+    console.log('USER', user);
+
     return this.userRepo.findOne({
       where: { email },
     });
