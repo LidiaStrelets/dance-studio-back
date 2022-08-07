@@ -59,12 +59,4 @@ export class UpdateUserDto {
     description: Dto.informationDescription,
   })
   readonly information?: string | null;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty({
-    example: Dto.keyExample,
-    description: Dto.keyDescription,
-  })
-  readonly adminKey?: string | null;
 }
