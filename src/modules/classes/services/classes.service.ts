@@ -17,7 +17,7 @@ export class ClassesService {
     return this.classRepo.findByPk(id);
   }
 
-  public getByCoach(id: string) {
+  public getByCoach(id: string): Promise<Class[]> {
     return this.classRepo.findAll({ where: { coach: id } });
   }
 

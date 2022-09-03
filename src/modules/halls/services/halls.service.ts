@@ -31,7 +31,7 @@ export class HallsService {
     return hall.poles_amount;
   }
 
-  public getById(id: string) {
+  public getById(id: string): Promise<Hall> {
     return this.hallRepo.findByPk(id);
   }
 }

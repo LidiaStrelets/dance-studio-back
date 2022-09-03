@@ -15,7 +15,10 @@ export class UsersService {
     return this.userRepo.create({ ...dto, ...BaseFields });
   }
 
-  public updateRole({ role, userId: id }: UpdateRoleDto) {
+  public updateRole({
+    role,
+    userId: id,
+  }: UpdateRoleDto): Promise<[affectedCount: number]> {
     return this.userRepo.update({ role }, { where: { id } });
   }
 

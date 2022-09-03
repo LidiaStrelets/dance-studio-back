@@ -29,7 +29,7 @@ export class AuthController {
   @ApiOkResponse({ description: TOKEN_EXAMPLE })
   @ApiUnauthorizedResponse({ description: ResponceDescription.credentials })
   @Post('/login')
-  public async login(@Body() dto: LoginDto) {
+  public async login(@Body() dto: LoginDto): Promise<string> {
     const user = await this.usersService.findByEmail(dto.email);
 
     return this.signToken(user);
