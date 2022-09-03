@@ -21,7 +21,7 @@ export class ClassesService {
     return this.classRepo.findAll({ where: { coach: id } });
   }
 
-  public async update(
+  public update(
     data: UpdateClassDto,
     id: string,
   ): Promise<[affectedCount: number]> {

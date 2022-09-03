@@ -18,7 +18,7 @@ export class HallsService {
     return this.hallRepo.create({ ...dto, ...BaseFields });
   }
 
-  public async update(
+  public update(
     data: UpdateHallDto,
     id: string,
   ): Promise<[affectedCount: number]> {

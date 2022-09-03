@@ -21,7 +21,7 @@ export class PricesService {
     return this.priceRepo.findAll();
   }
 
-  public async update(
+  public update(
     data: UpdatePriceDto,
     id: string,
   ): Promise<[affectedCount: number]> {

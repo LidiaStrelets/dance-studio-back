@@ -11,11 +11,11 @@ import { BaseFields } from '@core/baseEntity';
 export class UsersService {
   constructor(@InjectModel(User) private userRepo: typeof User) {}
 
-  public async registrate(dto: RegisterDto): Promise<User> {
+  public registrate(dto: RegisterDto): Promise<User> {
     return this.userRepo.create({ ...dto, ...BaseFields });
   }
 
-  public async updateRole({ role, userId: id }: UpdateRoleDto) {
+  public updateRole({ role, userId: id }: UpdateRoleDto) {
     return this.userRepo.update({ role }, { where: { id } });
   }
 
@@ -45,7 +45,7 @@ export class UsersService {
     return user.role === RolesEnum.coach;
   }
 
-  public async update(
+  public update(
     data: UpdateUserDto,
     id: string,
   ): Promise<[affectedCount: number]> {

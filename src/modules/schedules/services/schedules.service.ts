@@ -25,15 +25,15 @@ export class SchedulesService {
     return this.scheduleRepo.findByPk(id);
   }
 
-  public async decreaseAvailableSpots(id: string): Promise<Schedule> {
+  public decreaseAvailableSpots(id: string): Promise<Schedule> {
     return this.scheduleRepo.decrement(PLACES_FIELD, { by: 1, where: { id } });
   }
 
-  public async increaseAvailableSpots(id: string): Promise<Schedule> {
+  public increaseAvailableSpots(id: string): Promise<Schedule> {
     return this.scheduleRepo.increment(PLACES_FIELD, { by: 1, where: { id } });
   }
 
-  public async update(
+  public update(
     data: UpdateScheduleDto,
     id: string,
   ): Promise<[affectedCount: number]> {

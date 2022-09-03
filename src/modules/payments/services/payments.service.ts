@@ -32,11 +32,11 @@ export class PaymentsService {
     });
   }
 
-  public async decreaseAvailableClasses(id: string): Promise<Payment> {
+  public decreaseAvailableClasses(id: string): Promise<Payment> {
     return this.paymentRepo.decrement(CLASSES_FIELD, { by: 1, where: { id } });
   }
 
-  public async increaseAvailableClasses(id: string): Promise<Payment> {
+  public increaseAvailableClasses(id: string): Promise<Payment> {
     return this.paymentRepo.increment(CLASSES_FIELD, { by: 1, where: { id } });
   }
 }
