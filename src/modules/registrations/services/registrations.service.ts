@@ -27,11 +27,14 @@ export class RegistrationsService {
     });
   }
 
-  public findById(id: string): Promise<Registration> {
+  public getById(id: string): Promise<Registration> {
     return this.registrationRepo.findByPk(id);
   }
 
-  public find(client_id: string, schedule_id: string): Promise<Registration> {
+  public findByClientAndSchedule(
+    client_id: string,
+    schedule_id: string,
+  ): Promise<Registration> {
     return this.registrationRepo.findOne({
       where: { client_id, schedule_id },
     });

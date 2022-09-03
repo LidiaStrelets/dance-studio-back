@@ -103,9 +103,7 @@ export class RegistrationsController {
     )
     regId: string,
   ): Promise<number> {
-    const existingRegistration = await this.registrationsService.findById(
-      regId,
-    );
+    const existingRegistration = await this.registrationsService.getById(regId);
 
     const userPaym = await this.paymentService.getLastByUser(
       existingRegistration.client_id,

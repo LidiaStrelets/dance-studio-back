@@ -45,7 +45,7 @@ export class AuthController {
   })
   @Post('/registration')
   public async register(@Body() dto: RegisterDto): Promise<string> {
-    const password = await this.authService.hashedPassword(dto.password);
+    const password = await this.authService.hashPassword(dto.password);
 
     const user = await this.usersService.registrate({ ...dto, password });
 

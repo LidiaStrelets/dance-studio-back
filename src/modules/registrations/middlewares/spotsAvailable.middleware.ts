@@ -8,7 +8,7 @@ export class SpotsAvailableMiddleware {
   constructor(private scheduleService: SchedulesService) {}
 
   async use({ body: { schedule_id } }: Request, _, next: NextFunction) {
-    const scheduleItem = await this.scheduleService.get(schedule_id);
+    const scheduleItem = await this.scheduleService.getById(schedule_id);
 
     if (scheduleItem.places_left === NO_LEFT) {
       throw new HttpException(

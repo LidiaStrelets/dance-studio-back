@@ -3,7 +3,7 @@ import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
-  public async hashedPassword(password: string): Promise<string> {
+  public async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt();
 
     return bcrypt.hash(password, salt);

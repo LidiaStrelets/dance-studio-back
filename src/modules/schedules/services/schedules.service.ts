@@ -21,7 +21,7 @@ export class SchedulesService {
     });
   }
 
-  public get(id: string): Promise<Schedule> {
+  public getById(id: string): Promise<Schedule> {
     return this.scheduleRepo.findByPk(id);
   }
 
