@@ -42,7 +42,7 @@ export class HallsController {
   @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Post()
-  public async ceate(@Body() dto: CreateHallDto): Promise<IHallResponce> {
+  public async create(@Body() dto: CreateHallDto): Promise<IHallResponce> {
     const newHall = await this.hallService.create(dto);
 
     return this.mapHallToResponce(newHall);

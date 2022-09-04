@@ -43,7 +43,7 @@ export class PricesController {
   @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Post()
-  public async ceate(@Body() dto: CreatePriceDto): Promise<IPriceResponce> {
+  public async create(@Body() dto: CreatePriceDto): Promise<IPriceResponce> {
     const newPrice = await this.pricesService.create(dto);
 
     return this.mapPriceToResponce(newPrice);
