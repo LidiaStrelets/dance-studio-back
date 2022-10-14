@@ -10,6 +10,8 @@ const PORT = process.env.PORT || 3000;
 async function startServer() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors();
+
   const config = new DocumentBuilder()
     .setTitle('Dance studio')
     .setDescription('The dance studio api description')

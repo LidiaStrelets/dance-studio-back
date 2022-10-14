@@ -32,11 +32,15 @@ export class PaymentsService {
     });
   }
 
-  public decreaseAvailableClasses(id: string): Promise<Payment> {
+  public decreaseAvailableClasses(
+    id: string,
+  ): Promise<[affectedRows: Payment[], affectedCount?: number]> {
     return this.paymentRepo.decrement(CLASSES_FIELD, { by: 1, where: { id } });
   }
 
-  public increaseAvailableClasses(id: string): Promise<Payment> {
+  public increaseAvailableClasses(
+    id: string,
+  ): Promise<[affectedRows: Payment[], affectedCount?: number]> {
     return this.paymentRepo.increment(CLASSES_FIELD, { by: 1, where: { id } });
   }
 }

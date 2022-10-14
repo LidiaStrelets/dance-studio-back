@@ -26,4 +26,28 @@ export class UpdateHallDto {
     description: Dto.poleAmountDescription as string,
   })
   readonly poles_amount: number;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: Dto.nameUkExample,
+    description: Dto.nameDescription as string,
+  })
+  readonly nameUk: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: Dto.descriptionUkExample,
+    description: Dto.descriptionDescription as string,
+  })
+  readonly descriptionUk: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: Dto.pictureExample,
+    description: Dto.pictureDescription as string,
+  })
+  readonly picture: string;
 }

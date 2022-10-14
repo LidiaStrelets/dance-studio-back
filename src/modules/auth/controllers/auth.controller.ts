@@ -1,4 +1,11 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Inject,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
   ApiBadRequestResponse,
@@ -14,6 +21,7 @@ import { UsersService } from '@usersModule/services/users.service';
 import { AuthService } from '@authModule/services/auth.service';
 import { JWT_SERVICE, TOKEN_EXAMPLE } from '@core/constants';
 import { ResponceDescription } from '@core/types';
+import { Response } from 'express';
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -29,10 +37,15 @@ export class AuthController {
   @ApiOkResponse({ description: TOKEN_EXAMPLE })
   @ApiUnauthorizedResponse({ description: ResponceDescription.credentials })
   @Post('/login')
-  public async login(@Body() dto: LoginDto): Promise<string> {
+  public async login(
+    @Body() dto: LoginDto,
+    @Res() res: Response,
+  ): Promise<Response> {
     const user = await this.usersService.findByEmail(dto.email);
 
-    return this.signToken(user);
+    return res
+      .status(HttpStatus.CREATED)
+      .send({ data: { token: this.signToken(user) } });
   }
 
   @ApiOperation({ summary: 'Register user' })
@@ -44,12 +57,17 @@ export class AuthController {
     description: ResponceDescription.adinKey,
   })
   @Post('/registration')
-  public async register(@Body() dto: RegisterDto): Promise<string> {
+  public async register(
+    @Body() dto: RegisterDto,
+    @Res() res: Response,
+  ): Promise<Response> {
     const password = await this.authService.hashPassword(dto.password);
 
     const user = await this.usersService.registrate({ ...dto, password });
 
-    return this.signToken(user);
+    return res
+      .status(HttpStatus.CREATED)
+      .send({ data: { token: this.signToken(user) } });
   }
 
   private signToken({ email, role, id }: User): string {

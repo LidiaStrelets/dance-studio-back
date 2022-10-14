@@ -14,6 +14,10 @@ export interface HallUpdate {
 export class HallsService {
   constructor(@InjectModel(Hall) private hallRepo: typeof Hall) {}
 
+  public get(): Promise<Hall[]> {
+    return this.hallRepo.findAll();
+  }
+
   public create(dto: CreateHallDto): Promise<Hall> {
     return this.hallRepo.create({ ...dto, ...BaseFields });
   }

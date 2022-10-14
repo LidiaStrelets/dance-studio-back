@@ -30,6 +30,25 @@ export class Hall extends Model<Hall, HallCreationAttrs> {
   description: string;
 
   @Column({
+    type: DataType.STRING,
+    unique: true,
+    allowNull: false,
+  })
+  nameUk: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  descriptionUk: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  picture: string;
+
+  @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -31,6 +32,21 @@ import { throwUuidException } from '@core/util';
 @Controller('halls')
 export class HallsController {
   constructor(private hallService: HallsService) {}
+
+  @ApiOperation({ summary: 'Get halls' })
+  @ApiOkResponse({ type: CreateHallDto })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @ApiBearerAuth()
+  @Get()
+  public async get(): Promise<IHallResponce[]> {
+    const halls = await this.hallService.get();
+
+    const mapped = halls.map((hall) => this.mapHallToResponce(hall));
+
+    return mapped;
+  }
 
   @ApiOperation({ summary: 'Create hall' })
   @ApiOkResponse({ type: CreateHallDto })
@@ -81,12 +97,18 @@ export class HallsController {
     description,
     poles_amount,
     id,
+    nameUk,
+    descriptionUk,
+    picture,
   }: Hall): IHallResponce {
     return {
       name,
+      nameUk,
       description,
+      descriptionUk,
       poles_amount,
       id,
+      picture,
     };
   }
 }

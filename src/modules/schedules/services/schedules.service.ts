@@ -25,11 +25,15 @@ export class SchedulesService {
     return this.scheduleRepo.findByPk(id);
   }
 
-  public decreaseAvailableSpots(id: string): Promise<Schedule> {
+  public decreaseAvailableSpots(
+    id: string,
+  ): Promise<[affectedRows: Schedule[], affectedCount?: number]> {
     return this.scheduleRepo.decrement(PLACES_FIELD, { by: 1, where: { id } });
   }
 
-  public increaseAvailableSpots(id: string): Promise<Schedule> {
+  public increaseAvailableSpots(
+    id: string,
+  ): Promise<[affectedRows: Schedule[], affectedCount?: number]> {
     return this.scheduleRepo.increment(PLACES_FIELD, { by: 1, where: { id } });
   }
 

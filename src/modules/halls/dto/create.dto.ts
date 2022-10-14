@@ -18,6 +18,27 @@ export class CreateHallDto extends BaseEntity {
   })
   readonly description: string;
 
+  @IsString()
+  @ApiProperty({
+    example: Dto.nameUkExample,
+    description: Dto.nameDescription as string,
+  })
+  readonly nameUk: string;
+
+  @IsString()
+  @ApiProperty({
+    example: Dto.descriptionUkExample,
+    description: Dto.descriptionDescription as string,
+  })
+  readonly descriptionUk: string;
+
+  @IsString()
+  @ApiProperty({
+    example: Dto.pictureExample,
+    description: Dto.pictureDescription as string,
+  })
+  readonly picture: string;
+
   @IsInt()
   @ApiProperty({
     example: Dto.poleAmountExample,

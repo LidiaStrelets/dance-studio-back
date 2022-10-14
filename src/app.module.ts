@@ -11,6 +11,8 @@ import { PaymentsModule } from '@paymentsModule/payments.module';
 import { RegistrationsModule } from '@registrationsModule/registrations.module';
 import { CoreJwtModule } from '@core/jwt.module';
 import { RequestService } from '@services/request.service';
+import { ServeStaticModule } from '@nestjs/serve-static/dist/serve-static.module';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -26,6 +28,9 @@ import { RequestService } from '@services/request.service';
       database: process.env.POSTGRES_DATABASE,
       autoLoadModels: true,
       synchronize: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'images'),
     }),
     UsersModule,
     AuthModule,
