@@ -1,7 +1,6 @@
 import { Roles } from '@core/types';
 import { User } from '@usersModule/models/users.model';
 import { Dto } from '@usersModule/types/types';
-import sequelize from 'sequelize';
 
 export const createUserData = (): User =>
   ({
@@ -9,7 +8,7 @@ export const createUserData = (): User =>
     firstname: Dto.nameExample,
     lastname: Dto.lastNameExample,
     password: Dto.passwordExample,
-    birth_date: new sequelize.DATE(),
+    birth_date: Dto.dateExample,
     information: Dto.informationExample,
     role: Roles.client,
   } as User);

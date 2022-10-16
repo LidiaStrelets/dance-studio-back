@@ -7,9 +7,10 @@ interface UserCreationAttrs {
   password: string;
   firstname: string;
   lastname: string;
-  birth_date: DateDataType | null;
+  birth_date: string;
   information: string | null;
   id: string;
+  photo: string;
 }
 
 @Table({ tableName: 'users' })
@@ -50,13 +51,19 @@ export class User extends Model<User, UserCreationAttrs> {
     type: DataType.DATE,
     allowNull: true,
   })
-  birth_date: DateDataType;
+  birth_date: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
   information: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  photo: string;
 
   @Column({
     type: DataType.STRING,

@@ -2,9 +2,12 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Patch,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -32,6 +35,7 @@ import {
 } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
+import { Response } from 'express';
 
 @ApiTags('Users')
 @Controller('users')
@@ -65,8 +69,6 @@ export class UsersController {
   @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Get('/:userId')
-  @Roles(RolesEnum.admin, RolesEnum.client)
-  @UseGuards(RolesGuard)
   public async getById(
     @Param(
       'userId',
@@ -117,12 +119,24 @@ export class UsersController {
       }),
     )
     id: string,
-  ): Promise<TUpdateResponce> {
+    @Res() res: Response,
+  ) {
     const updatedUser = await this.userService.update(dto, id);
 
-    return updatedUser.length >= 1
-      ? UpdateResponce.success
-      : UpdateResponce.error;
+    if (updatedUser.length !== 1) {
+      throw new HttpException(
+        [
+          {
+            message: [
+              'Requested user not found or duplicated - check the user id',
+            ],
+          },
+        ],
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return res.status(HttpStatus.OK).send();
   }
 
   private mapUserToResponce({
@@ -133,6 +147,7 @@ export class UsersController {
     information,
     id,
     role,
+    photo,
   }: User): IUserResponce {
     return {
       email,
@@ -142,6 +157,7 @@ export class UsersController {
       information,
       id,
       role,
+      photo,
     };
   }
 }

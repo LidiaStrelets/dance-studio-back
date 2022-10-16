@@ -16,7 +16,7 @@ export const UserMock = DBConnectionMock.define(
     password: Dto.passwordExample,
     firstname: Dto.nameExample,
     lastname: Dto.lastNameExample,
-    birth_date: new sequelize.DATE(),
+    birth_date: Dto.dateExample,
     information: Dto.informationExample,
     role: Roles.client,
   },

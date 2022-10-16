@@ -1,6 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
+  Headers,
+  HttpException,
   HttpStatus,
   Inject,
   Post,
@@ -9,6 +12,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -19,7 +23,7 @@ import { RegisterDto } from '@usersModule/dto/register.dto';
 import { User } from '@usersModule/models/users.model';
 import { UsersService } from '@usersModule/services/users.service';
 import { AuthService } from '@authModule/services/auth.service';
-import { JWT_SERVICE, TOKEN_EXAMPLE } from '@core/constants';
+import { JWT_SERVICE, TOKEN_EXAMPLE, UUID_EXAMPLE } from '@core/constants';
 import { ResponceDescription } from '@core/types';
 import { Response } from 'express';
 
@@ -68,6 +72,35 @@ export class AuthController {
     return res
       .status(HttpStatus.CREATED)
       .send({ data: { token: this.signToken(user) } });
+  }
+
+  @ApiOperation({
+    summary: 'Get current user id from token',
+  })
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: UUID_EXAMPLE })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @Get('/currentId')
+  public getIdFromToken(
+    @Headers('Authorization') auth: string,
+    @Res() res: Response,
+  ) {
+    const id = this.authService.getIdFromToken(auth);
+
+    if (!id) {
+      throw new HttpException(
+        [
+          {
+            message: ['Invalid token!'],
+          },
+        ],
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return res.status(HttpStatus.OK).send({ data: { id } });
   }
 
   private signToken({ email, role, id }: User): string {

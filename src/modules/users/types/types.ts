@@ -1,13 +1,12 @@
-import { DateDataType } from 'sequelize/types';
-
 export interface IUserResponce {
   email: string;
   firstname: string;
   lastname: string;
-  birth_date: DateDataType | null;
-  information: string | null;
+  birth_date?: string;
+  information?: string;
   id: string;
   role: string;
+  photo?: string;
 }
 
 export enum EUpdateUser {
@@ -15,6 +14,8 @@ export enum EUpdateUser {
   lastname,
   birth_date,
   information,
+  photo,
+  email,
 }
 
 export enum Dto {
@@ -36,9 +37,11 @@ export enum Dto {
   informationDescription = `Here you can attach some additional information about uuser`,
   keyExample = 'jgvjkb76cghvh',
   keyDescription = `Here you can attach your admin key`,
+  dateExample = '12-12-2021',
 }
 
 export enum Path {
   withId = 'users/:userId',
   root = 'users',
+  currentId = 'users/currentId',
 }

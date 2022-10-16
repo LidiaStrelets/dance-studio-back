@@ -1,14 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Roles, TRoles } from '@core/types';
-import {
-  IsDateString,
-  IsEmail,
-  IsIn,
-  IsOptional,
-  IsString,
-  Length,
-} from 'class-validator';
-import { DateDataType } from 'sequelize/types';
+import { IsEmail, IsIn, IsOptional, IsString, Length } from 'class-validator';
 import { BaseEntity } from '@core/baseEntity';
 import { Dto } from '@usersModule/types/types';
 
@@ -48,22 +40,6 @@ export class RegisterDto extends BaseEntity {
     description: Dto.roleDescription,
   })
   readonly role: TRoles;
-
-  @IsOptional()
-  @IsDateString()
-  @ApiProperty({
-    example: Dto.birthDateExample,
-    description: Dto.birthDateDescription,
-  })
-  readonly birth_date?: DateDataType | null;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty({
-    example: Dto.informationExample,
-    description: Dto.informationDescription,
-  })
-  readonly information?: string | null;
 
   @IsOptional()
   @IsString()
