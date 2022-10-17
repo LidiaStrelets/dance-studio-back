@@ -7,8 +7,11 @@ import {
   Param,
   ParseUUIDPipe,
   Patch,
+  Post,
   Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -36,6 +39,9 @@ import {
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
 import { Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @ApiTags('Users')
 @Controller('users')
@@ -56,6 +62,59 @@ export class UsersController {
     return users.map((user) => {
       return this.mapUserToResponce(user);
     });
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Upload user photo' })
+  @ApiOkResponse({ description: ResponceDescription.update })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @UseInterceptors(
+    FileInterceptor('thumbnail', {
+      storage: diskStorage({
+        destination: './images',
+        filename: (req, file, callback) => {
+          const filename = `${req.params.userId}-${Date.now()}`;
+          const fileExt = extname(file.originalname);
+
+          const name = filename + fileExt;
+          callback(null, name);
+        },
+      }),
+    }),
+  )
+  @Post('/:userId/photo')
+  public async savePhoto(
+    @Param(
+      'userId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    id: string,
+    @Res() res: Response,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const updatedUser = await this.userService.update(
+      { photo: `http://localhost:5555/${file.filename}` },
+      id,
+    );
+
+    if (updatedUser.length !== 1) {
+      throw new HttpException(
+        [
+          {
+            message: [
+              'Requested user not found or duplicated - check the user id',
+            ],
+          },
+        ],
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return res.status(HttpStatus.OK).send();
   }
 
   @ApiOperation({
@@ -106,9 +165,6 @@ export class UsersController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
-  @Roles(RolesEnum.admin, RolesEnum.client)
-  @UseGuards(RolesGuard)
   @Patch('/:userId')
   public async update(
     @Body(new BodyValidPipe(EUpdateUser)) dto: UpdateUserDto,
