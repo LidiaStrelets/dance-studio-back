@@ -96,12 +96,12 @@ export class UsersController {
     @Res() res: Response,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const updatedUser = await this.userService.update(
+    const [updatedNumber, updatedItems] = await this.userService.update(
       { photo: `http://localhost:5555/${file.filename}` },
       id,
     );
 
-    if (updatedUser.length !== 1) {
+    if (updatedNumber !== 1) {
       throw new HttpException(
         [
           {
@@ -114,7 +114,9 @@ export class UsersController {
       );
     }
 
-    return res.status(HttpStatus.OK).send();
+    return res.status(HttpStatus.OK).send({
+      user: updatedItems[0],
+    });
   }
 
   @ApiOperation({
@@ -177,9 +179,12 @@ export class UsersController {
     id: string,
     @Res() res: Response,
   ) {
-    const updatedUser = await this.userService.update(dto, id);
+    const [updatedNumber, UpdatedItems] = await this.userService.update(
+      dto,
+      id,
+    );
 
-    if (updatedUser.length !== 1) {
+    if (updatedNumber !== 1) {
       throw new HttpException(
         [
           {
@@ -192,7 +197,9 @@ export class UsersController {
       );
     }
 
-    return res.status(HttpStatus.OK).send();
+    return res.status(HttpStatus.OK).send({
+      user: UpdatedItems[0],
+    });
   }
 
   private mapUserToResponce({

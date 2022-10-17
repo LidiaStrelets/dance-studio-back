@@ -49,7 +49,7 @@ export class UsersService {
   public update(
     data: UpdateUserDto,
     id: string,
-  ): Promise<[affectedCount: number]> {
-    return this.userRepo.update(data, { where: { id } });
+  ): Promise<[affectedCount: number, affectedRows: User[]]> {
+    return this.userRepo.update(data, { where: { id }, returning: true });
   }
 }
