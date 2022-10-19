@@ -43,13 +43,21 @@ export class UsersService {
   public async isCoach(id: string): Promise<boolean> {
     const user = await this.userRepo.findByPk(id);
 
-    return user.role === RolesEnum.coach;
+    return user.getDataValue('role') === RolesEnum.coach;
   }
 
   public update(
     data: UpdateUserDto,
     id: string,
+    photo?: string,
   ): Promise<[affectedCount: number, affectedRows: User[]]> {
-    return this.userRepo.update(data, { where: { id }, returning: true });
+    const parsed = JSON.parse(data as string);
+    return this.userRepo.update(
+      { ...parsed, photo },
+      {
+        where: { id },
+        returning: true,
+      },
+    );
   }
 }

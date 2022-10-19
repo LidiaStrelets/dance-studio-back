@@ -14,12 +14,23 @@ module.exports = {
         allowNull: false,
       },
       description: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
+      nameUk: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      descriptionUk: {
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       poles_amount: {
         type: Sequelize.INTEGER,
         allowNull: false,
+      },
+      picture: {
+        type: Sequelize.STRING,
       },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE,

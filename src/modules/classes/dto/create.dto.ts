@@ -1,9 +1,13 @@
-import { Classes, Dto, TClass } from '@classesModule/types/types';
+import {
+  Classes,
+  ClassesUk,
+  Dto,
+  TClass,
+  TClassUk,
+} from '@classesModule/types/types';
 import { BaseEntity } from '@core/baseEntity';
-import { UUID_EXAMPLE } from '@core/constants';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsString, IsUUID } from 'class-validator';
-import { Dto as UsersDto } from '@usersModule/types/types';
+import { IsIn, IsString } from 'class-validator';
 
 export class CreateClassDto extends BaseEntity {
   @IsIn([
@@ -25,10 +29,22 @@ export class CreateClassDto extends BaseEntity {
   })
   readonly description: string;
 
-  @IsUUID()
+  @IsIn([
+    ClassesUk.poleExotic,
+    ClassesUk.poleSport,
+    ClassesUk.stretching,
+    ClassesUk.stripPlastic,
+  ])
   @ApiProperty({
-    example: UUID_EXAMPLE,
-    description: UsersDto.coachDescription,
+    example: ClassesUk.stretching,
+    description: Dto.nameUkDescription,
   })
-  readonly coach: string;
+  readonly nameUk: TClassUk;
+
+  @IsString()
+  @ApiProperty({
+    example: Dto.descriptionUkExample,
+    description: Dto.descriptionUkDescription,
+  })
+  readonly descriptionUk: string;
 }

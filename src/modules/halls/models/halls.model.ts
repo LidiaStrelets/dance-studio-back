@@ -3,6 +3,8 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript';
 interface HallCreationAttrs {
   name: string;
   description: string;
+  nameUk: string;
+  descriptionUk: string;
   poles_amount: number;
   id: string;
 }

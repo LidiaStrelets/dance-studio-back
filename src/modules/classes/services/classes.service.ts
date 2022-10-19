@@ -17,10 +17,6 @@ export class ClassesService {
     return this.classRepo.findByPk(id);
   }
 
-  public getByCoach(id: string): Promise<Class[]> {
-    return this.classRepo.findAll({ where: { coach: id } });
-  }
-
   public update(
     data: UpdateClassDto,
     id: string,

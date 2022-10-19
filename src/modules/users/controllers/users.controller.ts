@@ -64,61 +64,6 @@ export class UsersController {
     });
   }
 
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Upload user photo' })
-  @ApiOkResponse({ description: ResponceDescription.update })
-  @ApiUnauthorizedResponse({
-    description: ResponceDescription.token,
-  })
-  @UseInterceptors(
-    FileInterceptor('thumbnail', {
-      storage: diskStorage({
-        destination: './images',
-        filename: (req, file, callback) => {
-          const filename = `${req.params.userId}-${Date.now()}`;
-          const fileExt = extname(file.originalname);
-
-          const name = filename + fileExt;
-          callback(null, name);
-        },
-      }),
-    }),
-  )
-  @Post('/:userId/photo')
-  public async savePhoto(
-    @Param(
-      'userId',
-      new ParseUUIDPipe({
-        exceptionFactory: throwUuidException,
-      }),
-    )
-    id: string,
-    @Res() res: Response,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    const [updatedNumber, updatedItems] = await this.userService.update(
-      { photo: `http://localhost:5555/${file.filename}` },
-      id,
-    );
-
-    if (updatedNumber !== 1) {
-      throw new HttpException(
-        [
-          {
-            message: [
-              'Requested user not found or duplicated - check the user id',
-            ],
-          },
-        ],
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    return res.status(HttpStatus.OK).send({
-      user: updatedItems[0],
-    });
-  }
-
   @ApiOperation({
     summary: 'Get data about one user - allowed to data owner or admin',
   })
@@ -167,9 +112,24 @@ export class UsersController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
+  @UseInterceptors(
+    FileInterceptor('thumbnail', {
+      storage: diskStorage({
+        destination: './images',
+        filename: (req, file, callback) => {
+          const filename = `${req.params.userId}-${Date.now()}`;
+          const fileExt = extname(file.originalname);
+
+          const name = filename + fileExt;
+          callback(null, name);
+        },
+      }),
+    }),
+  )
   @Patch('/:userId')
   public async update(
-    @Body(new BodyValidPipe(EUpdateUser)) dto: UpdateUserDto,
+    @Body(new BodyValidPipe(EUpdateUser)) dto: { userForm: UpdateUserDto },
+
     @Param(
       'userId',
       new ParseUUIDPipe({
@@ -178,10 +138,12 @@ export class UsersController {
     )
     id: string,
     @Res() res: Response,
+    @UploadedFile() file: Express.Multer.File,
   ) {
     const [updatedNumber, UpdatedItems] = await this.userService.update(
-      dto,
+      dto.userForm,
       id,
+      file && `${process.env.IMAGES_BASE_URL}${file.filename}`,
     );
 
     if (updatedNumber !== 1) {

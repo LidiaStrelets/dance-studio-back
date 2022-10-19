@@ -13,16 +13,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      coach: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      hall: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       description: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
+      nameUk: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      descriptionUk: {
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       createdAt: Sequelize.DATE,

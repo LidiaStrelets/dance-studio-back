@@ -44,11 +44,11 @@ export class RegistrationMiddleware {
       throw new HttpException(
         [
           {
-            message: ['Unauthorized!'],
-            name: 'Unauthorized Error',
+            message: ['Valid admin key is required for this operation!'],
+            name: 'Bad request Error',
           },
         ],
-        HttpStatus.UNAUTHORIZED,
+        HttpStatus.BAD_REQUEST,
       );
     }
     next();

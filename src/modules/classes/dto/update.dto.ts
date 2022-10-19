@@ -1,4 +1,10 @@
-import { Classes, Dto, TClass } from '@classesModule/types/types';
+import {
+  Classes,
+  ClassesUk,
+  Dto,
+  TClass,
+  TClassUk,
+} from '@classesModule/types/types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 
@@ -23,4 +29,25 @@ export class UpdateClassDto {
     description: Dto.descriptionDescription,
   })
   readonly description: string;
+
+  @IsOptional()
+  @IsIn([
+    ClassesUk.poleExotic,
+    ClassesUk.poleSport,
+    ClassesUk.stretching,
+    ClassesUk.stripPlastic,
+  ])
+  @ApiProperty({
+    example: ClassesUk.stretching,
+    description: Dto.nameUkDescription,
+  })
+  readonly nameUk: TClassUk;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: Dto.descriptionUkExample,
+    description: Dto.descriptionUkDescription,
+  })
+  readonly descriptionUk: string;
 }

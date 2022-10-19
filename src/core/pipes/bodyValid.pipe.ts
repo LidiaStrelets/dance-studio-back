@@ -18,7 +18,7 @@ export class BodyValidPipe implements PipeTransform<any> {
     }
 
     if (
-      Object.keys(value).some(
+      Object.keys(value.userForm).some(
         (key) =>
           !Object.keys(this.expectedDto).some((dtoKey) => dtoKey === key),
       )
