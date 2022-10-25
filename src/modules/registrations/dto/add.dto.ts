@@ -9,7 +9,7 @@ export class CreateRegistrationDto extends BaseEntity {
   @IsUUID()
   @ApiProperty({
     example: UUID_EXAMPLE,
-    description: SchedulesDto.scheduleDescription,
+    description: SchedulesDto.scheduleDescription as string,
   })
   readonly schedule_id: string;
 

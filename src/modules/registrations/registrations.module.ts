@@ -16,6 +16,7 @@ import { PaymentAvailableMiddleware } from './middlewares/paymentAvailable.middl
 import { SpotsAvailableMiddleware } from './middlewares/spotsAvailable.middleware';
 import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 import { Paths } from '@registrationsModule/types/types';
+import { HallsModule } from '@hallsModule/halls.module';
 
 @Module({
   controllers: [RegistrationsController],
@@ -26,6 +27,7 @@ import { Paths } from '@registrationsModule/types/types';
     PaymentsModule,
     SchedulesModule,
     CoreJwtModule,
+    HallsModule,
   ],
 })
 export class RegistrationsModule {

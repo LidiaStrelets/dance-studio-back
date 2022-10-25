@@ -1,11 +1,9 @@
-import { DateDataType } from 'sequelize/types';
-
 export interface IScheduleResponce {
-  coach: string;
-  hall: string;
-  class: string;
-  date_time: DateDataType;
-  places_left: number;
+  coach_id: string;
+  hall_id: string;
+  class_id: string;
+  date_time: string;
+  duration: number;
   id: string;
 }
 
@@ -15,9 +13,18 @@ export enum Dto {
   scheduleDescription = 'The schedule item unique id',
   dateExample = '29.05.2022 12:00',
   dateDescription = `Date and time of the class`,
+  durationExample = 60,
 }
 
 export enum Path {
   withId = 'schedules/:id',
   root = 'schedules',
+}
+
+export interface TransformedSchedule extends IScheduleResponce {
+  coach: string;
+  hall: string;
+  class: string;
+  hallUk: string;
+  classUk: string;
 }

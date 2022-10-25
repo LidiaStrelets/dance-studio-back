@@ -3,16 +3,17 @@ import { InjectModel } from '@nestjs/sequelize';
 import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateUserDto } from '@usersModule/dto/update.dto';
 import { User } from '@usersModule/models/users.model';
-import { Roles as RolesEnum } from '@core/types';
+import { Roles, Roles as RolesEnum } from '@core/types';
 import { UpdateRoleDto } from '@usersModule/dto/update-role.dto';
-import { BaseFields } from '@core/baseEntity';
+import { GetId } from '@core/baseEntity';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User) private userRepo: typeof User) {}
 
   public registrate(dto: RegisterDto): Promise<User> {
-    return this.userRepo.create({ ...dto, ...BaseFields });
+    return this.userRepo.create({ ...dto, id: GetId() });
   }
 
   public updateRole({
@@ -43,8 +44,22 @@ export class UsersService {
   public async isCoach(id: string): Promise<boolean> {
     const user = await this.userRepo.findByPk(id);
 
+    if (!user) {
+      return false;
+    }
+
     return user.getDataValue('role') === RolesEnum.coach;
   }
+
+  public getCoaches = () => {
+    return this.userRepo.findAll({
+      where: {
+        role: {
+          [Op.eq]: Roles.coach,
+        },
+      },
+    });
+  };
 
   public update(
     data: UpdateUserDto,

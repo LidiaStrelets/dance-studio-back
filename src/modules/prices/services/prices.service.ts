@@ -1,4 +1,4 @@
-import { BaseFields } from '@core/baseEntity';
+import { GetId } from '@core/baseEntity';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreatePriceDto } from '@pricesModule/dto/add.dto';
@@ -10,7 +10,7 @@ export class PricesService {
   constructor(@InjectModel(Price) private priceRepo: typeof Price) {}
 
   public create(dto: CreatePriceDto): Promise<Price> {
-    return this.priceRepo.create({ ...dto, ...BaseFields });
+    return this.priceRepo.create({ ...dto, id: GetId() });
   }
 
   public getById(id: string): Promise<Price> {

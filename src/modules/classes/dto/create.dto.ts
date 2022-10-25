@@ -15,6 +15,7 @@ export class CreateClassDto extends BaseEntity {
     Classes.poleSport,
     Classes.stretching,
     Classes.stripPlastic,
+    Classes.exoticBeginners,
   ])
   @ApiProperty({
     example: Classes.stretching,
@@ -34,6 +35,7 @@ export class CreateClassDto extends BaseEntity {
     ClassesUk.poleSport,
     ClassesUk.stretching,
     ClassesUk.stripPlastic,
+    ClassesUk.exoticBeginners,
   ])
   @ApiProperty({
     example: ClassesUk.stretching,

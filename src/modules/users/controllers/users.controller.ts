@@ -65,6 +65,20 @@ export class UsersController {
   }
 
   @ApiOperation({
+    summary: 'Get coaches list',
+  })
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: RegisterDto })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @Get('/coaches')
+  public async getCoaches(): Promise<IUserResponce[]> {
+    const coaches = await this.userService.getCoaches();
+    return coaches.map((coach) => this.mapUserToResponce(coach));
+  }
+
+  @ApiOperation({
     summary: 'Get data about one user - allowed to data owner or admin',
   })
   @ApiBearerAuth()

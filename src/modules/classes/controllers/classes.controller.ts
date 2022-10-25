@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -82,7 +83,30 @@ export class ClassesController {
       : UpdateResponce.error;
   }
 
-  private mapClassToResponce({ name, description, id }: Class): IClassResponce {
-    return { name, description, id };
+  @ApiOperation({ summary: 'Get classes' })
+  @ApiOkResponse({ type: CreateClassDto })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @ApiBearerAuth()
+  @Get()
+  public async get(): Promise<IClassResponce[]> {
+    const classes = await this.classesService.get();
+
+    const mapped = classes.map((classItem) =>
+      this.mapClassToResponce(classItem),
+    );
+
+    return mapped;
+  }
+
+  private mapClassToResponce({
+    name,
+    description,
+    id,
+    nameUk,
+    descriptionUk,
+  }: Class): IClassResponce {
+    return { name, description, id, nameUk, descriptionUk };
   }
 }

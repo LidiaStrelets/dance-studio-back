@@ -70,7 +70,7 @@ export class RegistrationsController {
 
     const userPaym = await this.paymentService.getLastByUser(client_id);
 
-    this.scheduleService.decreaseAvailableSpots(dto.schedule_id);
+    // this.scheduleService.decreaseAvailableSpots(dto.schedule_id);
 
     if (userPaym.classes_left !== UNLIMITED_AMOUNT) {
       this.paymentService.decreaseAvailableClasses(userPaym.id);
@@ -116,9 +116,9 @@ export class RegistrationsController {
       this.paymentService.increaseAvailableClasses(userPaym.id);
     }
 
-    this.scheduleService.increaseAvailableSpots(
-      existingRegistration.schedule_id,
-    );
+    // this.scheduleService.increaseAvailableSpots(
+    //   existingRegistration.schedule_id,
+    // );
 
     return await this.registrationsService.cancel(regId);
   }

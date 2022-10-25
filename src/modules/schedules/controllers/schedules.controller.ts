@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Param,
@@ -18,15 +19,19 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
-import { HallsService } from '@hallsModule/services/halls.service';
 import { CreateScheduleDto } from '@schedulesModule/dto/create.dto';
 import { UpdateScheduleDto } from '@schedulesModule/dto/update.dto';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
 import { Schedule } from '@schedulesModule/models/schedules.model';
-import { IScheduleResponce } from '@schedulesModule/types/types';
+import {
+  IScheduleResponce,
+  TransformedSchedule,
+} from '@schedulesModule/types/types';
 import { ResponceDescription, UpdateResponce } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
+import { UsersService } from '@usersModule/services/users.service';
+import { HallsService } from '@hallsModule/services/halls.service';
 import { ClassesService } from '@classesModule/services/classes.service';
 
 @ApiTags('Schedules')
@@ -34,8 +39,9 @@ import { ClassesService } from '@classesModule/services/classes.service';
 export class SchedulesController {
   constructor(
     private scheduleService: SchedulesService,
-    private hallsService: HallsService,
-    private classesService: ClassesService,
+    private usersServise: UsersService,
+    private hallService: HallsService,
+    private classService: ClassesService,
   ) {}
 
   @ApiBearerAuth()
@@ -47,20 +53,77 @@ export class SchedulesController {
   @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @Roles(RolesEnum.admin)
   @Post()
-  public async add(@Body() dto: CreateScheduleDto): Promise<IScheduleResponce> {
-    const coachClasses = await this.classesService.getByCoach(dto.coach);
+  public async add(@Body() dto: CreateScheduleDto): Promise<any> {
+    const itemsSameTime = await this.scheduleService.getByTime(dto.date_time);
 
-    if (!coachClasses || coachClasses.length < 1) {
+    const item = itemsSameTime.find((item) => {
+      const existingDate = new Date(item.date_time);
+      const newDate = new Date(dto.date_time);
+      const minutes = this.scheduleService.msToMinutes(
+        existingDate.getTime() - newDate.getTime(),
+      );
+      if (Math.abs(minutes) < dto.duration) {
+        if (item.hall_id !== dto.hall_id && item.coach_id !== dto.coach_id) {
+          return false;
+        }
+        return true;
+      }
+    });
+
+    if (item) {
       throw new HttpException(
-        `Requested class not found!`,
+        [
+          {
+            message: [
+              'You are trying to create class in the same time with esisting one',
+            ],
+          },
+        ],
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    const availablePoles = await this.hallsService.getPolesAmount(dto.hall);
-
-    const newItem = await this.scheduleService.create(dto, availablePoles);
+    const newItem = await this.scheduleService.create(dto);
     return this.mapScheduleToResponce(newItem);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Add item to the schedule' })
+  @ApiOkResponse({ type: CreateScheduleDto })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
+  @Roles(RolesEnum.admin)
+  @Post('copyDay')
+  public async copyDay(
+    @Body() dto: { dateExisting: string; dateTarget: string },
+  ): Promise<any> {
+    const itemsSameDate = await this.scheduleService.getByTime(
+      dto.dateExisting,
+    );
+
+    try {
+      await Promise.all(
+        itemsSameDate.map((item) =>
+          this.scheduleService.create({
+            ...item.get(),
+            date_time:
+              dto.dateTarget.split('T')[0] + 'T' + item.date_time.split('T')[1],
+          }),
+        ),
+      );
+      return 'success';
+    } catch {
+      throw new HttpException(
+        [
+          {
+            message: ['something went wrong'],
+          },
+        ],
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @ApiBearerAuth()
@@ -89,21 +152,52 @@ export class SchedulesController {
       : UpdateResponce.error;
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update schedule' })
+  @ApiOkResponse({ description: ResponceDescription.update })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
+  @Roles(RolesEnum.admin)
+  @Get()
+  public async get(): Promise<TransformedSchedule[]> {
+    const coaches = await this.usersServise.getCoaches();
+    const halls = await this.hallService.get();
+    const classes = await this.classService.get();
+    const schedules = await this.scheduleService.get();
+
+    return schedules.map((item) => {
+      const coach = coaches.find((coach) => coach.id === item.coach_id);
+      return {
+        ...item.get(),
+        coach: coach.firstname + ' ' + coach.lastname,
+        hall: halls.find((hall) => hall.id === item.hall_id).name,
+        class: classes.find((class_item) => class_item.id === item.class_id)
+          .name,
+        hallUk: halls.find((hall) => hall.id === item.hall_id).nameUk,
+        classUk: classes.find((class_item) => class_item.id === item.class_id)
+          .nameUk,
+      };
+    });
+  }
+
   private mapScheduleToResponce({
-    coach,
-    hall,
-    class: class_id,
+    coach_id,
+    hall_id,
+    class_id,
     date_time,
-    places_left,
     id,
+    duration,
   }: Schedule): IScheduleResponce {
     return {
-      coach,
-      hall,
-      class: class_id,
+      coach_id,
+      hall_id,
+      class_id,
       date_time,
-      places_left,
       id,
+      duration,
     };
   }
 }

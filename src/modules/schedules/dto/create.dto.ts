@@ -1,7 +1,7 @@
 import { BaseEntity } from '@core/baseEntity';
 import { UUID_EXAMPLE } from '@core/constants';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsUUID } from 'class-validator';
+import { IsDateString, IsNumber, IsString, IsUUID } from 'class-validator';
 import { DateDataType } from 'sequelize/types';
 import { Dto as UsersDto } from '@usersModule/types/types';
 import { Dto as ClassesDto } from '@classesModule/types/types';
@@ -14,26 +14,33 @@ export class CreateScheduleDto extends BaseEntity {
     example: UUID_EXAMPLE,
     description: UsersDto.coachDescription,
   })
-  readonly coach: string;
+  readonly coach_id: string;
 
   @IsUUID()
   @ApiProperty({
     example: UUID_EXAMPLE,
     description: ClassesDto.idDescription,
   })
-  readonly class: string;
+  readonly class_id: string;
 
   @IsUUID()
   @ApiProperty({
     example: UUID_EXAMPLE,
     description: HallsDto.idDescription as string,
   })
-  readonly hall: string;
+  readonly hall_id: string;
 
-  @IsDateString()
+  @IsNumber()
+  @ApiProperty({
+    example: Dto.durationExample,
+    description: HallsDto.idDescription as string,
+  })
+  readonly duration: number;
+
+  @IsString()
   @ApiProperty({
     example: Dto.dateExample,
-    description: Dto.dateDescription,
+    description: Dto.dateDescription as string,
   })
-  readonly date_time: DateDataType;
+  readonly date_time: string;
 }

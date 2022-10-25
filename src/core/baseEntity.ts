@@ -13,6 +13,4 @@ export abstract class BaseEntity {
   readonly id: string;
 }
 
-export const BaseFields = {
-  id: uuidv4(),
-};
+export const GetId = () => uuidv4();

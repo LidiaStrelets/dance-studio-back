@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
 import { SchedulesController } from '@schedulesModule/controllers/schedules.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
@@ -12,6 +12,9 @@ import { RequestService } from '@services/request.service';
 import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
 import { ClassesModule } from '@classesModule/classes.module';
 import { Path } from '@schedulesModule/types/types';
+import { ExistsClassMiddleware } from './middlewares/existsClass.middleware';
+import { ExistsCoachMiddleware } from './middlewares/existsCoach.middleware';
+import { ExistsHallMiddleware } from './middlewares/existsHall.middleware';
 
 @Module({
   providers: [SchedulesService, RequestService],
@@ -29,6 +32,16 @@ import { Path } from '@schedulesModule/types/types';
 export class SchedulesModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(UnauthorizedMiddleware).forRoutes(Path.root);
+
+    consumer
+      .apply(ExistsClassMiddleware)
+      .forRoutes({ path: Path.root, method: RequestMethod.POST });
+    consumer
+      .apply(ExistsCoachMiddleware)
+      .forRoutes({ path: Path.root, method: RequestMethod.POST });
+    consumer
+      .apply(ExistsHallMiddleware)
+      .forRoutes({ path: Path.root, method: RequestMethod.POST });
 
     consumer.apply(IsCoachMiddleware).exclude(Path.withId).forRoutes(Path.root);
   }

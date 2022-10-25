@@ -1,4 +1,4 @@
-import { BaseFields } from '@core/baseEntity';
+import { GetId } from '@core/baseEntity';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreatePaymentDto } from '@paymentsModule/dto/add.dto';
@@ -18,7 +18,7 @@ export class PaymentsService {
       ...dto,
       client_id,
       classes_left: classes_amount,
-      ...BaseFields,
+      id: GetId(),
     });
   }
 

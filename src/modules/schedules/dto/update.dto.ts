@@ -1,7 +1,13 @@
 import { UUID_EXAMPLE } from '@core/constants';
 import { ApiProperty } from '@nestjs/swagger';
 import { Dto as UsersDto } from '@usersModule/types/types';
-import { IsDateString, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsDateString,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { DateDataType } from 'sequelize/types';
 import { Dto as ClassesDto } from '@classesModule/types/types';
 import { Dto as HallsDto } from '@hallsModule/types/types';
@@ -14,7 +20,7 @@ export class UpdateScheduleDto {
     example: UUID_EXAMPLE,
     description: UsersDto.coachDescription,
   })
-  readonly coach: string;
+  readonly coach_id: string;
 
   @IsOptional()
   @IsUUID()
@@ -22,7 +28,7 @@ export class UpdateScheduleDto {
     example: UUID_EXAMPLE,
     description: ClassesDto.idDescription,
   })
-  readonly class: string;
+  readonly class_id: string;
 
   @IsOptional()
   @IsUUID()
@@ -30,13 +36,21 @@ export class UpdateScheduleDto {
     example: UUID_EXAMPLE,
     description: HallsDto.idDescription as string,
   })
-  readonly hall: string;
+  readonly hall_id: string;
 
   @IsOptional()
-  @IsDateString()
+  @IsNumber()
+  @ApiProperty({
+    example: Dto.durationExample,
+    description: HallsDto.idDescription as string,
+  })
+  readonly duration: number;
+
+  @IsOptional()
+  @IsString()
   @ApiProperty({
     example: Dto.dateExample,
-    description: Dto.dateDescription,
+    description: Dto.dateDescription as string,
   })
-  readonly date_time: DateDataType;
+  readonly date_time: string;
 }

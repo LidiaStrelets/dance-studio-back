@@ -1,6 +1,8 @@
 export interface IClassResponce {
   name: string;
   description: string;
+  nameUk: string;
+  descriptionUk: string;
   id: string;
 }
 
@@ -9,6 +11,7 @@ export enum Classes {
   poleSport = 'pole sport',
   poleExotic = 'pole exotic',
   stripPlastic = 'stripplastic',
+  exoticBeginners = 'pole exotic beginners',
 }
 
 export enum ClassesUk {
@@ -16,19 +19,22 @@ export enum ClassesUk {
   poleSport = 'пілон спорт',
   poleExotic = 'пілон танець',
   stripPlastic = 'стріппластика',
+  exoticBeginners = 'пілон танець початківці',
 }
 
 export type TClass =
   | 'stretching'
   | 'pole sport'
   | 'pole exotic'
-  | 'stripplastic';
+  | 'stripplastic'
+  | 'pole exotic beginners';
 
 export type TClassUk =
   | 'розтяжка'
   | 'пілон спорт'
   | 'пілон танець'
-  | 'стріппластика';
+  | 'стріппластика'
+  | 'пілон танець початківці';
 
 export enum Dto {
   nameDescription = 'The name of a class',

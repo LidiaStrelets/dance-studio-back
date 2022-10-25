@@ -16,11 +16,10 @@ export class ExistsRegistrationMiddleware {
     next: NextFunction,
   ) {
     const client_id = clientId || this.requestService.getUserId();
-    const registration =
-      await this.registrationsService.findByClientAndSchedule(
-        client_id,
-        schedule_id,
-      );
+    const registration = await this.registrationsService.getByClientAndSchedule(
+      client_id,
+      schedule_id,
+    );
 
     if (registration) {
       throw new HttpException(

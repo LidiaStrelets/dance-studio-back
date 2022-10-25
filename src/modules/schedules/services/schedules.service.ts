@@ -1,23 +1,20 @@
-import { BaseFields } from '@core/baseEntity';
+import { GetId } from '@core/baseEntity';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateScheduleDto } from '@schedulesModule/dto/create.dto';
 import { UpdateScheduleDto } from '@schedulesModule/dto/update.dto';
 import { Schedule } from '@schedulesModule/models/schedules.model';
 import { PLACES_FIELD } from '@schedulesModule/types/types';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class SchedulesService {
   constructor(@InjectModel(Schedule) private scheduleRepo: typeof Schedule) {}
 
-  public create(
-    dto: CreateScheduleDto,
-    places_left: number,
-  ): Promise<Schedule> {
+  public create(dto: CreateScheduleDto): Promise<Schedule> {
     return this.scheduleRepo.create({
       ...dto,
-      places_left,
-      ...BaseFields,
+      id: GetId(),
     });
   }
 
@@ -25,17 +22,20 @@ export class SchedulesService {
     return this.scheduleRepo.findByPk(id);
   }
 
-  public decreaseAvailableSpots(
-    id: string,
-  ): Promise<[affectedRows: Schedule[], affectedCount?: number]> {
-    return this.scheduleRepo.decrement(PLACES_FIELD, { by: 1, where: { id } });
+  public get(): Promise<Schedule[]> {
+    return this.scheduleRepo.findAll({
+      order: [['date_time', 'ASC']],
+    });
   }
 
-  public increaseAvailableSpots(
-    id: string,
-  ): Promise<[affectedRows: Schedule[], affectedCount?: number]> {
-    return this.scheduleRepo.increment(PLACES_FIELD, { by: 1, where: { id } });
+  public getByTime(date: string): Promise<Schedule[]> {
+    const datePart = date.split('T')[0];
+    return this.scheduleRepo.findAll({
+      where: { date_time: { [Op.like]: `${datePart}%` } },
+    });
   }
+
+  public msToMinutes = (ms: number): number => ms / 1000 / 60;
 
   public update(
     data: UpdateScheduleDto,

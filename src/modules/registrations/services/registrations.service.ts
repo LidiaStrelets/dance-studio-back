@@ -1,4 +1,4 @@
-import { BaseFields } from '@core/baseEntity';
+import { GetId } from '@core/baseEntity';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateRegistrationDto } from '@registrationsModule/dto/add.dto';
@@ -17,7 +17,7 @@ export class RegistrationsService {
   public create(dto: CreateRegistrationDto): Promise<Registration> {
     return this.registrationRepo.create({
       ...dto,
-      ...BaseFields,
+      id: GetId(),
     });
   }
 
@@ -31,12 +31,18 @@ export class RegistrationsService {
     return this.registrationRepo.findByPk(id);
   }
 
-  public findByClientAndSchedule(
+  public getByClientAndSchedule(
     client_id: string,
     schedule_id: string,
   ): Promise<Registration> {
     return this.registrationRepo.findOne({
       where: { client_id, schedule_id },
+    });
+  }
+
+  public getBySchedule(schedule_id: string): Promise<Registration[]> {
+    return this.registrationRepo.findAll({
+      where: { schedule_id },
     });
   }
 
