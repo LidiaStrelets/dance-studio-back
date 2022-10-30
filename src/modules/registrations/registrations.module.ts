@@ -12,11 +12,11 @@ import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { AdminWithUserIdMiddleware } from '@middlewares/adminWithUserId.middleware';
 import { CoreJwtModule } from '@core/jwt.module';
 import { ExistsRegistrationMiddleware } from './middlewares/existsRegistration.middleware';
-import { PaymentAvailableMiddleware } from './middlewares/paymentAvailable.middleware';
 import { SpotsAvailableMiddleware } from './middlewares/spotsAvailable.middleware';
 import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 import { Paths } from '@registrationsModule/types/types';
 import { HallsModule } from '@hallsModule/halls.module';
+import { ExistsUserMiddleware } from '@middlewares/existsUser.middleware';
 
 @Module({
   controllers: [RegistrationsController],
@@ -39,12 +39,16 @@ export class RegistrationsModule {
       .forRoutes({ path: Paths.root, method: RequestMethod.POST });
 
     consumer
-      .apply(ExistsRegistrationMiddleware)
+      .apply(ExistsUserMiddleware)
       .forRoutes({ path: Paths.root, method: RequestMethod.POST });
 
     consumer
-      .apply(PaymentAvailableMiddleware)
+      .apply(ExistsRegistrationMiddleware)
       .forRoutes({ path: Paths.root, method: RequestMethod.POST });
+
+    // consumer
+    //   .apply(PaymentAvailableMiddleware)
+    //   .forRoutes({ path: Paths.root, method: RequestMethod.POST });
 
     consumer
       .apply(SpotsAvailableMiddleware)
@@ -52,6 +56,6 @@ export class RegistrationsModule {
 
     consumer
       .apply(DataOwnerOrAdminMiddleware)
-      .forRoutes(Paths.registrationId, Paths.clientId);
+      .forRoutes({ path: Paths.clientId, method: RequestMethod.GET });
   }
 }

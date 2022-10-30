@@ -21,9 +21,6 @@ export class UsersModule {
 
     consumer
       .apply(DataOwnerOrAdminMiddleware)
-      .forRoutes(
-        { path: Path.withId, method: RequestMethod.GET },
-        { path: Path.withId, method: RequestMethod.PATCH },
-      );
+      .forRoutes({ path: Path.withId, method: RequestMethod.PATCH });
   }
 }

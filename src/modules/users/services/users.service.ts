@@ -51,6 +51,12 @@ export class UsersService {
     return user.getDataValue('role') === RolesEnum.coach;
   }
 
+  public async getName(id: string) {
+    const user = await this.userRepo.findByPk(id);
+
+    return `${user.firstname} ${user.lastname}`;
+  }
+
   public getCoaches = () => {
     return this.userRepo.findAll({
       where: {

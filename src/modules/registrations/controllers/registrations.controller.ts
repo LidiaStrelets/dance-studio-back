@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   HttpStatus,
   Param,
   ParseUUIDPipe,
@@ -21,6 +22,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
+import { Roles as RolesType } from '@core/types';
 import { RequestService } from '@services/request.service';
 import { PaymentsService } from '@paymentsModule/services/payments.service';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
@@ -32,6 +34,7 @@ import { RolesGuard } from '@guards/roles.guard';
 import { IN_DAY_HOURS, UNLIMITED_AMOUNT } from '@core/constants';
 import { ResponceDescription, Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
+import { UsersService } from '@usersModule/services/users.service';
 
 @ApiTags('Registrations')
 @Controller('registrations')
@@ -41,6 +44,7 @@ export class RegistrationsController {
     private requestService: RequestService,
     private paymentService: PaymentsService,
     private scheduleService: SchedulesService,
+    private userService: UsersService,
   ) {}
 
   @ApiOperation({ summary: 'Create registration' })
@@ -66,15 +70,13 @@ export class RegistrationsController {
   public async create(
     @Body() dto: CreateRegistrationDto,
   ): Promise<IRegistrationResponce> {
-    const client_id = dto.client_id || this.requestService.getUserId();
+    // const client_id = dto.client_id || this.requestService.getUserId();
 
-    const userPaym = await this.paymentService.getLastByUser(client_id);
+    // const userPaym = await this.paymentService.getLastByUser(client_id);
 
-    // this.scheduleService.decreaseAvailableSpots(dto.schedule_id);
-
-    if (userPaym.classes_left !== UNLIMITED_AMOUNT) {
-      this.paymentService.decreaseAvailableClasses(userPaym.id);
-    }
+    // if (userPaym.classes_left !== UNLIMITED_AMOUNT) {
+    //   this.paymentService.decreaseAvailableClasses(userPaym.id);
+    // }
 
     const newRegistration = await this.registrationsService.create(dto);
 
@@ -102,25 +104,71 @@ export class RegistrationsController {
       }),
     )
     regId: string,
-  ): Promise<number> {
+  ): Promise<IRegistrationResponce[]> {
     const existingRegistration = await this.registrationsService.getById(regId);
+    if (!existingRegistration) {
+      throw new HttpException(
+        [
+          {
+            message: ['Enrollment not found'],
+          },
+        ],
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const userRole = this.requestService.getUserRole();
+    const userId = this.requestService.getUserId();
 
-    const userPaym = await this.paymentService.getLastByUser(
-      existingRegistration.client_id,
+    if (
+      userRole === RolesType.coach ||
+      (userRole === RolesType.client &&
+        userId !== existingRegistration.client_id)
+    ) {
+      throw new HttpException(
+        { message: `You are not allowed to cancell this enrollment!` },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // const userPaym = await this.paymentService.getLastByUser(
+    //   existingRegistration.client_id,
+    // );
+
+    const schedule = await this.scheduleService.getById(
+      existingRegistration.schedule_id,
     );
 
     const hours = this.registrationsService.convertMilisecondsToHours(
-      Date.now() - new Date(existingRegistration.createdAt).getTime(),
+      new Date(schedule.date_time).getTime() - Date.now(),
     );
+
     if (hours < IN_DAY_HOURS) {
-      this.paymentService.increaseAvailableClasses(userPaym.id);
+      throw new HttpException(
+        [
+          {
+            message: [`Impossible to cancell enrollment less then in 24 hours`],
+          },
+        ],
+        HttpStatus.BAD_REQUEST,
+      );
+      // this.paymentService.increaseAvailableClasses(userPaym.id);
     }
 
-    // this.scheduleService.increaseAvailableSpots(
-    //   existingRegistration.schedule_id,
-    // );
+    const cancelled = await this.registrationsService.cancel(regId);
 
-    return await this.registrationsService.cancel(regId);
+    if (cancelled !== 1) {
+      throw new HttpException(
+        [
+          {
+            message: [`Error on deleting`],
+          },
+        ],
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    const registrations = await this.registrationsService.getAllByUser(userId);
+    return registrations.map((item) => this.mapRegistrationToResponce(item));
   }
 
   @ApiOperation({
@@ -142,6 +190,29 @@ export class RegistrationsController {
     userId: string,
   ): Promise<IRegistrationResponce[]> {
     const registrations = await this.registrationsService.getAllByUser(userId);
+
+    return registrations.map((item) => this.mapRegistrationToResponce(item));
+  }
+
+  @ApiOperation({
+    summary: 'Get user registrations information',
+  })
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
+  @ApiUnauthorizedResponse({ description: ResponceDescription.token })
+  @ApiForbiddenResponse({ description: ResponceDescription.userIdRequired })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
+  @Get('/bySchedule/:id')
+  public async getAllBySchedule(
+    @Param(
+      'id',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    id: string,
+  ): Promise<IRegistrationResponce[]> {
+    const registrations = await this.registrationsService.getBySchedule(id);
 
     return registrations.map((item) => this.mapRegistrationToResponce(item));
   }

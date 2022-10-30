@@ -44,4 +44,5 @@ export enum Path {
   withId = 'users/:userId',
   root = 'users',
   currentId = 'users/currentId',
+  coaches = 'users/coaches',
 }

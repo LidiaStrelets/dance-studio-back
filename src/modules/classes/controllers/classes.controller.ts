@@ -100,6 +100,27 @@ export class ClassesController {
     return mapped;
   }
 
+  @ApiOperation({ summary: 'Get classes' })
+  @ApiOkResponse({ type: CreateClassDto })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @ApiBearerAuth()
+  @Get('/:id')
+  public async getById(
+    @Param(
+      'id',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    id: string,
+  ): Promise<IClassResponce> {
+    const classItem = await this.classesService.getById(id);
+
+    return this.mapClassToResponce(classItem);
+  }
+
   private mapClassToResponce({
     name,
     description,
