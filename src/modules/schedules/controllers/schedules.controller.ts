@@ -33,6 +33,7 @@ import { throwUuidException } from '@core/util';
 import { UsersService } from '@usersModule/services/users.service';
 import { HallsService } from '@hallsModule/services/halls.service';
 import { ClassesService } from '@classesModule/services/classes.service';
+import { RegistrationsService } from '@registrationsModule/services/registrations.service';
 
 @ApiTags('Schedules')
 @Controller('schedules')
@@ -42,6 +43,7 @@ export class SchedulesController {
     private usersServise: UsersService,
     private hallService: HallsService,
     private classService: ClassesService,
+    private registrationsService: RegistrationsService,
   ) {}
 
   @ApiBearerAuth()
@@ -158,9 +160,6 @@ export class SchedulesController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
-  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
-  @Roles(RolesEnum.admin)
   @Get()
   public async get(): Promise<TransformedSchedule[]> {
     const coaches = await this.usersServise.getCoaches();
@@ -179,8 +178,57 @@ export class SchedulesController {
         hallUk: halls.find((hall) => hall.id === item.hall_id).nameUk,
         classUk: classes.find((class_item) => class_item.id === item.class_id)
           .nameUk,
+        polesAmount: halls.find((hall) => hall.id === item.hall_id)
+          .poles_amount,
       };
     });
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update schedule' })
+  @ApiOkResponse({ description: ResponceDescription.update })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @Get('/enrolled/:userId')
+  public async getEnrolled(
+    @Param(
+      'userId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    userId: string,
+  ): Promise<TransformedSchedule[]> {
+    const coaches = await this.usersServise.getCoaches();
+    const halls = await this.hallService.get();
+    const classes = await this.classService.get();
+    const schedules = await this.scheduleService.get();
+    const registrations = await this.registrationsService.getAllByUser(userId);
+
+    return schedules
+      .filter((schedule) =>
+        registrations.some(
+          (registration) =>
+            registration.schedule_id === schedule.id &&
+            registration.client_id === userId,
+        ),
+      )
+      .map((item) => {
+        const coach = coaches.find((coach) => coach.id === item.coach_id);
+        return {
+          ...item.get(),
+          coach: coach.firstname + ' ' + coach.lastname,
+          hall: halls.find((hall) => hall.id === item.hall_id).name,
+          class: classes.find((class_item) => class_item.id === item.class_id)
+            .name,
+          hallUk: halls.find((hall) => hall.id === item.hall_id).nameUk,
+          classUk: classes.find((class_item) => class_item.id === item.class_id)
+            .nameUk,
+          polesAmount: halls.find((hall) => hall.id === item.hall_id)
+            .poles_amount,
+        };
+      });
   }
 
   private mapScheduleToResponce({

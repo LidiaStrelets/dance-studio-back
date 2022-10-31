@@ -19,6 +19,7 @@ export enum Dto {
 export enum Path {
   withId = 'schedules/:id',
   root = 'schedules',
+  enrolled = 'schedules/enrolled/:userId',
 }
 
 export interface TransformedSchedule extends IScheduleResponce {

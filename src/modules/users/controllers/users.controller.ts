@@ -52,9 +52,6 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOkResponse({ type: [RegisterDto] })
   @ApiUnauthorizedResponse({ description: ResponceDescription.token })
-  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
-  @Roles(RolesEnum.admin)
-  @UseGuards(RolesGuard)
   @Get()
   public async getAll(): Promise<IUserResponce[]> {
     const users = await this.userService.getAll();

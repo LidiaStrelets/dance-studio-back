@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import {
+  forwardRef,
+  MiddlewareConsumer,
+  Module,
+  RequestMethod,
+} from '@nestjs/common';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
 import { SchedulesController } from '@schedulesModule/controllers/schedules.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
@@ -15,6 +20,8 @@ import { Path } from '@schedulesModule/types/types';
 import { ExistsClassMiddleware } from './middlewares/existsClass.middleware';
 import { ExistsCoachMiddleware } from './middlewares/existsCoach.middleware';
 import { ExistsHallMiddleware } from './middlewares/existsHall.middleware';
+import { RegistrationsModule } from '@registrationsModule/registrations.module';
+import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 
 @Module({
   providers: [SchedulesService, RequestService],
@@ -26,6 +33,8 @@ import { ExistsHallMiddleware } from './middlewares/existsHall.middleware';
     UsersModule,
     CoreJwtModule,
     ClassesModule,
+
+    forwardRef(() => RegistrationsModule),
   ],
   exports: [SchedulesService],
 })
@@ -44,5 +53,9 @@ export class SchedulesModule {
       .forRoutes({ path: Path.root, method: RequestMethod.POST });
 
     consumer.apply(IsCoachMiddleware).exclude(Path.withId).forRoutes(Path.root);
+
+    consumer
+      .apply(DataOwnerOrAdminMiddleware)
+      .forRoutes({ path: Path.enrolled, method: RequestMethod.GET });
   }
 }

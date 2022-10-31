@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import {
+  forwardRef,
+  MiddlewareConsumer,
+  Module,
+  RequestMethod,
+} from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { RequestService } from '@services/request.service';
 import { PaymentsModule } from '@paymentsModule/payments.module';
@@ -25,10 +30,11 @@ import { ExistsUserMiddleware } from '@middlewares/existsUser.middleware';
     SequelizeModule.forFeature([User, Registration]),
     UsersModule,
     PaymentsModule,
-    SchedulesModule,
+    forwardRef(() => SchedulesModule),
     CoreJwtModule,
     HallsModule,
   ],
+  exports: [RegistrationsService],
 })
 export class RegistrationsModule {
   configure(consumer: MiddlewareConsumer) {
