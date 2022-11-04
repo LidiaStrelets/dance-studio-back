@@ -1,10 +1,10 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface PaymentCreationAttrs {
-  classes_left: number;
   price_id: string;
-  client_id: string;
+  user_id: string;
   id: string;
+  available_spots: number;
 }
 
 @Table({ tableName: 'payments' })
@@ -17,12 +17,6 @@ export class Payment extends Model<Payment, PaymentCreationAttrs> {
   id: string;
 
   @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  classes_left: number;
-
-  @Column({
     type: DataType.STRING,
     allowNull: false,
   })
@@ -31,5 +25,11 @@ export class Payment extends Model<Payment, PaymentCreationAttrs> {
   @Column({
     type: DataType.STRING,
   })
-  client_id: string;
+  user_id: string;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  available_spots: number;
 }

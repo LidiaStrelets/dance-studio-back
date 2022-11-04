@@ -22,6 +22,7 @@ import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 import { Paths } from '@registrationsModule/types/types';
 import { HallsModule } from '@hallsModule/halls.module';
 import { ExistsUserMiddleware } from '@middlewares/existsUser.middleware';
+import { PaymentAvailableMiddleware } from './middlewares/paymentAvailable.middleware';
 
 @Module({
   controllers: [RegistrationsController],
@@ -52,9 +53,9 @@ export class RegistrationsModule {
       .apply(ExistsRegistrationMiddleware)
       .forRoutes({ path: Paths.root, method: RequestMethod.POST });
 
-    // consumer
-    //   .apply(PaymentAvailableMiddleware)
-    //   .forRoutes({ path: Paths.root, method: RequestMethod.POST });
+    consumer
+      .apply(PaymentAvailableMiddleware)
+      .forRoutes({ path: Paths.root, method: RequestMethod.POST });
 
     consumer
       .apply(SpotsAvailableMiddleware)

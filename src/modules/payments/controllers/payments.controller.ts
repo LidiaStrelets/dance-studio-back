@@ -22,9 +22,8 @@ import { Roles } from '@decorators/roles.decorator';
 import { RequestService } from '@services/request.service';
 import { PricesService } from '@pricesModule/services/prices.service';
 import { CreatePaymentDto } from '@paymentsModule/dto/add.dto';
-import { Payment } from '@paymentsModule/models/payments.model';
 import { PaymentsService } from '@paymentsModule/services/payments.service';
-import { IPaymentResponce } from '@paymentsModule/types/types';
+import { IPaymentResponce, PaymentCreated } from '@paymentsModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
 import { ResponceDescription } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
@@ -52,21 +51,10 @@ export class PaymentsController {
     @Body() dto: CreatePaymentDto,
   ): Promise<IPaymentResponce> {
     const price = await this.priceService.getById(dto.price_id);
-
-    if (!price) {
-      throw new HttpException(
-        { message: 'Price id is invalid', problem_field: 'price_id' },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    const client_id = dto.user_id || this.requestServise.getUserId();
-
-    const newPayment = await this.paymentsService.create(
-      dto,
-      client_id,
-      price.classes_amount,
-    );
+    const newPayment = await this.paymentsService.create({
+      ...dto,
+      available_spots: price.classes_amount,
+    });
 
     return this.mapPaymentToResponce(newPayment);
   }
@@ -95,31 +83,28 @@ export class PaymentsController {
   ): Promise<IPaymentResponce[]> {
     const payments = await this.paymentsService.getAllByUser(userId);
 
-    if (payments.length < 1) {
-      throw new HttpException(
-        [
-          {
-            message: 'No payments for requested user',
-          },
-        ],
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    const mapped = payments.map((payment) =>
+      this.mapPaymentToResponce(payment),
+    );
 
-    return payments.map((payment) => this.mapPaymentToResponce(payment));
+    return mapped.filter((payment) => payment.available_spots > 0).length > 0
+      ? mapped.filter((payment) => payment.available_spots > 0)
+      : [mapped[mapped.length - 1]];
   }
 
   private mapPaymentToResponce({
-    classes_left,
     price_id,
-    client_id,
+    user_id,
     id,
-  }: Payment): IPaymentResponce {
+    createdAt,
+    available_spots,
+  }: PaymentCreated): IPaymentResponce {
     return {
-      classes_left,
       price_id,
-      client_id,
+      user_id,
       id,
+      createdAt,
+      available_spots,
     };
   }
 }

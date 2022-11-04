@@ -13,6 +13,7 @@ import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { CoreJwtModule } from '@core/jwt.module';
 import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 import { Paths } from '@paymentsModule/types/types';
+import { PriceExistsMiddleware } from './middlewares/priceExists.middleware';
 
 @Module({
   providers: [PaymentsService, RequestService],
@@ -35,7 +36,10 @@ export class PaymentsModule {
 
     consumer
       .apply(DataOwnerOrAdminMiddleware)
-      .exclude({ path: Paths.root, method: RequestMethod.POST })
-      .forRoutes(Paths.root);
+      .forRoutes({ path: Paths.withId, method: RequestMethod.GET });
+
+    consumer
+      .apply(PriceExistsMiddleware)
+      .forRoutes({ path: Paths.root, method: RequestMethod.POST });
   }
 }

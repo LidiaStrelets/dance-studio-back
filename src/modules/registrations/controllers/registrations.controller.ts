@@ -70,14 +70,6 @@ export class RegistrationsController {
   public async create(
     @Body() dto: CreateRegistrationDto,
   ): Promise<IRegistrationResponce> {
-    // const client_id = dto.client_id || this.requestService.getUserId();
-
-    // const userPaym = await this.paymentService.getLastByUser(client_id);
-
-    // if (userPaym.classes_left !== UNLIMITED_AMOUNT) {
-    //   this.paymentService.decreaseAvailableClasses(userPaym.id);
-    // }
-
     const newRegistration = await this.registrationsService.create(dto);
 
     return this.mapRegistrationToResponce(newRegistration);
@@ -95,17 +87,35 @@ export class RegistrationsController {
   @ApiBearerAuth()
   @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
-  @Delete('/:regId')
+  @Delete('/:scheduleId')
   public async delete(
     @Param(
-      'regId',
+      'scheduleId',
       new ParseUUIDPipe({
         exceptionFactory: throwUuidException,
       }),
     )
-    regId: string,
+    scheduleId: string,
   ): Promise<IRegistrationResponce[]> {
-    const existingRegistration = await this.registrationsService.getById(regId);
+    const scheduleExisting = await this.scheduleService.getById(scheduleId);
+
+    if (!scheduleExisting) {
+      throw new HttpException(
+        [
+          {
+            message: ['Class not found'],
+          },
+        ],
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const userRole = this.requestService.getUserRole();
+    const userId = this.requestService.getUserId();
+    const existingRegistration =
+      await this.registrationsService.getByClientAndSchedule(
+        userId,
+        scheduleId,
+      );
     if (!existingRegistration) {
       throw new HttpException(
         [
@@ -116,8 +126,6 @@ export class RegistrationsController {
         HttpStatus.NOT_FOUND,
       );
     }
-    const userRole = this.requestService.getUserRole();
-    const userId = this.requestService.getUserId();
 
     if (
       userRole === RolesType.coach ||
@@ -130,9 +138,9 @@ export class RegistrationsController {
       );
     }
 
-    // const userPaym = await this.paymentService.getLastByUser(
-    //   existingRegistration.client_id,
-    // );
+    const userPaym = await this.paymentService.getLastByUser(
+      existingRegistration.client_id,
+    );
 
     const schedule = await this.scheduleService.getById(
       existingRegistration.schedule_id,
@@ -142,19 +150,13 @@ export class RegistrationsController {
       new Date(schedule.date_time).getTime() - Date.now(),
     );
 
-    if (hours < IN_DAY_HOURS) {
-      throw new HttpException(
-        [
-          {
-            message: [`Impossible to cancell enrollment less then in 24 hours`],
-          },
-        ],
-        HttpStatus.BAD_REQUEST,
-      );
-      // this.paymentService.increaseAvailableClasses(userPaym.id);
+    if (hours > IN_DAY_HOURS) {
+      this.paymentService.increaseAvailableClasses(userPaym.id);
     }
 
-    const cancelled = await this.registrationsService.cancel(regId);
+    const cancelled = await this.registrationsService.cancel(
+      existingRegistration.id,
+    );
 
     if (cancelled !== 1) {
       throw new HttpException(

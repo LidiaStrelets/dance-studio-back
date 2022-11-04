@@ -13,6 +13,6 @@ export const UNLIMITED_AMOUNT = 1000;
 
 export const IN_DAY_HOURS = 24;
 
-export const DAYS_IN_MONTH = 30;
+export const DAYS_IN_MONTH = 28;
 
 export const NO_LEFT = 0;
