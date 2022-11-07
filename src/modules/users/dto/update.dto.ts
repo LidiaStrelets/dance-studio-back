@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Dto } from '@usersModule/types/types';
-import { IsEmail, IsOptional, IsString, Length } from 'class-validator';
+import { IsEmail, IsOptional, IsString, Length, IsDate } from 'class-validator';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -38,12 +38,12 @@ export class UpdateUserDto {
   readonly lastname?: string;
 
   @IsOptional()
-  @IsString()
+  @IsDate()
   @ApiPropertyOptional({
-    example: Dto.birthDateExample,
+    example: new Date('2000-12-12'),
     description: Dto.birthDateDescription,
   })
-  readonly birth_date?: string;
+  readonly birth_date?: Date;
 
   @IsOptional()
   @IsString()

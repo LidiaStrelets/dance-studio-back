@@ -8,7 +8,7 @@ export const createUserData = (): User =>
     firstname: Dto.nameExample,
     lastname: Dto.lastNameExample,
     password: Dto.passwordExample,
-    birth_date: Dto.dateExample,
+    birth_date: new Date('2000-12-12'),
     information: Dto.informationExample,
     role: Roles.client,
   } as User);

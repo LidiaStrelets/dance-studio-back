@@ -2,7 +2,7 @@ export interface IUserResponce {
   email: string;
   firstname: string;
   lastname: string;
-  birth_date?: string;
+  birth_date?: Date;
   information?: string;
   id: string;
   role: string;
@@ -31,13 +31,11 @@ export enum Dto {
   lastNameExample = 'Ivanova',
   lastNameDescription = 'User lastname',
   roleDescription = 'User role',
-  birthDateExample = '29.07.1996',
   birthDateDescription = `User's date of birth`,
   informationExample = 'Want to visit classes every day!',
   informationDescription = `Here you can attach some additional information about uuser`,
   keyExample = 'jgvjkb76cghvh',
   keyDescription = `Here you can attach your admin key`,
-  dateExample = '12-12-2021',
 }
 
 export enum Path {
