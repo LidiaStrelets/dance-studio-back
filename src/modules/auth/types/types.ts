@@ -6,6 +6,11 @@ export interface IToken {
   id: string;
 }
 
+export interface ITokenData {
+  role: TRoles;
+  id: string;
+}
+
 export enum Paths {
   login = 'auth/login',
   register = 'auth/registration',

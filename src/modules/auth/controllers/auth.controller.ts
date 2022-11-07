@@ -87,9 +87,9 @@ export class AuthController {
     @Headers('Authorization') auth: string,
     @Res() res: Response,
   ) {
-    const id = this.authService.getIdFromToken(auth);
+    const data = this.authService.getDataFromToken(auth);
 
-    if (!id) {
+    if (!data.id) {
       throw new HttpException(
         [
           {
@@ -100,7 +100,9 @@ export class AuthController {
       );
     }
 
-    return res.status(HttpStatus.OK).send({ data: { id } });
+    return res.status(HttpStatus.OK).send({
+      data,
+    });
   }
 
   private signToken({ email, role, id }: User): string {
