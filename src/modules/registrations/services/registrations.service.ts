@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateRegistrationDto } from '@registrationsModule/dto/add.dto';
 import { Registration } from '@registrationsModule/models/registrations.model';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class RegistrationsService {
@@ -48,5 +49,19 @@ export class RegistrationsService {
 
   public getAllByUser(client_id: string): Promise<Registration[]> {
     return this.registrationRepo.findAll({ where: { client_id } });
+  }
+
+  public getByUserAndDate(
+    client_id: string,
+    scheduleIds: string[],
+  ): Promise<Registration[]> {
+    return this.registrationRepo.findAll({
+      where: {
+        client_id,
+        schedule_id: {
+          [Op.in]: scheduleIds,
+        },
+      },
+    });
   }
 }

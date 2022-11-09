@@ -4,7 +4,7 @@ interface ScheduleCreationAttrs {
   coach_id: string;
   hall_id: string;
   class_id: string;
-  date_time: string;
+  date_time: Date;
   duration: number;
   id: string;
 }
@@ -37,10 +37,10 @@ export class Schedule extends Model<Schedule, ScheduleCreationAttrs> {
   hall_id: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.DATE,
     allowNull: true,
   })
-  date_time: string;
+  date_time: Date;
 
   @Column({
     type: DataType.INTEGER,

@@ -2,7 +2,7 @@ export interface IScheduleResponce {
   coach_id: string;
   hall_id: string;
   class_id: string;
-  date_time: string;
+  date_time: Date;
   duration: number;
   id: string;
 }

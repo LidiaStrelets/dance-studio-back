@@ -56,33 +56,27 @@ export class SchedulesController {
   @Roles(RolesEnum.admin)
   @Post()
   public async add(@Body() dto: CreateScheduleDto): Promise<any> {
-    const itemsSameTime = await this.scheduleService.getByTime(dto.date_time);
-
-    const item = itemsSameTime.find((item) => {
-      const existingDate = new Date(item.date_time);
-      const newDate = new Date(dto.date_time);
-      const minutes = this.scheduleService.msToMinutes(
-        existingDate.getTime() - newDate.getTime(),
-      );
-      if (Math.abs(minutes) < dto.duration) {
-        if (item.hall_id !== dto.hall_id && item.coach_id !== dto.coach_id) {
-          return false;
+    const itemsWithDifferentDuration = await this.scheduleService.getByDuration(
+      dto.date_time,
+    );
+    if (itemsWithDifferentDuration.length > 0) {
+      itemsWithDifferentDuration.forEach((item) => {
+        if (item.date_time < new Date(dto.date_time)) {
+          if (
+            new Date(
+              item.date_time.getTime() +
+                this.scheduleService.minToMs(item.duration),
+            ) > new Date(dto.date_time)
+          ) {
+            this.scheduleService.throwSameTimeException();
+          }
         }
-        return true;
-      }
-    });
+      });
+    }
 
-    if (item) {
-      throw new HttpException(
-        [
-          {
-            message: [
-              'You are trying to create class in the same time with esisting one',
-            ],
-          },
-        ],
-        HttpStatus.BAD_REQUEST,
-      );
+    const itemsSameTime = await this.scheduleService.checkSameTime(dto);
+    if (itemsSameTime.length > 0) {
+      this.scheduleService.throwSameTimeException();
     }
 
     const newItem = await this.scheduleService.create(dto);
@@ -101,17 +95,18 @@ export class SchedulesController {
   public async copyDay(
     @Body() dto: { dateExisting: string; dateTarget: string },
   ): Promise<any> {
-    const itemsSameDate = await this.scheduleService.getByTime(
+    const itemsSameDate = await this.scheduleService.getByDate(
       dto.dateExisting,
     );
-
     try {
       await Promise.all(
         itemsSameDate.map((item) =>
           this.scheduleService.create({
             ...item.get(),
             date_time:
-              dto.dateTarget.split('T')[0] + 'T' + item.date_time.split('T')[1],
+              dto.dateTarget.split('T')[0] +
+              'T' +
+              item.date_time.toISOString().split('T')[1],
           }),
         ),
       );
@@ -161,11 +156,11 @@ export class SchedulesController {
     description: ResponceDescription.token,
   })
   @Get()
-  public async get(): Promise<TransformedSchedule[]> {
+  public async get(@Body() date: Date): Promise<TransformedSchedule[]> {
     const coaches = await this.usersServise.getCoaches();
     const halls = await this.hallService.get();
     const classes = await this.classService.get();
-    const schedules = await this.scheduleService.get();
+    const schedules = await this.scheduleService.getByDate(date.toISOString());
 
     return schedules.map((item) => {
       const coach = coaches.find((coach) => coach.id === item.coach_id);
@@ -192,6 +187,7 @@ export class SchedulesController {
   })
   @Get('/enrolled/:userId')
   public async getEnrolled(
+    @Body() date: Date,
     @Param(
       'userId',
       new ParseUUIDPipe({
@@ -203,8 +199,11 @@ export class SchedulesController {
     const coaches = await this.usersServise.getCoaches();
     const halls = await this.hallService.get();
     const classes = await this.classService.get();
-    const schedules = await this.scheduleService.get();
-    const registrations = await this.registrationsService.getAllByUser(userId);
+    const schedules = await this.scheduleService.getByDate(date.toISOString());
+    const registrations = await this.registrationsService.getByUserAndDate(
+      userId,
+      schedules.map(({ id }) => id),
+    );
 
     return schedules
       .filter((schedule) =>
