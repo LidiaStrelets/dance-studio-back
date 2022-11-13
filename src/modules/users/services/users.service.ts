@@ -73,12 +73,16 @@ export class UsersService {
     photo?: string,
   ): Promise<[affectedCount: number, affectedRows: User[]]> {
     const parsed = JSON.parse(data as string);
-    return this.userRepo.update(
-      { ...parsed, photo },
-      {
-        where: { id },
-        returning: true,
-      },
-    );
+
+    let user = {};
+    if (photo === undefined) {
+      user = { ...parsed };
+    } else {
+      user = { ...parsed, photo };
+    }
+    return this.userRepo.update(user, {
+      where: { id },
+      returning: true,
+    });
   }
 }
