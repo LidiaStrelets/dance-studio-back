@@ -23,16 +23,10 @@ import { CreateScheduleDto } from '@schedulesModule/dto/create.dto';
 import { UpdateScheduleDto } from '@schedulesModule/dto/update.dto';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
 import { Schedule } from '@schedulesModule/models/schedules.model';
-import {
-  IScheduleResponce,
-  TransformedSchedule,
-} from '@schedulesModule/types/types';
+import { FullResponce, IScheduleResponce } from '@schedulesModule/types/types';
 import { ResponceDescription, UpdateResponce } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
-import { UsersService } from '@usersModule/services/users.service';
-import { HallsService } from '@hallsModule/services/halls.service';
-import { ClassesService } from '@classesModule/services/classes.service';
 import { RegistrationsService } from '@registrationsModule/services/registrations.service';
 
 @ApiTags('Schedules')
@@ -40,9 +34,6 @@ import { RegistrationsService } from '@registrationsModule/services/registration
 export class SchedulesController {
   constructor(
     private scheduleService: SchedulesService,
-    private usersServise: UsersService,
-    private hallService: HallsService,
-    private classService: ClassesService,
     private registrationsService: RegistrationsService,
   ) {}
 
@@ -155,28 +146,19 @@ export class SchedulesController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @Get()
-  public async get(@Body() date: Date): Promise<TransformedSchedule[]> {
-    const coaches = await this.usersServise.getCoaches();
-    const halls = await this.hallService.get();
-    const classes = await this.classService.get();
-    const schedules = await this.scheduleService.getByDate(date.toISOString());
+  @Get('schedule/:id')
+  public async getById(
+    @Param(
+      'id',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    id: string,
+  ): Promise<FullResponce> {
+    const schedule = await this.scheduleService.getById(id);
 
-    return schedules.map((item) => {
-      const coach = coaches.find((coach) => coach.id === item.coach_id);
-      return {
-        ...item.get(),
-        coach: coach.firstname + ' ' + coach.lastname,
-        hall: halls.find((hall) => hall.id === item.hall_id).name,
-        class: classes.find((class_item) => class_item.id === item.class_id)
-          .name,
-        hallUk: halls.find((hall) => hall.id === item.hall_id).nameUk,
-        classUk: classes.find((class_item) => class_item.id === item.class_id)
-          .nameUk,
-        polesAmount: halls.find((hall) => hall.id === item.hall_id)
-          .poles_amount,
-      };
-    });
+    return this.scheduleService.mapScheduleToResponce(schedule);
   }
 
   @ApiBearerAuth()
@@ -185,9 +167,38 @@ export class SchedulesController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @Get('/enrolled/:userId')
+  @Get('/:date')
+  public async get(@Param('date') date: string): Promise<FullResponce[]> {
+    const schedules = await this.scheduleService.getByDate(date);
+
+    return this.scheduleService.mapSchedulesToResponce(schedules);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update schedule' })
+  @ApiOkResponse({ description: ResponceDescription.update })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @Get('week/:dateFrom/:dateTo')
+  public async getForPeriod(
+    @Param('dateFrom') dateFrom: string,
+    @Param('dateTo') dateTo: string,
+  ): Promise<FullResponce[]> {
+    const schedules = await this.scheduleService.getForPeriod(dateFrom, dateTo);
+
+    return this.scheduleService.mapSchedulesToResponce(schedules);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update schedule' })
+  @ApiOkResponse({ description: ResponceDescription.update })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @Get('/enrolled/:userId/:date')
   public async getEnrolled(
-    @Body() date: Date,
+    @Param('date') date: string,
     @Param(
       'userId',
       new ParseUUIDPipe({
@@ -195,39 +206,22 @@ export class SchedulesController {
       }),
     )
     userId: string,
-  ): Promise<TransformedSchedule[]> {
-    const coaches = await this.usersServise.getCoaches();
-    const halls = await this.hallService.get();
-    const classes = await this.classService.get();
-    const schedules = await this.scheduleService.getByDate(date.toISOString());
+  ): Promise<FullResponce[]> {
+    const schedules = await this.scheduleService.getByDate(date);
     const registrations = await this.registrationsService.getByUserAndDate(
       userId,
       schedules.map(({ id }) => id),
     );
 
-    return schedules
-      .filter((schedule) =>
+    return this.scheduleService.mapSchedulesToResponce(
+      schedules.filter((schedule) =>
         registrations.some(
           (registration) =>
             registration.schedule_id === schedule.id &&
             registration.client_id === userId,
         ),
-      )
-      .map((item) => {
-        const coach = coaches.find((coach) => coach.id === item.coach_id);
-        return {
-          ...item.get(),
-          coach: coach.firstname + ' ' + coach.lastname,
-          hall: halls.find((hall) => hall.id === item.hall_id).name,
-          class: classes.find((class_item) => class_item.id === item.class_id)
-            .name,
-          hallUk: halls.find((hall) => hall.id === item.hall_id).nameUk,
-          classUk: classes.find((class_item) => class_item.id === item.class_id)
-            .nameUk,
-          polesAmount: halls.find((hall) => hall.id === item.hall_id)
-            .poles_amount,
-        };
-      });
+      ),
+    );
   }
 
   private mapScheduleToResponce({

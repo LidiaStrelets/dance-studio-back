@@ -10,3 +10,13 @@ export enum Paths {
   bySchedule = 'registrations/bySchedule/:id',
   root = 'registrations',
 }
+
+export interface StatsResponce {
+  totalClasses: number;
+  totalMinutes: number;
+  stretching?: number;
+  poleSport?: number;
+  poleExotic?: number;
+  stripPlastic?: number;
+  exoticBeginners?: number;
+}

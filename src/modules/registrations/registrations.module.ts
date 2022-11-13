@@ -23,6 +23,7 @@ import { Paths } from '@registrationsModule/types/types';
 import { HallsModule } from '@hallsModule/halls.module';
 import { ExistsUserMiddleware } from '@middlewares/existsUser.middleware';
 import { PaymentAvailableMiddleware } from './middlewares/paymentAvailable.middleware';
+import { ClassesModule } from '@classesModule/classes.module';
 
 @Module({
   controllers: [RegistrationsController],
@@ -34,6 +35,7 @@ import { PaymentAvailableMiddleware } from './middlewares/paymentAvailable.middl
     forwardRef(() => SchedulesModule),
     CoreJwtModule,
     HallsModule,
+    ClassesModule,
   ],
   exports: [RegistrationsService],
 })

@@ -29,12 +29,17 @@ import { SchedulesService } from '@schedulesModule/services/schedules.service';
 import { CreateRegistrationDto } from '@registrationsModule/dto/add.dto';
 import { Registration } from '@registrationsModule/models/registrations.model';
 import { RegistrationsService } from '../services/registrations.service';
-import { IRegistrationResponce } from '@registrationsModule/types/types';
+import {
+  IRegistrationResponce,
+  StatsResponce,
+} from '@registrationsModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
-import { IN_DAY_HOURS, UNLIMITED_AMOUNT } from '@core/constants';
+import { IN_DAY_HOURS } from '@core/constants';
 import { ResponceDescription, Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
-import { UsersService } from '@usersModule/services/users.service';
+import { FullResponce } from '@schedulesModule/types/types';
+import { ClassesService } from '@classesModule/services/classes.service';
+import { Classes } from '@classesModule/types/types';
 
 @ApiTags('Registrations')
 @Controller('registrations')
@@ -44,7 +49,7 @@ export class RegistrationsController {
     private requestService: RequestService,
     private paymentService: PaymentsService,
     private scheduleService: SchedulesService,
-    private userService: UsersService,
+    private classesService: ClassesService,
   ) {}
 
   @ApiOperation({ summary: 'Create registration' })
@@ -217,6 +222,113 @@ export class RegistrationsController {
     const registrations = await this.registrationsService.getBySchedule(id);
 
     return registrations.map((item) => this.mapRegistrationToResponce(item));
+  }
+
+  @ApiOperation({
+    summary: 'Get user registrations information',
+  })
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
+  @ApiUnauthorizedResponse({ description: ResponceDescription.token })
+  @ApiForbiddenResponse({ description: ResponceDescription.userIdRequired })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
+  @Get('/byDateMapped/:userId/:date')
+  public async getByDateAndUserMapped(
+    @Param(
+      'userId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    userId: string,
+    @Param('date')
+    date: string,
+  ): Promise<FullResponce[]> {
+    const schedules = await this.scheduleService.getByDate(date);
+    const registrations = await this.registrationsService.getAllByUser(userId);
+
+    return this.scheduleService.mapSchedulesToResponce(
+      schedules.filter(({ id }) =>
+        registrations.some(({ schedule_id }) => id === schedule_id),
+      ),
+    );
+  }
+
+  @ApiOperation({
+    summary: 'Get user registrations information',
+  })
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
+  @ApiUnauthorizedResponse({ description: ResponceDescription.token })
+  @ApiForbiddenResponse({ description: ResponceDescription.userIdRequired })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
+  @Get('/byDate/:userId/:date')
+  public async getByDateAndUser(
+    @Param(
+      'userId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    userId: string,
+    @Param('date')
+    date: string,
+  ): Promise<IRegistrationResponce[]> {
+    const schedules = await this.scheduleService.getByDate(date);
+    const registrations = await this.registrationsService.getAllByUser(userId);
+
+    return registrations
+      .filter(({ schedule_id }) =>
+        schedules.some(({ id }) => id === schedule_id),
+      )
+      .map(this.mapRegistrationToResponce);
+  }
+
+  @ApiOperation({
+    summary: 'Get user registrations information',
+  })
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
+  @ApiUnauthorizedResponse({ description: ResponceDescription.token })
+  @ApiForbiddenResponse({ description: ResponceDescription.userIdRequired })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
+  @Get('/stats/:userId')
+  public async getStats(
+    @Param(
+      'userId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    userId: string,
+  ): Promise<StatsResponce> {
+    const registrations = await this.registrationsService.getAllByUser(userId);
+    const classes = await this.classesService.get();
+
+    const schedules = await Promise.all(
+      registrations.map(({ schedule_id }) =>
+        this.scheduleService.getById(schedule_id),
+      ),
+    );
+
+    const responcePart = {
+      totalMinutes: schedules.reduce(
+        (min, schedule) => min + schedule.duration,
+        0,
+      ),
+      totalClasses: schedules.length,
+    };
+
+    const responce = Object.keys(Classes).reduce((responce, key) => {
+      responce[key] = schedules.filter(
+        (item) =>
+          item.class_id ===
+          classes.find((classItem) => classItem.name === Classes[key]).id,
+      ).length;
+      return responce;
+    }, responcePart);
+
+    return responce;
   }
 
   private mapRegistrationToResponce({

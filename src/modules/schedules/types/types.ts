@@ -1,3 +1,5 @@
+import { TClass, TClassUk } from '@classesModule/types/types';
+
 export interface IScheduleResponce {
   coach_id: string;
   hall_id: string;
@@ -22,10 +24,22 @@ export enum Path {
   enrolled = 'schedules/enrolled/:userId',
 }
 
-export interface TransformedSchedule extends IScheduleResponce {
+export interface FullResponce {
+  date_time: Date;
+  id: string;
+  duration: number;
   coach: string;
+  coach_id: string;
   hall: string;
-  class: string;
+  class: TClass;
+  class_id: string;
   hallUk: string;
-  classUk: string;
+  classUk: TClassUk;
+  polesAmount: number;
+}
+
+export interface SingleFullResponce extends FullResponce {
+  coachInfo: string;
+  classInfo: string;
+  classInfoUk: string;
 }
