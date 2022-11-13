@@ -58,6 +58,7 @@ export class SchedulesService {
     const maxDate = new Date(dateTo);
     return this.scheduleRepo.findAll({
       where: { date_time: { [Op.lt]: maxDate, [Op.gt]: minDate } },
+      order: [['date_time', 'ASC']],
     });
   }
 
@@ -67,6 +68,7 @@ export class SchedulesService {
     const maxDate = new Date(maxDateMs);
     return this.scheduleRepo.findAll({
       where: { date_time: { [Op.lt]: maxDate, [Op.gt]: minDate } },
+      order: [['date_time', 'ASC']],
     });
   }
 
