@@ -311,16 +311,20 @@ export class RegistrationsController {
       ),
     );
 
+    const attended = schedules.filter(
+      ({ date_time }) => date_time < new Date(Date.now()),
+    );
+
     const responcePart = {
-      totalMinutes: schedules.reduce(
+      totalMinutes: attended.reduce(
         (min, schedule) => min + schedule.duration,
         0,
       ),
-      totalClasses: schedules.length,
+      totalClasses: attended.length,
     };
 
     const responce = Object.keys(Classes).reduce((responce, key) => {
-      responce[key] = schedules.filter(
+      responce[key] = attended.filter(
         (item) =>
           item.class_id ===
           classes.find((classItem) => classItem.name === Classes[key]).id,
