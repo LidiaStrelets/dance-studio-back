@@ -17,9 +17,9 @@ import { RequestService } from '@services/request.service';
 import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
 import { ClassesModule } from '@classesModule/classes.module';
 import { Path } from '@schedulesModule/types/types';
-import { ExistsClassMiddleware } from './middlewares/existsClass.middleware';
-import { ExistsCoachMiddleware } from './middlewares/existsCoach.middleware';
-import { ExistsHallMiddleware } from './middlewares/existsHall.middleware';
+import { ExistsClassMiddleware } from '@middlewares/existsClass.middleware';
+import { ExistsCoachMiddleware } from '@middlewares/existsCoach.middleware';
+import { ExistsHallMiddleware } from '@middlewares/existsHall.middleware';
 import { RegistrationsModule } from '@registrationsModule/registrations.module';
 import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 
