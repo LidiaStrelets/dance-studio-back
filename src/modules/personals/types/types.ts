@@ -1,0 +1,34 @@
+export enum Statuses {
+  created = 'created',
+  submitted = 'submitted',
+  approved = 'approved',
+}
+
+export type TStatus = 'created' | 'submitted' | 'approved';
+
+export interface IPersonalResponce {
+  coach_id: string;
+  hall_id: string;
+  class_id: string;
+  client_id: string;
+  date_time: Date;
+  duration: number;
+  message?: string;
+  status: TStatus;
+  id: string;
+}
+
+export enum Dto {
+  personalDescription = 'The personal class unique id',
+  dateExample = '29.05.2022 12:00',
+  dateDescription = `Date and time of the personal class`,
+  durationExample = 60,
+  statusDescription = 'Personal class status',
+  messageExample = 'I would like to have a class in the small hall',
+  messageDescription = 'An additional information from coach or client about the personal class',
+}
+
+export enum Path {
+  withId = 'personals/:userId',
+  root = 'personals',
+}

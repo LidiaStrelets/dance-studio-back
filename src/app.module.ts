@@ -13,6 +13,7 @@ import { CoreJwtModule } from '@core/jwt.module';
 import { RequestService } from '@services/request.service';
 import { ServeStaticModule } from '@nestjs/serve-static/dist/serve-static.module';
 import { join } from 'path';
+import { PersonalsModule } from '@personalsModule/personals.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { join } from 'path';
     PricesModule,
     PaymentsModule,
     RegistrationsModule,
+    PersonalsModule,
   ],
   controllers: [],
   providers: [RequestService],

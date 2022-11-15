@@ -49,7 +49,7 @@ export class UpdateScheduleDto {
   @IsOptional()
   @IsString()
   @ApiProperty({
-    example: Dto.dateExample,
+    example: new Date(),
     description: Dto.dateDescription as string,
   })
   readonly date_time: string;

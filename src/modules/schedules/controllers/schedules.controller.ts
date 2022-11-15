@@ -8,6 +8,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -28,6 +29,7 @@ import { ResponceDescription, UpdateResponce } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
 import { RegistrationsService } from '@registrationsModule/services/registrations.service';
+import { RolesGuard } from '@guards/roles.guard';
 
 @ApiTags('Schedules')
 @Controller('schedules')
@@ -45,10 +47,11 @@ export class SchedulesController {
   })
   @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @Roles(RolesEnum.admin)
+  @UseGuards(RolesGuard)
   @Post()
   public async add(@Body() dto: CreateScheduleDto): Promise<any> {
     const itemsWithDifferentDuration = await this.scheduleService.getByDuration(
-      dto.date_time,
+      dto.date_time.toISOString(),
     );
     if (itemsWithDifferentDuration.length > 0) {
       itemsWithDifferentDuration.forEach((item) => {
@@ -82,6 +85,7 @@ export class SchedulesController {
   })
   @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @Roles(RolesEnum.admin)
+  @UseGuards(RolesGuard)
   @Post('copyDay')
   public async copyDay(
     @Body() dto: { dateExisting: string; dateTarget: string },
@@ -94,10 +98,11 @@ export class SchedulesController {
         itemsSameDate.map((item) =>
           this.scheduleService.create({
             ...item.get(),
-            date_time:
+            date_time: new Date(
               dto.dateTarget.split('T')[0] +
-              'T' +
-              item.date_time.toISOString().split('T')[1],
+                'T' +
+                item.date_time.toISOString().split('T')[1],
+            ),
           }),
         ),
       );
@@ -120,9 +125,10 @@ export class SchedulesController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
+  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @Roles(RolesEnum.admin)
+  @UseGuards(RolesGuard)
   @Patch('/:id')
   public async update(
     @Body() scheduleDto: UpdateScheduleDto,

@@ -1,27 +1,18 @@
 import { BaseEntity } from '@core/baseEntity';
 import { UUID_EXAMPLE } from '@core/constants';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNumber, IsUUID } from 'class-validator';
-import { Dto as UsersDto } from '@usersModule/types/types';
-import { Dto as ClassesDto } from '@classesModule/types/types';
+import {
+  IsDateString,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { Dto as HallsDto } from '@hallsModule/types/types';
-import { Dto } from '@schedulesModule/types/types';
+import { Dto, Statuses, TStatus } from '@personalsModule/types/types';
 
-export class CreateScheduleDto extends BaseEntity {
-  @IsUUID()
-  @ApiProperty({
-    example: UUID_EXAMPLE,
-    description: UsersDto.coachDescription,
-  })
-  readonly coach_id: string;
-
-  @IsUUID()
-  @ApiProperty({
-    example: UUID_EXAMPLE,
-    description: ClassesDto.idDescription,
-  })
-  readonly class_id: string;
-
+export class UpdatePersonalDto extends BaseEntity {
+  @IsOptional()
   @IsUUID()
   @ApiProperty({
     example: UUID_EXAMPLE,
@@ -29,6 +20,7 @@ export class CreateScheduleDto extends BaseEntity {
   })
   readonly hall_id: string;
 
+  @IsOptional()
   @IsNumber()
   @ApiProperty({
     example: Dto.durationExample,
@@ -36,10 +28,27 @@ export class CreateScheduleDto extends BaseEntity {
   })
   readonly duration: number;
 
-  @IsDate()
+  @IsOptional()
+  @IsDateString()
   @ApiProperty({
     example: new Date(),
     description: Dto.dateDescription as string,
   })
   readonly date_time: Date;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: Statuses.created,
+    description: Dto.statusDescription as string,
+  })
+  readonly status: TStatus;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: Dto.messageExample,
+    description: Dto.messageDescription as string,
+  })
+  readonly message: string;
 }

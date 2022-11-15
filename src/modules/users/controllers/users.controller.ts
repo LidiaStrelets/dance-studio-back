@@ -7,7 +7,6 @@ import {
   Param,
   ParseUUIDPipe,
   Patch,
-  Post,
   Res,
   UploadedFile,
   UseGuards,
@@ -140,7 +139,6 @@ export class UsersController {
   @Patch('/:userId')
   public async update(
     @Body(new BodyValidPipe(EUpdateUser)) dto: { userForm: UpdateUserDto },
-
     @Param(
       'userId',
       new ParseUUIDPipe({
