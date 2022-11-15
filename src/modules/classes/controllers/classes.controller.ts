@@ -39,11 +39,11 @@ export class ClassesController {
     type: CreateClassDto,
   })
   @ApiUnauthorizedResponse({ description: ResponceDescription.token })
+  @ApiBearerAuth()
+  @ApiBody({ type: CreateClassDto })
   @ApiForbiddenResponse({
     description: ResponceDescription.adminRoute,
   })
-  @ApiBearerAuth()
-  @ApiBody({ type: CreateClassDto })
   @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Post()
@@ -58,13 +58,13 @@ export class ClassesController {
     description: ResponceDescription.update,
   })
   @ApiUnauthorizedResponse({ description: ResponceDescription.token })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @ApiForbiddenResponse({
     description: ResponceDescription.adminRoute,
   })
-  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Roles(RolesEnum.admin)
-  @ApiBearerAuth()
   @UseGuards(RolesGuard)
+  @ApiBearerAuth()
   @Patch('/:id')
   public async update(
     @Body() dto: UpdateClassDto,

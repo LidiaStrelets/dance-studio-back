@@ -42,8 +42,8 @@ export class PaymentsController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
   @ApiBasicAuth()
+  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
   @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   @Post()
@@ -67,8 +67,8 @@ export class PaymentsController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
+  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
   @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   @Get('/:userId')

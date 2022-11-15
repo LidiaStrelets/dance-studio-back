@@ -64,11 +64,11 @@ export class RegistrationsController {
     status: HttpStatus.PAYMENT_REQUIRED,
     description: ResponceDescription.passExpired,
   })
-  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
   @ApiNotFoundResponse({
     description: ResponceDescription.noPlaces,
   })
   @ApiBearerAuth()
+  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
   @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   @Post()
@@ -85,11 +85,11 @@ export class RegistrationsController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
+  @ApiBearerAuth()
   @ApiForbiddenResponse({
     description: `${ResponceDescription.notCoachRoute}, ${ResponceDescription.userIdRequired}`,
   })
-  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
-  @ApiBearerAuth()
   @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   @Delete('/:scheduleId')

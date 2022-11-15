@@ -38,8 +38,8 @@ export class PricesController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @ApiBearerAuth()
+  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Post()
@@ -68,8 +68,8 @@ export class PricesController {
     description: ResponceDescription.token,
   })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
-  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @ApiBearerAuth()
+  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Patch('/:id')

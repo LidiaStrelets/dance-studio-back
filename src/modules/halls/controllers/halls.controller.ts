@@ -53,8 +53,8 @@ export class HallsController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @ApiBearerAuth()
+  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Post()
@@ -70,8 +70,8 @@ export class HallsController {
     description: ResponceDescription.token,
   })
   @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
-  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @ApiBearerAuth()
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Patch('/:id')
