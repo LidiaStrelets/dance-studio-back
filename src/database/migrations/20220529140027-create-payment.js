@@ -17,6 +17,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      available_spots: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE,
     });

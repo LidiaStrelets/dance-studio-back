@@ -23,7 +23,7 @@ import { ClassesService } from '@classesModule/services/classes.service';
 import { CreateClassDto } from '@classesModule/dto/create.dto';
 import { UpdateClassDto } from '@classesModule/dto/update.dto';
 import { Class } from '@classesModule/models/classes.model';
-import { IClassResponce } from '@classesModule/types/types';
+import { Classes, ClassesUk, IClassResponce } from '@classesModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
 import { ResponceDescription, UpdateResponce } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';

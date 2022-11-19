@@ -29,6 +29,12 @@ import { PersonalsModule } from '@personalsModule/personals.module';
       database: process.env.POSTGRES_DATABASE,
       autoLoadModels: true,
       synchronize: true,
+      dialectOptions: {
+        ssl: {
+          require: true, // This will help you. But you will see nwe error
+          rejectUnauthorized: false, // This line will fix new error
+        },
+      },
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'images'),

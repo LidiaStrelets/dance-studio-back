@@ -3,7 +3,6 @@
 /node_modules
 
 .env
-/src/database/config.ts
 
 # Logs
 logs
@@ -36,3 +35,4 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+src/database/config.js

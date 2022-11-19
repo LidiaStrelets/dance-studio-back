@@ -30,5 +30,6 @@ export enum Dto {
 
 export enum Path {
   withId = 'personals/:userId',
+  coach = 'personals/byCoach/:coachId/:date',
   root = 'personals',
 }

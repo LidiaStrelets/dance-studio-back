@@ -72,6 +72,23 @@ export class SchedulesService {
     });
   }
 
+  public getByDateAndCoach(
+    date: string,
+    coach_id: string,
+  ): Promise<Schedule[]> {
+    const minDate = new Date(date);
+    const maxDateMs = minDate.getTime() + this.dayToMs(1);
+    const maxDate = new Date(maxDateMs);
+
+    return this.scheduleRepo.findAll({
+      where: {
+        date_time: { [Op.lt]: maxDate, [Op.gt]: minDate },
+        coach_id,
+      },
+      order: [['date_time', 'ASC']],
+    });
+  }
+
   public getByDuration(date: string): Promise<Schedule[]> {
     const dateStr = date.split('T')[0];
     const minDate = new Date(dateStr);

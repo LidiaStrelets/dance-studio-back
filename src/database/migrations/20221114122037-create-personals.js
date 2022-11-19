@@ -33,7 +33,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      message: { type: Sequelize.STRING },
+      message: { type: Sequelize.TEXT('long') },
       duration: { type: Sequelize.INTEGER, allowNull: false },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE,

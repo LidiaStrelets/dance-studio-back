@@ -15,6 +15,7 @@ import { HallsModule } from '@hallsModule/halls.module';
 import { ClassesModule } from '@classesModule/classes.module';
 import { SchedulesModule } from '@schedulesModule/schedules.module';
 import { ExistsPersonalMiddleware } from './middlewares/existsPersonal.middleware';
+import { IsCoachIdMiddleware } from './middlewares/isCoachId.middleware';
 
 @Module({
   providers: [PersonalsService, RequestService],
@@ -46,5 +47,9 @@ export class PersonalsModule {
     consumer
       .apply(ExistsPersonalMiddleware)
       .forRoutes({ path: Path.withId, method: RequestMethod.POST });
+
+    consumer
+      .apply(IsCoachIdMiddleware)
+      .forRoutes({ path: Path.coach, method: RequestMethod.GET });
   }
 }

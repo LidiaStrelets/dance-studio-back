@@ -64,4 +64,10 @@ export class RegistrationsService {
       },
     });
   }
+
+  public getBySchedules(ids: string[]): Promise<Registration[]> {
+    return this.registrationRepo.findAll({
+      where: { schedule_id: { [Op.in]: ids } },
+    });
+  }
 }

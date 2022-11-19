@@ -19,6 +19,8 @@ export class HallsService {
   }
 
   public create(dto: CreateHallDto): Promise<Hall> {
+    console.log('create', { ...dto, id: GetId() });
+
     return this.hallRepo.create({ ...dto, id: GetId() });
   }
 

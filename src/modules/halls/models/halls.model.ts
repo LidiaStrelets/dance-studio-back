@@ -26,7 +26,7 @@ export class Hall extends Model<Hall, HallCreationAttrs> {
   name: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.TEXT('long'),
     allowNull: false,
   })
   description: string;
@@ -39,7 +39,7 @@ export class Hall extends Model<Hall, HallCreationAttrs> {
   nameUk: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.TEXT('long'),
     allowNull: false,
   })
   descriptionUk: string;

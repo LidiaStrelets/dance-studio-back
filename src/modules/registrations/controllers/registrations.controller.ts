@@ -262,6 +262,52 @@ export class RegistrationsController {
   @ApiUnauthorizedResponse({ description: ResponceDescription.token })
   @ApiForbiddenResponse({ description: ResponceDescription.userIdRequired })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
+  @Get('/byDateAndCoachMapped/:coachId/:date')
+  public async getByDateAndCoachMapped(
+    @Param(
+      'coachId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    coachId: string,
+    @Param('date')
+    date: string,
+  ): Promise<FullResponce[]> {
+    const schedules = await this.scheduleService.getByDateAndCoach(
+      date,
+      coachId,
+    );
+
+    const scheduleIds = schedules.map(({ id }) => id);
+
+    const registrations = await this.registrationsService.getBySchedules(
+      scheduleIds,
+    );
+    registrations.forEach((r) => console.log(r.client_id));
+
+    const mapped = await this.scheduleService.mapSchedulesToResponce(
+      schedules.filter(({ id }) =>
+        registrations.some(({ schedule_id }) => id === schedule_id),
+      ),
+    );
+
+    return mapped.map((item) => ({
+      ...item,
+      clients: registrations
+        .filter(({ schedule_id }) => schedule_id === item.id)
+        .map(({ client_id }) => client_id),
+    }));
+  }
+
+  @ApiOperation({
+    summary: 'Get user registrations information',
+  })
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
+  @ApiUnauthorizedResponse({ description: ResponceDescription.token })
+  @ApiForbiddenResponse({ description: ResponceDescription.userIdRequired })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Get('/byDate/:userId/:date')
   public async getByDateAndUser(
     @Param(

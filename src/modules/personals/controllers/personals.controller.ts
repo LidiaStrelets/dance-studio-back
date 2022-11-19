@@ -77,6 +77,31 @@ export class PersonalsController {
     return personals.map((item) => this.mapPersonalToResponce(item));
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: `Get user's personals` })
+  @ApiOkResponse({ type: CreatePersonalDto })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
+  @Roles(RolesEnum.admin, RolesEnum.coach)
+  @UseGuards(RolesGuard)
+  @Get('byCoach/:coachId/:date')
+  public async getByCoach(
+    @Param(
+      'coachId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    coachId: string,
+    @Param('date')
+    date: string,
+  ): Promise<any> {
+    const personals = await this.personalsService.getByDate(coachId, date);
+    return personals.map((item) => this.mapPersonalToResponce(item));
+  }
+
   private mapPersonalToResponce({
     coach_id,
     hall_id,

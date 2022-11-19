@@ -53,7 +53,7 @@ export class User extends Model<User, UserCreationAttrs> {
   birth_date: Date;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.TEXT('long'),
     allowNull: true,
   })
   information: string;

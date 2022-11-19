@@ -14,7 +14,7 @@ module.exports = {
         allowNull: false,
       },
       description: {
-        type: Sequelize.TEXT,
+        type: Sequelize.TEXT('long'),
         allowNull: false,
       },
       nameUk: {
@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false,
       },
       descriptionUk: {
-        type: Sequelize.TEXT,
+        type: Sequelize.TEXT('long'),
         allowNull: false,
       },
       poles_amount: {

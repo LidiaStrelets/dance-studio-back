@@ -26,7 +26,7 @@ export class Class extends Model<Class, ClassCreationAttrs> {
   name: TClass;
 
   @Column({
-    type: DataType.TEXT,
+    type: DataType.TEXT('long'),
     allowNull: false,
   })
   description: string;
@@ -39,7 +39,7 @@ export class Class extends Model<Class, ClassCreationAttrs> {
   nameUk: TClassUk;
 
   @Column({
-    type: DataType.TEXT,
+    type: DataType.TEXT('long'),
     allowNull: false,
   })
   descriptionUk: string;

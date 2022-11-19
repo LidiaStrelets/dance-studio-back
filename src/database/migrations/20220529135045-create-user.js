@@ -31,13 +31,13 @@ module.exports = {
         allowNull: false,
       },
       information: {
-        type: Sequelize.TEXT,
+        type: Sequelize.TEXT('long'),
       },
       photo: {
         type: Sequelize.STRING,
       },
       birth_date: {
-        type: Sequelize.STRING,
+        type: Sequelize.DATE,
       },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE,

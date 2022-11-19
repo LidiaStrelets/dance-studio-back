@@ -7,6 +7,7 @@ import {
   Param,
   ParseUUIDPipe,
   Patch,
+  Post,
   Res,
   UploadedFile,
   UseGuards,
@@ -21,7 +22,6 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Roles } from '@decorators/roles.decorator';
 import { RolesGuard } from '@guards/roles.guard';
 import { RegisterDto } from '@usersModule/dto/register.dto';
 import { UpdateUserDto } from '@usersModule/dto/update.dto';
@@ -41,11 +41,13 @@ import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { Roles } from '@decorators/roles.decorator';
+import { AuthService } from '@authModule/services/auth.service';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(private userService: UsersService, private auth: AuthService) {}
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiBearerAuth()
