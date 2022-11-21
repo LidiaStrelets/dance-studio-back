@@ -25,11 +25,12 @@ import { UpdateScheduleDto } from '@schedulesModule/dto/update.dto';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
 import { Schedule } from '@schedulesModule/models/schedules.model';
 import { FullResponce, IScheduleResponce } from '@schedulesModule/types/types';
-import { ResponceDescription, UpdateResponce } from '@core/types';
+import { ResponceDescription } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
 import { RegistrationsService } from '@registrationsModule/services/registrations.service';
 import { RolesGuard } from '@guards/roles.guard';
+import { PersonalsService } from '@personalsModule/services/personals.service';
 
 @ApiTags('Schedules')
 @Controller('schedules')
@@ -37,6 +38,7 @@ export class SchedulesController {
   constructor(
     private scheduleService: SchedulesService,
     private registrationsService: RegistrationsService,
+    private personalsService: PersonalsService,
   ) {}
 
   // until the admin functionality is done will keep this for creating schedules
@@ -48,64 +50,7 @@ export class SchedulesController {
       id: '',
       coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
       class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-10-17T09:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: 'b4361154-3b92-43ac-bae1-10450ea7189c', //tania
-      class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-10-17T10:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: 'b4361154-3b92-43ac-bae1-10450ea7189c', //tania
-      class_id: 'fe5f1fff-bbd8-4675-8a5f-52eac3f42b88', //sport
-      date_time: new Date('2022-10-17T11:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: '911fe288-b387-4c62-9878-812457abb156', //sasha
-      class_id: '88f7bf82-ea7e-4172-bd3e-1ad5c4b718dd', //beg
-      date_time: new Date('2022-10-17T17:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: '911fe288-b387-4c62-9878-812457abb156', //sasha
-      class_id: 'fe5f1fff-bbd8-4675-8a5f-52eac3f42b88', //sport
-      date_time: new Date('2022-10-17T18:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-
-    await this.scheduleService.create({
-      id: '',
-      coach_id: 'd36e54fe-a82f-4bbc-a505-3a6f2a20277f', //vira
-      class_id: '16c0c2dd-e139-4544-b312-4fdd934d68ee', //plastic
-      date_time: new Date('2022-10-18T12:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: 'd36e54fe-a82f-4bbc-a505-3a6f2a20277f', //vira
-      class_id: 'b678755c-20fa-405a-bff6-ad7cbb6ec53f', //stretch
-      date_time: new Date('2022-10-18T13:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: 'b4361154-3b92-43ac-bae1-10450ea7189c', //tania
-      class_id: 'fe5f1fff-bbd8-4675-8a5f-52eac3f42b88', //sport
-      date_time: new Date('2022-10-18T18:00:00'),
+      date_time: new Date('2022-11-02T20:00:00'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
@@ -113,7 +58,7 @@ export class SchedulesController {
       id: '',
       coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
       class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-10-18T19:00:00'),
+      date_time: new Date('2022-11-04T20:00:00'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
@@ -121,7 +66,23 @@ export class SchedulesController {
       id: '',
       coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
       class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-10-18T20:00:00'),
+      date_time: new Date('2022-11-07T20:00:00'),
+      duration: 60,
+      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    });
+    await this.scheduleService.create({
+      id: '',
+      coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
+      class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
+      date_time: new Date('2022-11-09T20:00:00'),
+      duration: 60,
+      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    });
+    await this.scheduleService.create({
+      id: '',
+      coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
+      class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
+      date_time: new Date('2022-11-11T20:00:00'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
@@ -130,83 +91,152 @@ export class SchedulesController {
       id: '',
       coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
       class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-11-19T09:00:00'),
+      date_time: new Date('2022-11-14T20:00:00'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
     await this.scheduleService.create({
       id: '',
-      coach_id: 'b4361154-3b92-43ac-bae1-10450ea7189c', //tania
+      coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
       class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-11-19T10:00:00'),
+      date_time: new Date('2022-11-16T20:00:00'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
     await this.scheduleService.create({
       id: '',
-      coach_id: 'b4361154-3b92-43ac-bae1-10450ea7189c', //tania
-      class_id: 'fe5f1fff-bbd8-4675-8a5f-52eac3f42b88', //sport
-      date_time: new Date('2022-11-19T11:00:00'),
+      coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
+      class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
+      date_time: new Date('2022-11-18T20:00:00'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: '911fe288-b387-4c62-9878-812457abb156', //sasha
-      class_id: '88f7bf82-ea7e-4172-bd3e-1ad5c4b718dd', //beg
-      date_time: new Date('2022-11-19T17:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: '911fe288-b387-4c62-9878-812457abb156', //sasha
-      class_id: 'fe5f1fff-bbd8-4675-8a5f-52eac3f42b88', //sport
-      date_time: new Date('2022-11-19T18:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
+    // await this.scheduleService.create({
+    //   id: '',
+    //   coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
+    //   class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
+    //   date_time: new Date('2022-10-18T19:00:00'),
+    //   duration: 60,
+    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    // });
+    // await this.scheduleService.create({
+    //   id: '',
+    //   coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
+    //   class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
+    //   date_time: new Date('2022-10-18T20:00:00'),
+    //   duration: 60,
+    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    // });
 
-    await this.scheduleService.create({
-      id: '',
-      coach_id: 'd36e54fe-a82f-4bbc-a505-3a6f2a20277f', //vira
-      class_id: '16c0c2dd-e139-4544-b312-4fdd934d68ee', //plastic
-      date_time: new Date('2022-11-20T12:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: 'd36e54fe-a82f-4bbc-a505-3a6f2a20277f', //vira
-      class_id: 'b678755c-20fa-405a-bff6-ad7cbb6ec53f', //stretch
-      date_time: new Date('2022-11-20T13:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: 'b4361154-3b92-43ac-bae1-10450ea7189c', //tania
-      class_id: 'fe5f1fff-bbd8-4675-8a5f-52eac3f42b88', //sport
-      date_time: new Date('2022-11-20T18:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
-      class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-11-20T19:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
-      class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-11-20T20:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
+    // await this.scheduleService.create({
+    //   id: '',
+    //   coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
+    //   class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
+    //   date_time: new Date('2022-11-19T09:00:00'),
+    //   duration: 60,
+    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    // });
+    // await this.scheduleService.create({
+    //   id: '',
+    //   coach_id: 'b4361154-3b92-43ac-bae1-10450ea7189c', //tania
+    //   class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
+    //   date_time: new Date('2022-11-19T10:00:00'),
+    //   duration: 60,
+    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    // });
+    // await this.scheduleService.create({
+    //   id: '',
+    //   coach_id: 'b4361154-3b92-43ac-bae1-10450ea7189c', //tania
+    //   class_id: 'fe5f1fff-bbd8-4675-8a5f-52eac3f42b88', //sport
+    //   date_time: new Date('2022-11-19T11:00:00'),
+    //   duration: 60,
+    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    // });
+    // await this.scheduleService.create({
+    //   id: '',
+    //   coach_id: '911fe288-b387-4c62-9878-812457abb156', //sasha
+    //   class_id: '88f7bf82-ea7e-4172-bd3e-1ad5c4b718dd', //beg
+    //   date_time: new Date('2022-11-19T17:00:00'),
+    //   duration: 60,
+    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    // });
+    // await this.scheduleService.create({
+    //   id: '',
+    //   coach_id: '911fe288-b387-4c62-9878-812457abb156', //sasha
+    //   class_id: 'fe5f1fff-bbd8-4675-8a5f-52eac3f42b88', //sport
+    //   date_time: new Date('2022-11-19T18:00:00'),
+    //   duration: 60,
+    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    // });
+
+    // await this.scheduleService.create({
+    //   id: '',
+    //   coach_id: 'd36e54fe-a82f-4bbc-a505-3a6f2a20277f', //vira
+    //   class_id: '16c0c2dd-e139-4544-b312-4fdd934d68ee', //plastic
+    //   date_time: new Date('2022-11-20T12:00:00'),
+    //   duration: 60,
+    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    // });
+    // await this.scheduleService.create({
+    //   id: '',
+    //   coach_id: 'd36e54fe-a82f-4bbc-a505-3a6f2a20277f', //vira
+    //   class_id: 'b678755c-20fa-405a-bff6-ad7cbb6ec53f', //stretch
+    //   date_time: new Date('2022-11-20T13:00:00'),
+    //   duration: 60,
+    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    // });
+    // await this.scheduleService.create({
+    //   id: '',
+    //   coach_id: 'b4361154-3b92-43ac-bae1-10450ea7189c', //tania
+    //   class_id: 'fe5f1fff-bbd8-4675-8a5f-52eac3f42b88', //sport
+    //   date_time: new Date('2022-11-20T18:00:00'),
+    //   duration: 60,
+    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    // });
+    // await this.scheduleService.create({
+    //   id: '',
+    //   coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
+    //   class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
+    //   date_time: new Date('2022-11-20T19:00:00'),
+    //   duration: 60,
+    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    // });
+    // await this.scheduleService.create({
+    //   id: '',
+    //   coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
+    //   class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
+    //   date_time: new Date('2022-11-20T20:00:00'),
+    //   duration: 60,
+    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
+    // });
+  }
+
+  @ApiOperation({
+    summary: 'Get data about one user - allowed to data owner or admin',
+  })
+  @ApiBearerAuth()
+  // @ApiOkResponse({ type: RegisterDto }) edit this
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @ApiForbiddenResponse({ description: ResponceDescription.notClientRoute })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
+  @Roles(RolesEnum.admin, RolesEnum.coach)
+  @UseGuards(RolesGuard)
+  @Get('salary/:coachId')
+  public async getSalary(
+    @Param(
+      'coachId',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    coachId: string,
+  ): Promise<number> {
+    const schedules = await this.scheduleService.getByCurrentMonth(coachId);
+    const personals = await this.personalsService.getByCurrentMonth(coachId);
+
+    return (schedules.length + personals.length) * 200;
   }
 
   @ApiBearerAuth()
@@ -297,7 +327,7 @@ export class SchedulesController {
   })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
-  @Roles(RolesEnum.admin)
+  @Roles(RolesEnum.admin, RolesEnum.coach)
   @UseGuards(RolesGuard)
   @Patch('/:id')
   public async update(
@@ -309,11 +339,25 @@ export class SchedulesController {
       }),
     )
     id: string,
-  ): Promise<string> {
-    const updatedSchedule = await this.scheduleService.update(scheduleDto, id);
-    return updatedSchedule.length >= 1
-      ? UpdateResponce.success
-      : UpdateResponce.error;
+  ): Promise<Schedule[]> {
+    const [updatedNumber, updatedRows] = await this.scheduleService.update(
+      scheduleDto,
+      id,
+    );
+
+    if (updatedNumber !== 1) {
+      throw new HttpException(
+        [
+          {
+            message: [
+              'Requested schedule not found or duplicated - check the schedule id',
+            ],
+          },
+        ],
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return updatedRows;
   }
 
   @ApiBearerAuth()

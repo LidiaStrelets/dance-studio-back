@@ -31,6 +31,15 @@ export class PersonalsService {
     });
   }
 
+  public getByCurrentMonth(coach_id: string): Promise<Personal[]> {
+    const maxDate = new Date();
+    const minDate = new Date(maxDate.getFullYear(), maxDate.getMonth());
+
+    return this.personalsRepo.findAll({
+      where: { date_time: { [Op.lt]: maxDate, [Op.gt]: minDate }, coach_id },
+    });
+  }
+
   public getByDate(coach_id: string, date: string): Promise<Personal[]> {
     const minDate = new Date(date);
     const maxDateMs = minDate.getTime() + this.scheduleService.dayToMs(1);

@@ -42,12 +42,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { Roles } from '@decorators/roles.decorator';
-import { AuthService } from '@authModule/services/auth.service';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService, private auth: AuthService) {}
+  constructor(private userService: UsersService) {}
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiBearerAuth()
@@ -84,7 +83,6 @@ export class UsersController {
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Get('/:userId')
   public async getById(

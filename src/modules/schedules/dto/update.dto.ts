@@ -8,7 +8,6 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { DateDataType } from 'sequelize/types';
 import { Dto as ClassesDto } from '@classesModule/types/types';
 import { Dto as HallsDto } from '@hallsModule/types/types';
 import { Dto } from '@schedulesModule/types/types';
@@ -47,10 +46,18 @@ export class UpdateScheduleDto {
   readonly duration: number;
 
   @IsOptional()
-  @IsString()
+  @IsDateString()
   @ApiProperty({
     example: new Date(),
     description: Dto.dateDescription as string,
   })
-  readonly date_time: string;
+  readonly date_time: Date;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: UUID_EXAMPLE, //edit this!
+    description: HallsDto.idDescription as string, //edit this!
+  })
+  readonly notes: string;
 }

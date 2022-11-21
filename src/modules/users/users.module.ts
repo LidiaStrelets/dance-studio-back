@@ -8,12 +8,11 @@ import { RequestService } from '@services/request.service';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 import { Path } from '@usersModule/types/types';
-import { AuthModule } from '@authModule/auth.module';
 
 @Module({
   controllers: [UsersController],
   providers: [UsersService, RequestService],
-  imports: [SequelizeModule.forFeature([User]), CoreJwtModule, AuthModule],
+  imports: [SequelizeModule.forFeature([User]), CoreJwtModule],
   exports: [UsersService],
 })
 export class UsersModule {

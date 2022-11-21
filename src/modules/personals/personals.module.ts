@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import {
+  forwardRef,
+  MiddlewareConsumer,
+  Module,
+  RequestMethod,
+} from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { RequestService } from '@services/request.service';
 import { PersonalsController } from '@personalsModule/controllers/personals.controller';
@@ -26,7 +31,7 @@ import { IsCoachIdMiddleware } from './middlewares/isCoachId.middleware';
     UsersModule,
     CoreJwtModule,
     ClassesModule,
-    SchedulesModule,
+    forwardRef(() => SchedulesModule),
   ],
   exports: [PersonalsService],
 })

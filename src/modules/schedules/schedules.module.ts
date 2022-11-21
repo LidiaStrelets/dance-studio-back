@@ -22,6 +22,7 @@ import { ExistsCoachMiddleware } from '@middlewares/existsCoach.middleware';
 import { ExistsHallMiddleware } from '@middlewares/existsHall.middleware';
 import { RegistrationsModule } from '@registrationsModule/registrations.module';
 import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
+import { PersonalsModule } from '@personalsModule/personals.module';
 
 @Module({
   providers: [SchedulesService, RequestService],
@@ -33,7 +34,7 @@ import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
     UsersModule,
     CoreJwtModule,
     ClassesModule,
-
+    forwardRef(() => PersonalsModule),
     forwardRef(() => RegistrationsModule),
   ],
   exports: [SchedulesService],
@@ -52,7 +53,10 @@ export class SchedulesModule {
       .apply(ExistsHallMiddleware)
       .forRoutes({ path: Path.root, method: RequestMethod.POST });
 
-    consumer.apply(IsCoachMiddleware).exclude(Path.withId).forRoutes(Path.root);
+    consumer
+      .apply(IsCoachMiddleware)
+      .exclude({ path: Path.withId, method: RequestMethod.GET })
+      .forRoutes(Path.root);
 
     consumer
       .apply(DataOwnerOrAdminMiddleware)

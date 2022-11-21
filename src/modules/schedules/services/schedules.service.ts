@@ -72,6 +72,15 @@ export class SchedulesService {
     });
   }
 
+  public getByCurrentMonth(coach_id: string): Promise<Schedule[]> {
+    const maxDate = new Date();
+    const minDate = new Date(maxDate.getFullYear(), maxDate.getMonth());
+
+    return this.scheduleRepo.findAll({
+      where: { date_time: { [Op.lt]: maxDate, [Op.gt]: minDate }, coach_id },
+    });
+  }
+
   public getByDateAndCoach(
     date: string,
     coach_id: string,
@@ -123,10 +132,10 @@ export class SchedulesService {
     data: UpdateScheduleDto,
     id: string,
   ): Promise<[affectedCount: number, affectedRows: Schedule[]]> {
-    const date_time_str = data.date_time;
-    const date_time = new Date(date_time_str);
+    // const date_time_str = data.date_time;
+    // const date_time = new Date(date_time_str);  pay attention later
     return this.scheduleRepo.update(
-      { ...data, date_time },
+      { ...data },
       { where: { id }, returning: true },
     );
   }
@@ -156,6 +165,7 @@ export class SchedulesService {
           .nameUk,
         polesAmount: halls.find((hall) => hall.id === item.hall_id)
           .poles_amount,
+        notes: item.notes,
       };
     });
   };

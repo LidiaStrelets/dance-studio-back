@@ -11,6 +11,7 @@ interface PersonalCreationAttrs {
   duration: number;
   status: TStatus;
   message?: string;
+  notes?: string;
 }
 
 @Table({ tableName: 'personals' })
@@ -63,6 +64,12 @@ export class Personal extends Model<Personal, PersonalCreationAttrs> {
     allowNull: true,
   })
   message: string;
+
+  @Column({
+    type: DataType.TEXT('long'),
+    allowNull: true,
+  })
+  notes: string;
 
   @Column({
     type: DataType.STRING,

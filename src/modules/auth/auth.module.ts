@@ -11,7 +11,6 @@ import { AuthService } from '@authModule/services/auth.service';
 import { LoginMiddleware } from './middlewares/login.middleware';
 import { RegistrationMiddleware } from './middlewares/signup.middleware';
 import { Paths } from '@authModule/types/types';
-import { HallsModule } from '@hallsModule/halls.module';
 
 @Module({
   controllers: [AuthController],
