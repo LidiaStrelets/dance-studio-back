@@ -1,6 +1,6 @@
 import { TUpdateResponce, UpdateResponce } from '@core/types';
 import { Test } from '@nestjs/testing';
-import { RequestService } from '@services/request.service';
+import { RequestService } from '@services/request/request.service';
 import { UsersController } from '@usersModule/controllers/users.controller';
 import { UsersService } from '@usersModule/services/users.service';
 import { IUserResponce } from '@usersModule/types/types';

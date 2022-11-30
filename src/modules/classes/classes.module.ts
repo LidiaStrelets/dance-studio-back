@@ -7,7 +7,7 @@ import { Class } from '@classesModule/models/classes.model';
 import { ClassesService } from '@classesModule/services/classes.service';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { CoreJwtModule } from '@core/jwt.module';
-import { RequestService } from '@services/request.service';
+import { RequestService } from '@services/request/request.service';
 import { UsersModule } from '@usersModule/users.module';
 import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
 import { Paths } from '@classesModule/types/types';

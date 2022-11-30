@@ -7,7 +7,7 @@ import { Payment } from '@paymentsModule/models/payments.model';
 import { Price } from '@pricesModule/models/prices.model';
 import { PricesModule } from '@pricesModule/prices.module';
 import { UsersModule } from '@usersModule/users.module';
-import { RequestService } from '@services/request.service';
+import { RequestService } from '@services/request/request.service';
 import { AdminWithUserIdMiddleware } from '@middlewares/adminWithUserId.middleware';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { CoreJwtModule } from '@core/jwt.module';

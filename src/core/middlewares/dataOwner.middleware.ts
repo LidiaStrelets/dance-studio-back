@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request, NextFunction } from 'express';
-import { RequestService } from '@services/request.service';
+import { RequestService } from '@services/request/request.service';
 import { Roles } from '@core/types';
 
 @Injectable()

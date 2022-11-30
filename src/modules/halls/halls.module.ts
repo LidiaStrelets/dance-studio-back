@@ -7,7 +7,7 @@ import { HallsService } from '@hallsModule/services/halls.service';
 import { CoreJwtModule } from '@core/jwt.module';
 import { UsersModule } from '@usersModule/users.module';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
-import { RequestService } from '@services/request.service';
+import { RequestService } from '@services/request/request.service';
 import { Paths } from '@hallsModule/types/types';
 
 @Module({

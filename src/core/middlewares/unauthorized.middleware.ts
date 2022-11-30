@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request, NextFunction } from 'express';
-import { RequestService } from '@services/request.service';
+import { RequestService } from '@services/request/request.service';
 import { UsersService } from '@usersModule/services/users.service';
 import { IToken } from '@authModule/types/types';
 import { BEARER, JWT_SERVICE } from '@core/constants';

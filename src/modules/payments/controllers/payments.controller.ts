@@ -19,7 +19,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
-import { RequestService } from '@services/request.service';
+import { RequestService } from '@services/request/request.service';
 import { PricesService } from '@pricesModule/services/prices.service';
 import { CreatePaymentDto } from '@paymentsModule/dto/add.dto';
 import { PaymentsService } from '@paymentsModule/services/payments.service';

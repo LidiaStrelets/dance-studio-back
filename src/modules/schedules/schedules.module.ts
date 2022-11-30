@@ -13,7 +13,7 @@ import { HallsModule } from '@hallsModule/halls.module';
 import { UsersModule } from '@usersModule/users.module';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { CoreJwtModule } from '@core/jwt.module';
-import { RequestService } from '@services/request.service';
+import { RequestService } from '@services/request/request.service';
 import { IsCoachMiddleware } from '@middlewares/isCoach.middleware';
 import { ClassesModule } from '@classesModule/classes.module';
 import { Path } from '@schedulesModule/types/types';

@@ -5,7 +5,7 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { RequestService } from '@services/request.service';
+import { RequestService } from '@services/request/request.service';
 import { PersonalsController } from '@personalsModule/controllers/personals.controller';
 import { Personal } from '@personalsModule/models/personals.model';
 import { PersonalsService } from '@personalsModule/services/personals.service';

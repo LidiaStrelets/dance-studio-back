@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request, NextFunction } from 'express';
 import { RegistrationsService } from '@registrationsModule/services/registrations.service';
-import { RequestService } from '@services/request.service';
+import { RequestService } from '@services/request/request.service';
 
 @Injectable()
 export class ExistsRegistrationMiddleware {

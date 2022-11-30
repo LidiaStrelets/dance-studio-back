@@ -23,7 +23,7 @@ import {
 } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
 import { Roles as RolesType } from '@core/types';
-import { RequestService } from '@services/request.service';
+import { RequestService } from '@services/request/request.service';
 import { PaymentsService } from '@paymentsModule/services/payments.service';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
 import { CreateRegistrationDto } from '@registrationsModule/dto/add.dto';
