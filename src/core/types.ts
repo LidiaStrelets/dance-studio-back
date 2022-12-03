@@ -33,3 +33,8 @@ export enum UpdateResponce {
 }
 
 export type TUpdateResponce = 'success' | 'error';
+
+export enum SocketEvents {
+  personalCreated = 'personal-created',
+  newPersonal = 'new-personal',
+}

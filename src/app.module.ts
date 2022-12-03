@@ -14,6 +14,7 @@ import { RequestService } from '@services/request/request.service';
 import { ServeStaticModule } from '@nestjs/serve-static/dist/serve-static.module';
 import { join } from 'path';
 import { PersonalsModule } from '@personalsModule/personals.module';
+import { AppGateway } from '@core/app.gateway';
 
 @Module({
   imports: [
@@ -51,6 +52,6 @@ import { PersonalsModule } from '@personalsModule/personals.module';
     PersonalsModule,
   ],
   controllers: [],
-  providers: [RequestService],
+  providers: [RequestService, AppGateway],
 })
 export class AppModule {}
