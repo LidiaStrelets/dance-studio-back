@@ -21,19 +21,27 @@ import { ClassesModule } from '@classesModule/classes.module';
 import { SchedulesModule } from '@schedulesModule/schedules.module';
 import { ExistsPersonalMiddleware } from './middlewares/existsPersonal.middleware';
 import { IsCoachIdMiddleware } from './middlewares/isCoachId.middleware';
+import { UpdateErrorService } from '@services/updateError/update-error.service';
+import { Message } from './models/messages.model';
+import { MessagesService } from './services/messages.service';
 
 @Module({
-  providers: [PersonalsService, RequestService],
+  providers: [
+    PersonalsService,
+    RequestService,
+    UpdateErrorService,
+    MessagesService,
+  ],
   controllers: [PersonalsController],
   imports: [
-    SequelizeModule.forFeature([Personal]),
+    SequelizeModule.forFeature([Personal, Message]),
     HallsModule,
     UsersModule,
     CoreJwtModule,
     ClassesModule,
     forwardRef(() => SchedulesModule),
   ],
-  exports: [PersonalsService],
+  exports: [PersonalsService, MessagesService],
 })
 export class PersonalsModule {
   configure(consumer: MiddlewareConsumer) {

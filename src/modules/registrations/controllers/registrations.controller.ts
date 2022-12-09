@@ -284,7 +284,6 @@ export class RegistrationsController {
     const registrations = await this.registrationsService.getBySchedules(
       scheduleIds,
     );
-    registrations.forEach((r) => console.log(r.client_id));
 
     const mapped = await this.scheduleService.mapSchedulesToResponce(
       schedules.filter(({ id }) =>

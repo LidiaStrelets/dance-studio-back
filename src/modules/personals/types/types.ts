@@ -13,7 +13,7 @@ export interface IPersonalResponce {
   client_id: string;
   date_time: Date;
   duration: number;
-  message?: string;
+  message?: string[];
   status: TStatus;
   id: string;
 }

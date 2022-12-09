@@ -23,9 +23,10 @@ import { ExistsHallMiddleware } from '@middlewares/existsHall.middleware';
 import { RegistrationsModule } from '@registrationsModule/registrations.module';
 import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 import { PersonalsModule } from '@personalsModule/personals.module';
+import { UpdateErrorService } from '@services/updateError/update-error.service';
 
 @Module({
-  providers: [SchedulesService, RequestService],
+  providers: [SchedulesService, RequestService, UpdateErrorService],
   controllers: [SchedulesController],
   imports: [
     SequelizeModule.forFeature([Schedule]),

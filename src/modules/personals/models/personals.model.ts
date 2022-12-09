@@ -10,7 +10,6 @@ interface PersonalCreationAttrs {
   date_time: Date;
   duration: number;
   status: TStatus;
-  message?: string;
   notes?: string;
 }
 
@@ -58,12 +57,6 @@ export class Personal extends Model<Personal, PersonalCreationAttrs> {
     allowNull: false,
   })
   duration: number;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  message: string;
 
   @Column({
     type: DataType.TEXT('long'),

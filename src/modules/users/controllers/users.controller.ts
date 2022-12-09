@@ -42,11 +42,15 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { Roles } from '@decorators/roles.decorator';
+import { UpdateErrorService } from '@services/updateError/update-error.service';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private userService: UsersService,
+    private updateErrorService: UpdateErrorService,
+  ) {}
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiBearerAuth()
@@ -155,18 +159,7 @@ export class UsersController {
       file && `${process.env.IMAGES_BASE_URL}${file.filename}`,
     );
 
-    if (updatedNumber !== 1) {
-      throw new HttpException(
-        [
-          {
-            message: [
-              'Requested user not found or duplicated - check the user id',
-            ],
-          },
-        ],
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    this.updateErrorService.throwError(updatedNumber);
 
     return res.status(HttpStatus.OK).send({
       user: UpdatedItems[0],

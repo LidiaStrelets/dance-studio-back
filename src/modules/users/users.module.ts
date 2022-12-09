@@ -8,10 +8,11 @@ import { RequestService } from '@services/request/request.service';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { DataOwnerOrAdminMiddleware } from '@middlewares/dataOwner.middleware';
 import { Path } from '@usersModule/types/types';
+import { UpdateErrorService } from '@services/updateError/update-error.service';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService, RequestService],
+  providers: [UsersService, RequestService, UpdateErrorService],
   imports: [SequelizeModule.forFeature([User]), CoreJwtModule],
   exports: [UsersService],
 })

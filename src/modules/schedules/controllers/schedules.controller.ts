@@ -31,6 +31,7 @@ import { throwUuidException } from '@core/util';
 import { RegistrationsService } from '@registrationsModule/services/registrations.service';
 import { RolesGuard } from '@guards/roles.guard';
 import { PersonalsService } from '@personalsModule/services/personals.service';
+import { UpdateErrorService } from '@services/updateError/update-error.service';
 
 @ApiTags('Schedules')
 @Controller('schedules')
@@ -39,18 +40,17 @@ export class SchedulesController {
     private scheduleService: SchedulesService,
     private registrationsService: RegistrationsService,
     private personalsService: PersonalsService,
+    private updateErrorService: UpdateErrorService,
   ) {}
 
   // until the admin functionality is done will keep this for creating schedules
   @Post('/createSchedules')
   public async createUsers() {
-    console.log('create in controller');
-
     await this.scheduleService.create({
       id: '',
       coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
       class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-11-02T20:00:00'),
+      date_time: new Date('2022-12-04T20:00:00'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
@@ -58,75 +58,26 @@ export class SchedulesController {
       id: '',
       coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
       class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-11-04T20:00:00'),
+      date_time: new Date('2022-12-04T19:00:00'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
     await this.scheduleService.create({
       id: '',
-      coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
-      class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-11-07T20:00:00'),
+      coach_id: '911fe288-b387-4c62-9878-812457abb156', //sasha
+      class_id: '88f7bf82-ea7e-4172-bd3e-1ad5c4b718dd', //beg
+      date_time: new Date('2022-12-04T17:00:00'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
     await this.scheduleService.create({
       id: '',
-      coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
-      class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-11-09T20:00:00'),
+      coach_id: '911fe288-b387-4c62-9878-812457abb156', //sasha
+      class_id: 'fe5f1fff-bbd8-4675-8a5f-52eac3f42b88', //sport
+      date_time: new Date('2022-12-04T18:00:00'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
-      class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-11-11T20:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-
-    await this.scheduleService.create({
-      id: '',
-      coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
-      class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-11-14T20:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
-      class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-11-16T20:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    await this.scheduleService.create({
-      id: '',
-      coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
-      class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-11-18T20:00:00'),
-      duration: 60,
-      hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    });
-    // await this.scheduleService.create({
-    //   id: '',
-    //   coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
-    //   class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-    //   date_time: new Date('2022-10-18T19:00:00'),
-    //   duration: 60,
-    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    // });
-    // await this.scheduleService.create({
-    //   id: '',
-    //   coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
-    //   class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-    //   date_time: new Date('2022-10-18T20:00:00'),
-    //   duration: 60,
-    //   hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
-    // });
 
     // await this.scheduleService.create({
     //   id: '',
@@ -249,7 +200,7 @@ export class SchedulesController {
   @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Post()
-  public async add(@Body() dto: CreateScheduleDto): Promise<any> {
+  public async add(@Body() dto: CreateScheduleDto): Promise<IScheduleResponce> {
     const itemsWithDifferentDuration = await this.scheduleService.getByDuration(
       dto.date_time.toISOString(),
     );
@@ -289,7 +240,7 @@ export class SchedulesController {
   @Post('copyDay')
   public async copyDay(
     @Body() dto: { dateExisting: string; dateTarget: string },
-  ): Promise<any> {
+  ): Promise<string> {
     const itemsSameDate = await this.scheduleService.getByDate(
       dto.dateExisting,
     );
@@ -345,18 +296,8 @@ export class SchedulesController {
       id,
     );
 
-    if (updatedNumber !== 1) {
-      throw new HttpException(
-        [
-          {
-            message: [
-              'Requested schedule not found or duplicated - check the schedule id',
-            ],
-          },
-        ],
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    this.updateErrorService.throwError(updatedNumber);
+
     return updatedRows;
   }
 

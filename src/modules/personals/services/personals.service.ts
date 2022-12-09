@@ -2,9 +2,11 @@ import { GetId } from '@core/baseEntity';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreatePersonalDto } from '@personalsModule/dto/create.dto';
+import { UpdatePersonalDto } from '@personalsModule/dto/update.dto';
 import { Personal } from '@personalsModule/models/personals.model';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
 import { Op } from 'sequelize';
+import { MessagesService } from './messages.service';
 
 @Injectable()
 export class PersonalsService {
@@ -12,13 +14,35 @@ export class PersonalsService {
   constructor(
     @InjectModel(Personal) private personalsRepo: typeof Personal,
     private scheduleService: SchedulesService,
+    private messagesService: MessagesService,
   ) {}
 
   public create(dto: CreatePersonalDto, client_id: string): Promise<Personal> {
+    const personal_id = GetId();
+    if (dto.message) {
+      this.messagesService.create(personal_id, dto.message);
+    }
     return this.personalsRepo.create({
       ...dto,
       client_id,
-      id: GetId(),
+      id: personal_id,
+    });
+  }
+
+  public update(
+    dto: UpdatePersonalDto,
+    id: string,
+  ): Promise<[affectedCount: number, affectedRows: Personal[]]> {
+    const object = {
+      hall_id: dto.hall_id,
+      status: dto.status,
+    };
+    if (dto.message) {
+      this.messagesService.create(id, dto.message);
+    }
+    return this.personalsRepo.update(object, {
+      where: { id },
+      returning: true,
     });
   }
 
