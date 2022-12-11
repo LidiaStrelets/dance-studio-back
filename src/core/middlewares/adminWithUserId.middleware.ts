@@ -8,7 +8,7 @@ import { UsersService } from '@usersModule/services/users.service';
 export class AdminWithUserIdMiddleware {
   constructor(
     private requestService: RequestService,
-    private userServise: UsersService,
+    private userService: UsersService,
   ) {}
 
   private throwException(message: string) {
@@ -31,7 +31,7 @@ export class AdminWithUserIdMiddleware {
         this.throwException('User id required!');
       }
 
-      const user = await this.userServise.getById(userId);
+      const user = await this.userService.getById(userId);
 
       if (!user) {
         this.throwException('User not found!');

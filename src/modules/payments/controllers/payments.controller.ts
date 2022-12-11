@@ -33,7 +33,6 @@ import { throwUuidException } from '@core/util';
 export class PaymentsController {
   constructor(
     private paymentsService: PaymentsService,
-    private requestServise: RequestService,
     private priceService: PricesService,
   ) {}
 

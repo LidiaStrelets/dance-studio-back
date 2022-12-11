@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request, NextFunction } from 'express';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
-import { NO_LEFT } from '@core/constants';
 import { RegistrationsService } from '@registrationsModule/services/registrations.service';
 import { HallsService } from '@hallsModule/services/halls.service';
 
@@ -9,7 +8,7 @@ import { HallsService } from '@hallsModule/services/halls.service';
 export class SpotsAvailableMiddleware {
   constructor(
     private scheduleService: SchedulesService,
-    private registrationsServise: RegistrationsService,
+    private registrationsService: RegistrationsService,
     private hallService: HallsService,
   ) {}
 
@@ -18,7 +17,7 @@ export class SpotsAvailableMiddleware {
     const availableSpots = await this.hallService.getPolesAmount(
       scheduleItem.hall_id,
     );
-    const occupiedSpots = await this.registrationsServise.getBySchedule(
+    const occupiedSpots = await this.registrationsService.getBySchedule(
       schedule_id,
     );
 

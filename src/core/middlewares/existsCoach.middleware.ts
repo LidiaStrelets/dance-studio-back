@@ -4,10 +4,10 @@ import { UsersService } from '@usersModule/services/users.service';
 
 @Injectable()
 export class ExistsCoachMiddleware {
-  constructor(private usersServise: UsersService) {}
+  constructor(private usersService: UsersService) {}
 
   async use({ body: { coach_id } }: Request, _, next: NextFunction) {
-    const isCoach = await this.usersServise.isCoach(coach_id);
+    const isCoach = await this.usersService.isCoach(coach_id);
 
     if (!isCoach) {
       throw new HttpException(

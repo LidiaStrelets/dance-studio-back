@@ -35,7 +35,7 @@ describe('usersController', () => {
         users = await usersController.getAll();
       });
 
-      test('then it should call usersServise', () => {
+      test('then it should call usersService', () => {
         expect(usersService.getAll).toBeCalled;
       });
 
@@ -53,7 +53,7 @@ describe('usersController', () => {
         user = await usersController.getById(userData().id);
       });
 
-      test('then it should call usersServise', () => {
+      test('then it should call usersService', () => {
         expect(usersService.getById).toBeCalledWith(userData().id);
       });
 
@@ -70,7 +70,7 @@ describe('usersController', () => {
         update = await usersController.updateRole(updateRoleData());
       });
 
-      test('then it should call usersServise', () => {
+      test('then it should call usersService', () => {
         expect(usersService.updateRole).toBeCalledWith(updateRoleData());
       });
 
@@ -94,7 +94,7 @@ describe('usersController', () => {
         );
       });
 
-      test('then it should call usersServise', () => {
+      test('then it should call usersService', () => {
         expect(usersService.update).toBeCalledWith(
           {
             email: emailToUpdate,

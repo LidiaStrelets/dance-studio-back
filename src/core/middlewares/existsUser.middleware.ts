@@ -7,7 +7,7 @@ import { UsersService } from '@usersModule/services/users.service';
 export class ExistsUserMiddleware {
   constructor(
     private requestService: RequestService,
-    private userServise: UsersService,
+    private userService: UsersService,
   ) {}
 
   private throwException(message: string) {
@@ -28,7 +28,7 @@ export class ExistsUserMiddleware {
     if (userId !== fromToken) {
       this.throwException(`User id doesn't match!`);
     }
-    const user = await this.userServise.getById(userId);
+    const user = await this.userService.getById(userId);
 
     if (!user) {
       this.throwException('User not found!');

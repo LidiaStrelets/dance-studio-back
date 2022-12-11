@@ -15,7 +15,7 @@ export class SchedulesService {
   public defaultDuration = 60;
   constructor(
     @InjectModel(Schedule) private scheduleRepo: typeof Schedule,
-    private usersServise: UsersService,
+    private usersService: UsersService,
     private hallService: HallsService,
     private classService: ClassesService,
   ) {}
@@ -143,7 +143,7 @@ export class SchedulesService {
   public mapSchedulesToResponce = async (
     schedulesItems: Schedule[],
   ): Promise<FullResponce[]> => {
-    const coaches = await this.usersServise.getCoaches();
+    const coaches = await this.usersService.getCoaches();
     const halls = await this.hallService.get();
     const classes = await this.classService.get();
 
@@ -166,6 +166,7 @@ export class SchedulesService {
         polesAmount: halls.find((hall) => hall.id === item.hall_id)
           .poles_amount,
         notes: item.notes,
+        hall_id: item.hall_id,
       };
     });
   };
@@ -178,7 +179,7 @@ export class SchedulesService {
     hall_id,
     class_id,
   }: Schedule): Promise<SingleFullResponce> => {
-    const coaches = await this.usersServise.getCoaches();
+    const coaches = await this.usersService.getCoaches();
     const halls = await this.hallService.get();
     const classes = await this.classService.get();
     const {
@@ -197,6 +198,7 @@ export class SchedulesService {
       description,
       descriptionUk,
     } = classes.find((class_item) => class_item.id === class_id);
+
     return {
       date_time: date_time,
       id: id,
@@ -204,6 +206,7 @@ export class SchedulesService {
       coach: firstname + ' ' + lastname,
       coach_id: coachId,
       class_id: classId,
+      hall_id,
       hall: name,
       class: className,
       hallUk: nameUk,
