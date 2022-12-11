@@ -22,7 +22,10 @@ import { RolesGuard } from '@guards/roles.guard';
 import { PersonalsService } from '@personalsModule/services/personals.service';
 import { CreatePersonalDto } from '@personalsModule/dto/create.dto';
 import { Personal } from '@personalsModule/models/personals.model';
-import { IPersonalResponce } from '@personalsModule/types/types';
+import {
+  IPersonalResponce,
+  PersonalFullResponce,
+} from '@personalsModule/types/types';
 import { throwUuidException } from '@core/util';
 import { UpdatePersonalDto } from '@personalsModule/dto/update.dto';
 import { UpdateErrorService } from '@services/updateError/update-error.service';
@@ -105,9 +108,9 @@ export class PersonalsController {
       }),
     )
     userId: string,
-  ): Promise<IPersonalResponce[]> {
+  ): Promise<PersonalFullResponce[]> {
     const personals = await this.personalsService.getActual(userId);
-    return personals.map((item) => this.mapPersonalToResponce(item));
+    return this.personalsService.mapPersonalToResponce(personals);
   }
 
   @ApiBearerAuth()
@@ -130,9 +133,9 @@ export class PersonalsController {
     coachId: string,
     @Param('date')
     date: string,
-  ): Promise<IPersonalResponce[]> {
+  ): Promise<PersonalFullResponce[]> {
     const personals = await this.personalsService.getByDate(coachId, date);
-    return personals.map((item) => this.mapPersonalToResponce(item));
+    return this.personalsService.mapPersonalToResponce(personals);
   }
 
   @ApiBearerAuth()

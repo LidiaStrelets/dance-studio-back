@@ -37,4 +37,11 @@ export type TUpdateResponce = 'success' | 'error';
 export enum SocketEvents {
   personalCreated = 'personal-created',
   newPersonal = 'new-personal',
+  messageCreated = 'message-created',
+  newMessage = 'new-message',
+}
+
+export interface SocketMessage {
+  personal_id: string;
+  message: string;
 }

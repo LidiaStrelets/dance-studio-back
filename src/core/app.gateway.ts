@@ -10,6 +10,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { IPersonalResponce } from '@personalsModule/types/types';
 import { SocketEvents } from './types';
+import { PersonalsService } from '@personalsModule/services/personals.service';
 
 @WebSocketGateway(8080, {
   cors: { origin: process.env.IMAGES_BASE_URL, methods: ['GET', 'POST'] },
@@ -23,11 +24,21 @@ export class AppGateway
 
   private logger = new Logger('AppGateway');
 
-  @SubscribeMessage(SocketEvents.newPersonal)
-  handleNewPersonal(client: Socket, data: IPersonalResponce) {
-    this.logger.log('new personal', client, data);
+  constructor(private personalService: PersonalsService) {}
 
-    this.server.emit(SocketEvents.personalCreated, data);
+  @SubscribeMessage(SocketEvents.newPersonal)
+  async handleNewPersonal(client: Socket, data: IPersonalResponce) {
+    this.logger.log('new personal', client, data);
+    const [mapped] = await this.personalService.mapPersonalToResponce([data]);
+
+    this.server.emit(SocketEvents.personalCreated, mapped);
+  }
+
+  @SubscribeMessage(SocketEvents.newMessage)
+  handleNewMessage(client: Socket, data: IPersonalResponce) {
+    this.logger.log('new message', client, data);
+
+    this.server.emit(SocketEvents.messageCreated, data);
   }
 
   afterInit(server: Server) {
