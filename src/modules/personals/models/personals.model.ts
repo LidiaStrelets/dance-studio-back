@@ -7,10 +7,12 @@ interface PersonalCreationAttrs {
   hall_id?: string;
   class_id: string;
   client_id: string;
+
   date_time: Date;
   duration: number;
-  status: TStatus;
   notes?: string;
+
+  status: TStatus;
 }
 
 @Table({ tableName: 'personals' })
@@ -44,7 +46,7 @@ export class Personal extends Model<Personal, PersonalCreationAttrs> {
     type: DataType.STRING,
     allowNull: true,
   })
-  hall_id: string;
+  hall_id?: string;
 
   @Column({
     type: DataType.DATE,

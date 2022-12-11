@@ -1,12 +1,13 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface ScheduleCreationAttrs {
+  id: string;
   coach_id: string;
   hall_id: string;
   class_id: string;
+
   date_time: Date;
   duration: number;
-  id: string;
   notes?: string;
 }
 

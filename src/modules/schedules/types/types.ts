@@ -1,12 +1,29 @@
 import { TClass, TClassUk } from '@classesModule/types/types';
 
 export interface IScheduleResponce {
+  id: string;
   coach_id: string;
   hall_id: string;
   class_id: string;
+
   date_time: Date;
   duration: number;
-  id: string;
+}
+
+export interface FullResponce extends IScheduleResponce {
+  coach: string;
+  hall: string;
+  hallUk: string;
+  class: TClass;
+  classUk: TClassUk;
+
+  polesAmount: number;
+}
+
+export interface SingleFullResponce extends FullResponce {
+  coachInfo: string;
+  classInfo: string;
+  classInfoUk: string;
 }
 
 export const PLACES_FIELD = 'places_left';
@@ -21,24 +38,4 @@ export enum Path {
   withId = 'schedules/:id',
   root = 'schedules',
   enrolled = 'schedules/enrolled/:userId',
-}
-
-export interface FullResponce {
-  date_time: Date;
-  id: string;
-  duration: number;
-  coach: string;
-  coach_id: string;
-  hall: string;
-  class: TClass;
-  class_id: string;
-  hallUk: string;
-  classUk: TClassUk;
-  polesAmount: number;
-}
-
-export interface SingleFullResponce extends FullResponce {
-  coachInfo: string;
-  classInfo: string;
-  classInfoUk: string;
 }

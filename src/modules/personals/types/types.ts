@@ -1,3 +1,5 @@
+import { IScheduleResponce, FullResponce } from '@schedulesModule/types/types';
+
 export enum Statuses {
   created = 'created',
   submitted = 'submitted',
@@ -6,16 +8,30 @@ export enum Statuses {
 
 export type TStatus = 'created' | 'submitted' | 'approved';
 
-export interface IPersonalResponce {
+export interface PersonalItem {
+  id: string;
   coach_id: string;
-  hall_id: string;
+  hall_id?: string;
   class_id: string;
   client_id: string;
+
   date_time: Date;
   duration: number;
-  message?: string[];
+  notes?: string;
+
   status: TStatus;
-  id: string;
+}
+
+export interface IPersonalResponce extends IScheduleResponce {
+  client_id: string;
+
+  status: TStatus;
+}
+
+export interface PersonalFullResponce extends FullResponce {
+  client_id: string;
+
+  status: TStatus;
 }
 
 export enum Dto {
