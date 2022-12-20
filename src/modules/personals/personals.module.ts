@@ -24,6 +24,10 @@ import { IsCoachIdMiddleware } from './middlewares/isCoachId.middleware';
 import { UpdateErrorService } from '@services/updateError/update-error.service';
 import { Message } from './models/messages.model';
 import { MessagesService } from './services/messages.service';
+import { NotesController } from './controllers/notes.controller';
+import { NotesService } from './services/notes.service';
+import { Notes } from './models/notes.model';
+import { MessagesController } from './controllers/messages.controller';
 
 @Module({
   providers: [
@@ -31,10 +35,11 @@ import { MessagesService } from './services/messages.service';
     RequestService,
     UpdateErrorService,
     MessagesService,
+    NotesService,
   ],
-  controllers: [PersonalsController],
+  controllers: [PersonalsController, NotesController, MessagesController],
   imports: [
-    SequelizeModule.forFeature([Personal, Message]),
+    SequelizeModule.forFeature([Personal, Message, Notes]),
     HallsModule,
     UsersModule,
     CoreJwtModule,

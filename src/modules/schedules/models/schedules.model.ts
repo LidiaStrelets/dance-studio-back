@@ -8,7 +8,6 @@ interface ScheduleCreationAttrs {
 
   date_time: Date;
   duration: number;
-  notes?: string;
 }
 
 @Table({ tableName: 'schedules' })
@@ -49,10 +48,4 @@ export class Schedule extends Model<Schedule, ScheduleCreationAttrs> {
     allowNull: false,
   })
   duration: number;
-
-  @Column({
-    type: DataType.TEXT('long'),
-    allowNull: true,
-  })
-  notes: string;
 }

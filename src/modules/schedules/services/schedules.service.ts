@@ -165,7 +165,6 @@ export class SchedulesService {
           .nameUk,
         polesAmount: halls.find((hall) => hall.id === item.hall_id)
           .poles_amount,
-        notes: item.notes,
         hall_id: item.hall_id,
       };
     });

@@ -52,12 +52,4 @@ export class UpdateScheduleDto {
     description: Dto.dateDescription as string,
   })
   readonly date_time: Date;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty({
-    example: UUID_EXAMPLE, //edit this!
-    description: HallsDto.idDescription as string, //edit this!
-  })
-  readonly notes: string;
 }

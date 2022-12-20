@@ -51,12 +51,4 @@ export class UpdatePersonalDto extends BaseEntity {
     description: Dto.messageDescription as string,
   })
   readonly message: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty({
-    example: Dto.messageExample, //edit this!
-    description: Dto.messageDescription as string, //edit this!
-  })
-  readonly notes: string;
 }

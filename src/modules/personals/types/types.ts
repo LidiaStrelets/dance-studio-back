@@ -17,7 +17,6 @@ export interface PersonalItem {
 
   date_time: Date;
   duration: number;
-  notes?: string;
 
   status: TStatus;
 }
