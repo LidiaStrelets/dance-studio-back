@@ -138,26 +138,6 @@ export class PersonalsController {
     return this.personalsService.mapPersonalToResponce(personals);
   }
 
-  @ApiBearerAuth()
-  @ApiOperation({ summary: `Get user's personals` })
-  @ApiOkResponse({ type: CreatePersonalDto })
-  @ApiUnauthorizedResponse({
-    description: ResponceDescription.token,
-  })
-  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
-  @Get('/messages/:id')
-  public async getMessages(
-    @Param(
-      'id',
-      new ParseUUIDPipe({
-        exceptionFactory: throwUuidException,
-      }),
-    )
-    id: string,
-  ): Promise<Message[]> {
-    return await this.messagesService.get(id);
-  }
-
   private mapPersonalToResponce({
     coach_id,
     hall_id,
