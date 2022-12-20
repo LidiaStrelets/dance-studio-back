@@ -86,7 +86,9 @@ export class PaymentsController {
       this.mapPaymentToResponce(payment),
     );
 
-    return mapped.filter((payment) => payment.available_spots > 0).length > 0
+    return mapped.length === 0
+      ? []
+      : mapped.filter((payment) => payment.available_spots > 0).length > 0
       ? mapped.filter((payment) => payment.available_spots > 0)
       : [mapped[mapped.length - 1]];
   }
