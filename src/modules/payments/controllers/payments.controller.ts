@@ -2,8 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
@@ -16,10 +14,10 @@ import {
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
-import { RequestService } from '@services/request/request.service';
 import { PricesService } from '@pricesModule/services/prices.service';
 import { CreatePaymentDto } from '@paymentsModule/dto/add.dto';
 import { PaymentsService } from '@paymentsModule/services/payments.service';
@@ -29,6 +27,7 @@ import { ResponceDescription } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
 
+@ApiTags('Payments')
 @Controller('payments')
 export class PaymentsController {
   constructor(
@@ -42,6 +41,9 @@ export class PaymentsController {
     description: ResponceDescription.token,
   })
   @ApiBasicAuth()
+  @ApiBadRequestResponse({
+    description: `${ResponceDescription.userIdRequired}; ${ResponceDescription.paymentsBadRequest}`,
+  })
   @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
   @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
@@ -59,7 +61,7 @@ export class PaymentsController {
   }
 
   @ApiOperation({
-    summary: 'Get user payments information',
+    summary: 'Get user payments',
   })
   @ApiBearerAuth()
   @ApiOkResponse({ type: [CreatePaymentDto] })
@@ -67,7 +69,9 @@ export class PaymentsController {
     description: ResponceDescription.token,
   })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
-  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
+  @ApiForbiddenResponse({
+    description: `${ResponceDescription.notCoachRoute}; ${ResponceDescription.forbidden}`,
+  })
   @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   @Get('/:userId')
@@ -82,15 +86,11 @@ export class PaymentsController {
   ): Promise<IPaymentResponce[]> {
     const payments = await this.paymentsService.getAllByUser(userId);
 
-    const mapped = payments.map((payment) =>
-      this.mapPaymentToResponce(payment),
-    );
+    const mapped = payments
+      .map((payment) => this.mapPaymentToResponce(payment))
+      .filter((payment) => payment.available_spots > 0);
 
-    return mapped.length === 0
-      ? []
-      : mapped.filter((payment) => payment.available_spots > 0).length > 0
-      ? mapped.filter((payment) => payment.available_spots > 0)
-      : [mapped[mapped.length - 1]];
+    return mapped.length === 0 ? [] : [mapped[mapped.length - 1]];
   }
 
   private mapPaymentToResponce({

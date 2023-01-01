@@ -24,17 +24,21 @@ import { HallsService } from '@hallsModule/services/halls.service';
 import { Hall } from '@hallsModule/models/halls.model';
 import { IHallResponce } from '@hallsModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
-import { ResponceDescription, UpdateResponce } from '@core/types';
+import { ResponceDescription } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
+import { UpdateErrorService } from '@services/updateError/update-error.service';
 
 @ApiTags('Halls')
 @Controller('halls')
 export class HallsController {
-  constructor(private hallService: HallsService) {}
+  constructor(
+    private hallService: HallsService,
+    private updateErrorService: UpdateErrorService,
+  ) {}
 
   @ApiOperation({ summary: 'Get halls' })
-  @ApiOkResponse({ type: CreateHallDto })
+  @ApiOkResponse({ type: [CreateHallDto] })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
@@ -65,13 +69,15 @@ export class HallsController {
   }
 
   @ApiOperation({ summary: 'Update hall' })
-  @ApiOkResponse({ type: ResponceDescription.update })
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: CreateHallDto })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
+  @ApiBadRequestResponse({
+    description: `${ResponceDescription.uuidException}; ${ResponceDescription.updateError}`,
+  })
   @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
-  @ApiBearerAuth()
-  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Roles(RolesEnum.admin)
   @UseGuards(RolesGuard)
   @Patch('/:id')
@@ -84,12 +90,15 @@ export class HallsController {
       }),
     )
     id: string,
-  ): Promise<string> {
-    const updatedHall = await this.hallService.update(dto, id);
+  ): Promise<IHallResponce> {
+    const [updatedNumber, updatedHalls] = await this.hallService.update(
+      dto,
+      id,
+    );
 
-    return updatedHall.length >= 1
-      ? UpdateResponce.success
-      : UpdateResponce.error;
+    this.updateErrorService.throwError(updatedNumber);
+
+    return this.mapHallToResponce(updatedHalls[0]);
   }
 
   private mapHallToResponce({

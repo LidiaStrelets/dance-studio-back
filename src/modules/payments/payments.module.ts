@@ -33,13 +33,12 @@ export class PaymentsModule {
     consumer
       .apply(AdminWithUserIdMiddleware)
       .forRoutes({ path: Paths.root, method: RequestMethod.POST });
+    consumer
+      .apply(PriceExistsMiddleware)
+      .forRoutes({ path: Paths.root, method: RequestMethod.POST });
 
     consumer
       .apply(DataOwnerOrAdminMiddleware)
       .forRoutes({ path: Paths.withId, method: RequestMethod.GET });
-
-    consumer
-      .apply(PriceExistsMiddleware)
-      .forRoutes({ path: Paths.root, method: RequestMethod.POST });
   }
 }

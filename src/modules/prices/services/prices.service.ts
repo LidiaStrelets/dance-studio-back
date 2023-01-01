@@ -24,7 +24,7 @@ export class PricesService {
   public update(
     data: UpdatePriceDto,
     id: string,
-  ): Promise<[affectedCount: number]> {
-    return this.priceRepo.update(data, { where: { id } });
+  ): Promise<[affectedCount: number, affectedRows: Price[]]> {
+    return this.priceRepo.update(data, { where: { id }, returning: true });
   }
 }

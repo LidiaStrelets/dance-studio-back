@@ -2,8 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -50,7 +48,7 @@ export class SchedulesController {
       id: '',
       coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
       class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-12-04T20:00:00'),
+      date_time: new Date('2022-10-17T22:00:00.326Z'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
@@ -58,7 +56,7 @@ export class SchedulesController {
       id: '',
       coach_id: '18d839b2-102f-44be-a81a-1f5dbf5f0f84', //luba
       class_id: 'f75f42d4-e28a-400a-b2f2-472eac4b4865', //exot
-      date_time: new Date('2022-12-04T19:00:00'),
+      date_time: new Date('2022-10-18T21:00:00.326Z'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
@@ -66,7 +64,7 @@ export class SchedulesController {
       id: '',
       coach_id: '911fe288-b387-4c62-9878-812457abb156', //sasha
       class_id: '88f7bf82-ea7e-4172-bd3e-1ad5c4b718dd', //beg
-      date_time: new Date('2022-12-04T17:00:00'),
+      date_time: new Date('2022-10-19T17:00:00.326Z'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
@@ -74,7 +72,7 @@ export class SchedulesController {
       id: '',
       coach_id: '911fe288-b387-4c62-9878-812457abb156', //sasha
       class_id: 'fe5f1fff-bbd8-4675-8a5f-52eac3f42b88', //sport
-      date_time: new Date('2022-12-04T18:00:00'),
+      date_time: new Date('2022-10-20T18:00:00.326Z'),
       duration: 60,
       hall_id: '7f59792b-ee8a-4ff2-af7e-0c45c4c0391e',
     });
@@ -163,13 +161,13 @@ export class SchedulesController {
   }
 
   @ApiOperation({
-    summary: 'Get data about one user - allowed to data owner or admin',
+    summary: 'Get coach salary',
   })
   @ApiBearerAuth()
-  // @ApiOkResponse({ type: RegisterDto }) edit this
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
+  @ApiOkResponse({ description: '1800' })
   @ApiForbiddenResponse({ description: ResponceDescription.notClientRoute })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Roles(RolesEnum.admin, RolesEnum.coach)
@@ -195,6 +193,9 @@ export class SchedulesController {
   @ApiOkResponse({ type: CreateScheduleDto })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
+  })
+  @ApiBadRequestResponse({
+    description: `${ResponceDescription.scheduleBadRequest}; ${ResponceDescription.notCoach}`,
   })
   @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @Roles(RolesEnum.admin)
@@ -228,56 +229,62 @@ export class SchedulesController {
     return this.mapScheduleToResponce(newItem);
   }
 
+  // TODO: maybe refactor this
+  // @ApiBearerAuth()
+  // @ApiOperation({ summary: 'Add item to the schedule' })
+  // @ApiOkResponse({ type: CreateScheduleDto })
+  // @ApiUnauthorizedResponse({
+  //   description: ResponceDescription.token,
+  // })
+  // @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
+  // @Roles(RolesEnum.admin)
+  // @UseGuards(RolesGuard)
+  // @Post('copyDay')
+  // public async copyDay(
+  //   @Body() dto: { dateExisting: string; dateTarget: string },
+  // ): Promise<string> {
+  //   const itemsSameDate = await this.scheduleService.getByDate(
+  //     dto.dateExisting,
+  //   );
+  //   try {
+  //     await Promise.all(
+  //       itemsSameDate.map((item) =>
+  //         this.scheduleService.create({
+  //           ...item.get(),
+  //           date_time: new Date(
+  //             dto.dateTarget.split('T')[0] +
+  //               'T' +
+  //               item.date_time.toISOString().split('T')[1],
+  //           ),
+  //         }),
+  //       ),
+  //     );
+  //     return 'success';
+  //   } catch {
+  //     throw new HttpException(
+  //       [
+  //         {
+  //           message: ['something went wrong'],
+  //         },
+  //       ],
+  //       HttpStatus.INTERNAL_SERVER_ERROR,
+  //     );
+  //   }
+  // }
+
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Add item to the schedule' })
+  @ApiOperation({ summary: 'Update schedule item' })
   @ApiOkResponse({ type: CreateScheduleDto })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
-  @Roles(RolesEnum.admin)
-  @UseGuards(RolesGuard)
-  @Post('copyDay')
-  public async copyDay(
-    @Body() dto: { dateExisting: string; dateTarget: string },
-  ): Promise<string> {
-    const itemsSameDate = await this.scheduleService.getByDate(
-      dto.dateExisting,
-    );
-    try {
-      await Promise.all(
-        itemsSameDate.map((item) =>
-          this.scheduleService.create({
-            ...item.get(),
-            date_time: new Date(
-              dto.dateTarget.split('T')[0] +
-                'T' +
-                item.date_time.toISOString().split('T')[1],
-            ),
-          }),
-        ),
-      );
-      return 'success';
-    } catch {
-      throw new HttpException(
-        [
-          {
-            message: ['something went wrong'],
-          },
-        ],
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update schedule' })
-  @ApiOkResponse({ description: ResponceDescription.update })
-  @ApiUnauthorizedResponse({
-    description: ResponceDescription.token,
+  @ApiBadRequestResponse({
+    description: `${ResponceDescription.uuidException}; ${ResponceDescription.notCoach}`,
   })
-  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
-  @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
+  @ApiBadRequestResponse({
+    description: ResponceDescription.scheduleBadRequest,
+  })
+  @ApiForbiddenResponse({ description: ResponceDescription.notClientRoute })
   @Roles(RolesEnum.admin, RolesEnum.coach)
   @UseGuards(RolesGuard)
   @Patch('/:id')
@@ -290,7 +297,7 @@ export class SchedulesController {
       }),
     )
     id: string,
-  ): Promise<Schedule[]> {
+  ): Promise<Schedule> {
     const [updatedNumber, updatedRows] = await this.scheduleService.update(
       scheduleDto,
       id,
@@ -298,12 +305,12 @@ export class SchedulesController {
 
     this.updateErrorService.throwError(updatedNumber);
 
-    return updatedRows;
+    return updatedRows[0];
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update schedule' })
-  @ApiOkResponse({ description: ResponceDescription.update })
+  @ApiOperation({ summary: 'Get schedule item by id' })
+  @ApiOkResponse({ type: CreateScheduleDto })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
@@ -323,8 +330,8 @@ export class SchedulesController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update schedule' })
-  @ApiOkResponse({ description: ResponceDescription.update })
+  @ApiOperation({ summary: 'Get schedule by date' })
+  @ApiOkResponse({ type: [CreateScheduleDto] })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
@@ -336,8 +343,8 @@ export class SchedulesController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update schedule' })
-  @ApiOkResponse({ description: ResponceDescription.update })
+  @ApiOperation({ summary: 'Get basic schedule for a week' })
+  @ApiOkResponse({ type: [CreateScheduleDto] })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
@@ -352,11 +359,13 @@ export class SchedulesController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update schedule' })
-  @ApiOkResponse({ description: ResponceDescription.update })
+  @ApiOperation({ summary: 'Get schedule with enrollments by user and date' })
+  @ApiOkResponse({ type: [CreateScheduleDto] })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
+  @ApiForbiddenResponse({ description: ResponceDescription.forbidden })
+  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Get('/enrolled/:userId/:date')
   public async getEnrolled(
     @Param('date') date: string,

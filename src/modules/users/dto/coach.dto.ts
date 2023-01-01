@@ -1,41 +1,51 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Roles } from '@core/types';
+import {
+  IsDate,
+  IsEmail,
+  IsIn,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
+import { BaseEntity } from '@core/baseEntity';
 import { Dto } from '@usersModule/types/types';
-import { IsEmail, IsOptional, IsString, Length, IsDate } from 'class-validator';
 
-export class UpdateUserDto {
-  @IsOptional()
-  @IsString()
+export class CoachDto extends BaseEntity {
+  @IsUUID()
+  @ApiProperty({
+    example: Dto.idExample,
+    description: Dto.idDescription,
+  })
+  readonly id: string;
+
   @IsEmail()
   @ApiProperty({
     example: Dto.emailExample,
     description: Dto.emailDescription,
   })
-  readonly email?: string;
+  readonly email: string;
 
-  @IsOptional()
-  @IsString()
-  @Length(8, 20)
-  @ApiProperty({
-    example: Dto.passwordExample,
-    description: Dto.passwordDescription,
-  })
-  readonly password?: string;
-
-  @IsOptional()
   @IsString()
   @ApiProperty({
     example: Dto.nameExample,
     description: Dto.nameDescription,
   })
-  readonly firstname?: string;
+  readonly firstname: string;
 
-  @IsOptional()
   @IsString()
   @ApiProperty({
     example: Dto.lastNameExample,
     description: Dto.lastNameDescription,
   })
-  readonly lastname?: string;
+  readonly lastname: string;
+
+  @IsIn([Roles.admin, Roles.client, Roles.coach])
+  @ApiProperty({
+    example: Roles.coach,
+    description: Dto.roleDescription,
+  })
+  readonly role: 'coach';
 
   @IsOptional()
   @IsDate()
@@ -51,7 +61,7 @@ export class UpdateUserDto {
     example: Dto.informationExample,
     description: Dto.informationDescription,
   })
-  readonly information?: string | null;
+  readonly information?: string;
 
   @IsOptional()
   @IsString()
@@ -59,5 +69,5 @@ export class UpdateUserDto {
     example: Dto.photoExample,
     description: Dto.photoDescription,
   })
-  readonly photo?: string | null;
+  readonly photo?: string;
 }

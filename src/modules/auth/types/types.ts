@@ -14,4 +14,5 @@ export interface ITokenData {
 export enum Paths {
   login = 'auth/login',
   register = 'auth/registration',
+  id = 'currentId',
 }

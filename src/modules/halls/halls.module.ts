@@ -9,10 +9,11 @@ import { UsersModule } from '@usersModule/users.module';
 import { UnauthorizedMiddleware } from '@middlewares/unauthorized.middleware';
 import { RequestService } from '@services/request/request.service';
 import { Paths } from '@hallsModule/types/types';
+import { UpdateErrorService } from '@services/updateError/update-error.service';
 
 @Module({
   controllers: [HallsController],
-  providers: [HallsService, RequestService],
+  providers: [HallsService, RequestService, UpdateErrorService],
   imports: [
     SequelizeModule.forFeature([Hall]),
     AuthModule,

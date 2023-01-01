@@ -54,13 +54,22 @@ export class PersonalsModule {
 
     consumer
       .apply(ExistsClassMiddleware)
-      .forRoutes({ path: Path.root, method: RequestMethod.POST });
+      .forRoutes(
+        { path: Path.root, method: RequestMethod.POST },
+        { path: Path.root, method: RequestMethod.PATCH },
+      );
     consumer
       .apply(ExistsCoachMiddleware)
-      .forRoutes({ path: Path.root, method: RequestMethod.POST });
+      .forRoutes(
+        { path: Path.root, method: RequestMethod.POST },
+        { path: Path.root, method: RequestMethod.PATCH },
+      );
     consumer
       .apply(ExistsHallMiddleware)
-      .forRoutes({ path: Path.root, method: RequestMethod.POST });
+      .forRoutes(
+        { path: Path.root, method: RequestMethod.POST },
+        { path: Path.root, method: RequestMethod.PATCH },
+      );
 
     consumer
       .apply(ExistsPersonalMiddleware)

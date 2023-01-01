@@ -2,14 +2,15 @@ import { TRoles } from '@core/types';
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface UserCreationAttrs {
+  id: string;
   email: string;
-  password: string;
   firstname: string;
   lastname: string;
+  password: string;
   birth_date: Date;
   information: string | null;
-  id: string;
   photo: string;
+  role: TRoles;
 }
 
 @Table({ tableName: 'users' })

@@ -19,8 +19,8 @@ export class UsersService {
   public updateRole({
     role,
     userId: id,
-  }: UpdateRoleDto): Promise<[affectedCount: number]> {
-    return this.userRepo.update({ role }, { where: { id } });
+  }: UpdateRoleDto): Promise<[affectedCount: number, affectedRows: User[]]> {
+    return this.userRepo.update({ role }, { where: { id }, returning: true });
   }
 
   public async findByEmail(email: string): Promise<User> {
@@ -80,6 +80,7 @@ export class UsersService {
     } else {
       user = { ...parsed, photo };
     }
+
     return this.userRepo.update(user, {
       where: { id },
       returning: true,

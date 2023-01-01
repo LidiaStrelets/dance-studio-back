@@ -7,12 +7,14 @@ export class IsCoachMiddleware {
   constructor(private usersService: UsersService) {}
 
   async use(req: Request, _, next: NextFunction) {
-    if (!req.body.coach) {
+    if (!req.body.coach && !req.body.coach_id) {
       next();
       return;
     }
 
-    const userIsCoach = await this.usersService.isCoach(req.body.coach);
+    const userIsCoach = await this.usersService.isCoach(
+      req.body.coach || req.body.coach_id,
+    );
 
     if (!userIsCoach) {
       throw new HttpException(

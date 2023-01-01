@@ -25,8 +25,8 @@ export class HallsService {
   public update(
     data: UpdateHallDto,
     id: string,
-  ): Promise<[affectedCount: number]> {
-    return this.hallRepo.update(data, { where: { id } });
+  ): Promise<[affectedCount: number, affectedRows: Hall[]]> {
+    return this.hallRepo.update(data, { where: { id }, returning: true });
   }
 
   public async getPolesAmount(id: string): Promise<number> {

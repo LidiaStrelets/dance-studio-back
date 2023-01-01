@@ -1,13 +1,7 @@
 import { UUID_EXAMPLE } from '@core/constants';
 import { ApiProperty } from '@nestjs/swagger';
 import { Dto as UsersDto } from '@usersModule/types/types';
-import {
-  IsDateString,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import { IsDateString, IsNumber, IsOptional, IsUUID } from 'class-validator';
 import { Dto as ClassesDto } from '@classesModule/types/types';
 import { Dto as HallsDto } from '@hallsModule/types/types';
 import { Dto } from '@schedulesModule/types/types';

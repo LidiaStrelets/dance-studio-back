@@ -22,7 +22,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Roles } from '@decorators/roles.decorator';
-import { Roles as RolesType } from '@core/types';
+import { Roles as RolesType, StatsResponseType } from '@core/types';
 import { RequestService } from '@services/request/request.service';
 import { PaymentsService } from '@paymentsModule/services/payments.service';
 import { SchedulesService } from '@schedulesModule/services/schedules.service';
@@ -58,7 +58,7 @@ export class RegistrationsController {
     description: ResponceDescription.token,
   })
   @ApiBadRequestResponse({
-    description: ResponceDescription.userIdRequired,
+    description: `${ResponceDescription.userIdRequired}; ${ResponceDescription.registrationsBadRequest}`,
   })
   @ApiResponse({
     status: HttpStatus.PAYMENT_REQUIRED,
@@ -67,8 +67,8 @@ export class RegistrationsController {
   @ApiNotFoundResponse({
     description: ResponceDescription.noPlaces,
   })
-  @ApiBearerAuth()
   @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
+  @ApiBearerAuth()
   @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
   @Post()
@@ -80,15 +80,18 @@ export class RegistrationsController {
     return this.mapRegistrationToResponce(newRegistration);
   }
 
-  @ApiOperation({ summary: 'Delete registration' })
-  @ApiResponse({ status: HttpStatus.OK, type: CreateRegistrationDto })
+  @ApiOperation({ summary: 'Delete registration by schedule id' })
+  @ApiOkResponse({ type: [CreateRegistrationDto] })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @ApiBearerAuth()
   @ApiForbiddenResponse({
-    description: `${ResponceDescription.notCoachRoute}, ${ResponceDescription.userIdRequired}`,
+    description: `${ResponceDescription.notCoachRoute}, ${ResponceDescription.userIdRequired}, ${ResponceDescription.forbidden},`,
+  })
+  @ApiNotFoundResponse({
+    description: ResponceDescription.registrationNotFound,
   })
   @Roles(RolesEnum.admin, RolesEnum.client)
   @UseGuards(RolesGuard)
@@ -121,6 +124,7 @@ export class RegistrationsController {
         userId,
         scheduleId,
       );
+
     if (!existingRegistration) {
       throw new HttpException(
         [
@@ -133,9 +137,8 @@ export class RegistrationsController {
     }
 
     if (
-      userRole === RolesType.coach ||
-      (userRole === RolesType.client &&
-        userId !== existingRegistration.client_id)
+      userRole === RolesType.client &&
+      userId !== existingRegistration.client_id
     ) {
       throw new HttpException(
         { message: `You are not allowed to cancell this enrollment!` },
@@ -179,12 +182,14 @@ export class RegistrationsController {
   }
 
   @ApiOperation({
-    summary: 'Get user registrations information',
+    summary: 'Get user registrations',
   })
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
   @ApiUnauthorizedResponse({ description: ResponceDescription.token })
-  @ApiForbiddenResponse({ description: ResponceDescription.userIdRequired })
+  @ApiForbiddenResponse({
+    description: `${ResponceDescription.userIdRequired}; ${ResponceDescription.forbidden}`,
+  })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Get('/:userId')
   public async getAllByUser(
@@ -202,30 +207,32 @@ export class RegistrationsController {
   }
 
   @ApiOperation({
-    summary: 'Get user registrations information',
+    summary: 'Get registrations by schedule id',
   })
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
   @ApiUnauthorizedResponse({ description: ResponceDescription.token })
   @ApiForbiddenResponse({ description: ResponceDescription.userIdRequired })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
-  @Get('/bySchedule/:id')
+  @Get('/bySchedule/:scheduleId')
   public async getAllBySchedule(
     @Param(
-      'id',
+      'scheduleId',
       new ParseUUIDPipe({
         exceptionFactory: throwUuidException,
       }),
     )
-    id: string,
+    scheduleId: string,
   ): Promise<IRegistrationResponce[]> {
-    const registrations = await this.registrationsService.getBySchedule(id);
+    const registrations = await this.registrationsService.getBySchedule(
+      scheduleId,
+    );
 
     return registrations.map((item) => this.mapRegistrationToResponce(item));
   }
 
   @ApiOperation({
-    summary: 'Get user registrations information',
+    summary: 'Get registrations by client and date as array of schedules',
   })
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
@@ -255,12 +262,11 @@ export class RegistrationsController {
   }
 
   @ApiOperation({
-    summary: 'Get user registrations information',
+    summary: 'Get registrations by coach and date',
   })
   @ApiBearerAuth()
-  @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
+  @ApiOkResponse({ type: [CreateRegistrationDto] })
   @ApiUnauthorizedResponse({ description: ResponceDescription.token })
-  @ApiForbiddenResponse({ description: ResponceDescription.userIdRequired })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Get('/byDateAndCoachMapped/:coachId/:date')
   public async getByDateAndCoachMapped(
@@ -300,7 +306,7 @@ export class RegistrationsController {
   }
 
   @ApiOperation({
-    summary: 'Get user registrations information',
+    summary: 'Get registrations by client and date as array of registrations',
   })
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
@@ -330,12 +336,16 @@ export class RegistrationsController {
   }
 
   @ApiOperation({
-    summary: 'Get user registrations information',
+    summary: 'Get user registrations statistics',
   })
   @ApiBearerAuth()
-  @ApiResponse({ status: HttpStatus.OK, type: [CreateRegistrationDto] })
+  @ApiOkResponse({
+    type: StatsResponseType,
+  })
   @ApiUnauthorizedResponse({ description: ResponceDescription.token })
-  @ApiForbiddenResponse({ description: ResponceDescription.userIdRequired })
+  @ApiForbiddenResponse({
+    description: `${ResponceDescription.userIdRequired}, ${ResponceDescription.forbidden}`,
+  })
   @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
   @Get('/stats/:userId')
   public async getStats(

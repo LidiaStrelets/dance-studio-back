@@ -9,10 +9,11 @@ import { RequestService } from '@services/request/request.service';
 import { CoreJwtModule } from '@core/jwt.module';
 import { UsersModule } from '@usersModule/users.module';
 import { Paths } from '@pricesModule/types/types';
+import { UpdateErrorService } from '@services/updateError/update-error.service';
 
 @Module({
   controllers: [PricesController],
-  providers: [PricesService, RequestService],
+  providers: [PricesService, RequestService, UpdateErrorService],
   imports: [
     SequelizeModule.forFeature([Price]),
     AuthModule,

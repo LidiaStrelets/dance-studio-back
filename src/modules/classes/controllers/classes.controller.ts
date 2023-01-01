@@ -25,14 +25,18 @@ import { UpdateClassDto } from '@classesModule/dto/update.dto';
 import { Class } from '@classesModule/models/classes.model';
 import { IClassResponce } from '@classesModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
-import { ResponceDescription, UpdateResponce } from '@core/types';
+import { ResponceDescription } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
+import { UpdateErrorService } from '@services/updateError/update-error.service';
 
 @ApiTags('Classes')
 @Controller('classes')
 export class ClassesController {
-  constructor(private classesService: ClassesService) {}
+  constructor(
+    private classesService: ClassesService,
+    private updateErrorService: UpdateErrorService,
+  ) {}
 
   @ApiOperation({ summary: 'Create class' })
   @ApiOkResponse({
@@ -55,10 +59,12 @@ export class ClassesController {
 
   @ApiOperation({ summary: 'Update class' })
   @ApiOkResponse({
-    description: ResponceDescription.update,
+    type: CreateClassDto,
   })
   @ApiUnauthorizedResponse({ description: ResponceDescription.token })
-  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
+  @ApiBadRequestResponse({
+    description: ResponceDescription.uuidException,
+  })
   @ApiForbiddenResponse({
     description: ResponceDescription.adminRoute,
   })
@@ -75,16 +81,19 @@ export class ClassesController {
       }),
     )
     id: string,
-  ): Promise<string> {
-    const updatedClass = await this.classesService.update(dto, id);
+  ): Promise<IClassResponce> {
+    const [updatedNumber, updatedClass] = await this.classesService.update(
+      dto,
+      id,
+    );
 
-    return updatedClass.length >= 1
-      ? UpdateResponce.success
-      : UpdateResponce.error;
+    this.updateErrorService.throwError(updatedNumber);
+
+    return this.mapClassToResponce(updatedClass[0]);
   }
 
   @ApiOperation({ summary: 'Get classes' })
-  @ApiOkResponse({ type: CreateClassDto })
+  @ApiOkResponse({ type: [CreateClassDto] })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
@@ -100,10 +109,13 @@ export class ClassesController {
     return mapped;
   }
 
-  @ApiOperation({ summary: 'Get classes' })
+  @ApiOperation({ summary: 'Get class by id' })
   @ApiOkResponse({ type: CreateClassDto })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
+  })
+  @ApiBadRequestResponse({
+    description: ResponceDescription.uuidException,
   })
   @ApiBearerAuth()
   @Get('/:id')

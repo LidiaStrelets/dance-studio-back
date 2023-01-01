@@ -11,7 +11,7 @@ export class PriceExistsMiddleware {
 
     if (!price) {
       throw new HttpException(
-        { message: 'Price id is invalid', problem_field: 'price_id' },
+        { message: `Price doesn't exist`, problem_field: 'price_id' },
         HttpStatus.BAD_REQUEST,
       );
     }

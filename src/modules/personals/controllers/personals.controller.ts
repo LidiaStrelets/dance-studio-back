@@ -4,10 +4,12 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -29,8 +31,6 @@ import {
 import { throwUuidException } from '@core/util';
 import { UpdatePersonalDto } from '@personalsModule/dto/update.dto';
 import { UpdateErrorService } from '@services/updateError/update-error.service';
-import { Message } from '@personalsModule/models/messages.model';
-import { MessagesService } from '@personalsModule/services/messages.service';
 
 @ApiTags('Personals')
 @Controller('personals')
@@ -38,7 +38,6 @@ export class PersonalsController {
   constructor(
     private personalsService: PersonalsService,
     private updateErrorService: UpdateErrorService,
-    private messagesService: MessagesService,
   ) {}
 
   @ApiBearerAuth()
@@ -46,6 +45,9 @@ export class PersonalsController {
   @ApiOkResponse({ type: CreatePersonalDto })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
+  })
+  @ApiBadRequestResponse({
+    description: ResponceDescription.personalsBadRequest,
   })
   @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
   @Roles(RolesEnum.admin, RolesEnum.client)
@@ -66,13 +68,16 @@ export class PersonalsController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Add item to the personals' })
+  @ApiOperation({ summary: 'Update personal class' })
   @ApiOkResponse({ type: CreatePersonalDto })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
+  @ApiBadRequestResponse({
+    description: `${ResponceDescription.personalsBadRequest}; ${ResponceDescription.updateError}`,
+  })
   @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
-  @Post('/update/:id')
+  @Patch('/:id')
   public async update(
     @Body() dto: UpdatePersonalDto,
     @Param(
@@ -92,7 +97,7 @@ export class PersonalsController {
 
   @ApiBearerAuth()
   @ApiOperation({ summary: `Get user's personals` })
-  @ApiOkResponse({ type: CreatePersonalDto })
+  @ApiOkResponse({ type: [CreatePersonalDto] })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
@@ -114,12 +119,14 @@ export class PersonalsController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: `Get user's personals` })
-  @ApiOkResponse({ type: CreatePersonalDto })
+  @ApiOperation({ summary: `Get personals by coach and date` })
+  @ApiOkResponse({ type: [CreatePersonalDto] })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @ApiForbiddenResponse({ description: ResponceDescription.notCoachRoute })
+  @ApiForbiddenResponse({
+    description: `${ResponceDescription.notClientRoute}; ${ResponceDescription.personalsForbidden}`,
+  })
   @Roles(RolesEnum.admin, RolesEnum.coach)
   @UseGuards(RolesGuard)
   @Get('byCoach/:coachId/:date')
@@ -136,6 +143,27 @@ export class PersonalsController {
   ): Promise<PersonalFullResponce[]> {
     const personals = await this.personalsService.getByDate(coachId, date);
     return this.personalsService.mapPersonalToResponce(personals);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: `Get personals by id` })
+  @ApiOkResponse({ type: [CreatePersonalDto] })
+  @ApiUnauthorizedResponse({
+    description: ResponceDescription.token,
+  })
+  @Get('byId/:id')
+  public async getById(
+    @Param(
+      'id',
+      new ParseUUIDPipe({
+        exceptionFactory: throwUuidException,
+      }),
+    )
+    id: string,
+  ): Promise<PersonalFullResponce[]> {
+    const personal = await this.personalsService.getById(id);
+
+    return this.personalsService.mapPersonalToResponce([personal]);
   }
 
   private mapPersonalToResponce({

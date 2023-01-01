@@ -46,23 +46,20 @@ export class RegistrationsModule {
     consumer
       .apply(AdminWithUserIdMiddleware)
       .forRoutes({ path: Paths.root, method: RequestMethod.POST });
-
+    consumer
+      .apply(PaymentAvailableMiddleware)
+      .forRoutes({ path: Paths.root, method: RequestMethod.POST });
+    consumer
+      .apply(SpotsAvailableMiddleware)
+      .forRoutes({ path: Paths.root, method: RequestMethod.POST });
     consumer
       .apply(ExistsUserMiddleware)
       .forRoutes({ path: Paths.root, method: RequestMethod.POST });
-
     consumer
       .apply(ExistsRegistrationMiddleware)
       .forRoutes({ path: Paths.root, method: RequestMethod.POST });
 
-    consumer
-      .apply(PaymentAvailableMiddleware)
-      .forRoutes({ path: Paths.root, method: RequestMethod.POST });
-
-    consumer
-      .apply(SpotsAvailableMiddleware)
-      .forRoutes({ path: Paths.root, method: RequestMethod.POST });
-
+    // TODO : check on which routes it is applied
     consumer
       .apply(DataOwnerOrAdminMiddleware)
       .forRoutes({ path: Paths.clientId, method: RequestMethod.GET });

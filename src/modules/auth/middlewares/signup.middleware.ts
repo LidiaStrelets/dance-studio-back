@@ -14,7 +14,7 @@ export class RegistrationMiddleware {
       throw new HttpException(
         [
           {
-            message: ['Incorrect credentials!'],
+            message: ['Some data is missing!'],
             name: 'Registration Error',
           },
         ],

@@ -1,7 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request, NextFunction } from 'express';
-import { PersonalsService } from '@personalsModule/services/personals.service';
-import { SchedulesService } from '@schedulesModule/services/schedules.service';
 import { UsersService } from '@usersModule/services/users.service';
 import { Roles } from '@core/types';
 

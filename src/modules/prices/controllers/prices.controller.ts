@@ -24,14 +24,18 @@ import { PricesService } from '@pricesModule/services/prices.service';
 import { Price } from '@pricesModule/models/prices.model';
 import { IPriceResponce } from '@pricesModule/types/types';
 import { RolesGuard } from '@guards/roles.guard';
-import { ResponceDescription, UpdateResponce } from '@core/types';
+import { ResponceDescription } from '@core/types';
 import { Roles as RolesEnum } from '@core/types';
 import { throwUuidException } from '@core/util';
+import { UpdateErrorService } from '@services/updateError/update-error.service';
 
 @ApiTags('Prices')
 @Controller('prices')
 export class PricesController {
-  constructor(private pricesService: PricesService) {}
+  constructor(
+    private pricesService: PricesService,
+    private updateErrorService: UpdateErrorService,
+  ) {}
 
   @ApiOperation({ summary: 'Create price' })
   @ApiOkResponse({ type: CreatePriceDto })
@@ -63,11 +67,13 @@ export class PricesController {
   }
 
   @ApiOperation({ summary: 'Update price' })
-  @ApiOkResponse({ description: ResponceDescription.update })
+  @ApiOkResponse({ type: CreatePriceDto })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })
-  @ApiBadRequestResponse({ description: ResponceDescription.uuidException })
+  @ApiBadRequestResponse({
+    description: `${ResponceDescription.uuidException}; ${ResponceDescription.update}`,
+  })
   @ApiBearerAuth()
   @ApiForbiddenResponse({ description: ResponceDescription.adminRoute })
   @Roles(RolesEnum.admin)
@@ -82,12 +88,15 @@ export class PricesController {
       }),
     )
     id: string,
-  ): Promise<string> {
-    const updatedPrice = await this.pricesService.update(dto, id);
+  ): Promise<IPriceResponce> {
+    const [updatedNumber, updatedPrices] = await this.pricesService.update(
+      dto,
+      id,
+    );
 
-    return updatedPrice.length >= 1
-      ? UpdateResponce.success
-      : UpdateResponce.error;
+    this.updateErrorService.throwError(updatedNumber);
+
+    return this.mapPriceToResponce(updatedPrices[0]);
   }
 
   private mapPriceToResponce({

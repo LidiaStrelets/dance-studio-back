@@ -24,7 +24,7 @@ export class ClassesService {
   public update(
     data: UpdateClassDto,
     id: string,
-  ): Promise<[affectedCount: number]> {
-    return this.classRepo.update(data, { where: { id } });
+  ): Promise<[affectedCount: number, affectedRows: Class[]]> {
+    return this.classRepo.update(data, { where: { id }, returning: true });
   }
 }

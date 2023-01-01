@@ -39,7 +39,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Login user' })
   @ApiOkResponse({ description: TOKEN_EXAMPLE })
-  @ApiUnauthorizedResponse({ description: ResponceDescription.credentials })
+  @ApiBadRequestResponse({ description: ResponceDescription.credentials })
   @Post('/login')
   public async login(
     @Body() dto: LoginDto,
@@ -56,9 +56,6 @@ export class AuthController {
   @ApiOkResponse({ description: TOKEN_EXAMPLE })
   @ApiBadRequestResponse({
     description: ResponceDescription.duplicateUser,
-  })
-  @ApiUnauthorizedResponse({
-    description: ResponceDescription.adinKey,
   })
   @Post('/registration')
   public async register(
@@ -78,7 +75,7 @@ export class AuthController {
     summary: 'Get current user id from token',
   })
   @ApiBearerAuth()
-  @ApiOkResponse({ type: UUID_EXAMPLE })
+  @ApiOkResponse({ description: UUID_EXAMPLE })
   @ApiUnauthorizedResponse({
     description: ResponceDescription.token,
   })

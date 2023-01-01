@@ -24,7 +24,7 @@ export class SpotsAvailableMiddleware {
     if (occupiedSpots.length + 1 > availableSpots) {
       throw new HttpException(
         {
-          message: 'No places left for this class, try another one!',
+          message: 'No spots left for this class, try another one!',
         },
         HttpStatus.NOT_FOUND,
       );
